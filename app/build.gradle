@@ -1,0 +1,59 @@
+//file:noinspection DependencyNotationArgument
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("maven-publish")
+}
+
+apply from: '../gradleConfig/dependencies.gradle'
+apply from: '../gradleConfig/configuration.gradle'
+
+android {
+    compileSdkVersion compilation.compileSdkVersion
+
+    defaultConfig {
+        aarMetadata {
+            minCompileSdk = compilation.minSdkVersion
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    namespace 'com.vro'
+
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.devaro95'
+            artifactId = 'vro'
+            version = '0.0.1'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(libraries.core)
+    implementation(libraries.appCompat)
+    implementation(libraries.material)
+    implementation(libraries.koinAndroid)
+    implementation(libraries.koinCore)
+    implementation(libraries.lifecycleViewModel)
+    implementation(libraries.navigationFragment)
+    implementation(libraries.navigationUi)
+    implementation(libraries.navigationDynamicFeatures)
+    implementation(libraries.viewBinding)
+    implementation(libraries.mockitoInline)
+    implementation(libraries.mockitoCore)
+    implementation(libraries.junit)
+    implementation(libraries.archCore)
+}

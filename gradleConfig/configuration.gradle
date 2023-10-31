@@ -1,0 +1,13 @@
+ext {
+    versioning = [
+            versionCode: 51,
+            versionName: "1.9.1"
+    ]
+
+    compilation = [
+            applicationId    : 'all.pillreminder.medicationtracker.medsalarm',
+            compileSdkVersion: 34,
+            minSdkVersion    : 24,
+            targetSdkVersion : 33
+    ]
+}
