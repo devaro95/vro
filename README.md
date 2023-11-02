@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/devaro95/vro.svg)](https://jitpack.io/#devaro95/vro)
 # VRO
-Vro is a framework create to facilitate the creation of Android projects. Based on a MVI architecture and focused on the use of States, fully created to keep a full clean architecture.
+Vro is a framework, based on a MVI architecture and focused on the use of States, fully created to keep a full clean architecture and to make the creation of Android projects easier. 
 
 # First Steps
 Implement the Vro dependency directly to your project using Jitpack repository.
