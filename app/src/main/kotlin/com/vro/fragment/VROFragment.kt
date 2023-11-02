@@ -5,7 +5,7 @@ import android.view.*
 import androidx.annotation.CallSuper
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.vro.model.VRODialogData
+import com.vro.model.VRODialogState
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
 import com.vro.state.VROState
@@ -76,7 +76,7 @@ abstract class VROFragment<VM : VROViewModel<S, D>, S : VROState, VB : ViewBindi
 
     abstract fun onViewUpdate(binding: VB, data: S)
 
-    abstract fun onLoadDialog(data: VRODialogData)
+    abstract fun onLoadDialog(data: VRODialogState)
 
     abstract fun VB.onError(error: Throwable)
 

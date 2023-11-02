@@ -2,9 +2,9 @@ package com.vro.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vro.fragment.VROViewModel
-import com.vro.model.VRODialogData
+import com.vro.model.VRODialogState
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigationData
+import com.vro.navigation.VRONavigationState
 import com.vro.state.VROState
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
@@ -40,11 +40,11 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *>, D : VRODe
         return viewModel.checkDataState()
     }
 
-    protected fun getDialogState(): VRODialogData? {
+    protected fun getDialogState(): VRODialogState? {
         return viewModel.dialogState.value
     }
 
-    private fun getNavigatorState(): VRONavigationData<out VRODestination>? {
+    private fun getNavigatorState(): VRONavigationState<out VRODestination>? {
         return viewModel.navigationState.value
     }
 

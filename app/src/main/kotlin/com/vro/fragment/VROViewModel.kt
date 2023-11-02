@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.vro.VROSingleLiveEvent
-import com.vro.model.VRODialogData
+import com.vro.model.VRODialogState
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigationData
+import com.vro.navigation.VRONavigationState
 import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
 import com.vro.net.MainUseCaseResult
@@ -25,11 +25,11 @@ abstract class VROViewModel<S : VROState, D : VRODestination> : ViewModel() {
     internal val state: LiveData<S>
         get() = stateLiveData
 
-    internal val dialogState: VROSingleLiveEvent<VRODialogData> = VROSingleLiveEvent()
+    internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
 
     internal val errorState: VROSingleLiveEvent<Throwable> = VROSingleLiveEvent()
 
-    internal val navigationState: VROSingleLiveEvent<VRONavigationData<D>> = VROSingleLiveEvent()
+    internal val navigationState: VROSingleLiveEvent<VRONavigationState<D>> = VROSingleLiveEvent()
 
     private fun createInitialState() {
         if (!this::viewState.isInitialized) {
@@ -67,7 +67,7 @@ abstract class VROViewModel<S : VROState, D : VRODestination> : ViewModel() {
         errorState.value = error
     }
 
-    fun updateDialogState(dialogId: VRODialogData, clearView: Boolean = true) {
+    fun updateDialogState(dialogId: VRODialogState, clearView: Boolean = true) {
         if (clearView) updateDataState { viewState }
         dialogState.value = dialogId
     }
@@ -86,11 +86,11 @@ abstract class VROViewModel<S : VROState, D : VRODestination> : ViewModel() {
     }
 
     fun navigate(destination: D?) {
-        navigationState.value = VRONavigationData(destination)
+        navigationState.value = VRONavigationState(destination)
     }
 
     fun navigateBack(result: Serializable? = null) {
-        navigationState.value = VRONavigationData(navigateBack = true, backResult = result)
+        navigationState.value = VRONavigationState(navigateBack = true, backResult = result)
     }
 
     open fun setOnResult(result: Serializable) = Unit
