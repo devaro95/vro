@@ -1,29 +1,31 @@
 package com.vro.fragment
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
+import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
+import com.vro.net.MainUseCaseResult
 import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
-import com.vro.net.MainUseCaseResult
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import java.io.Serializable
 
-abstract class VROViewModel<S : VROState, D : VRODestination> : ViewModel() {
+abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel() {
 
     abstract val initialViewState: S
 
     private lateinit var viewState: S
 
-    private val stateLiveData: MutableLiveData<S> = MutableLiveData()
-    internal val state: LiveData<S>
-        get() = stateLiveData
+    private val internalState: MutableStateFlow<S> by lazy { MutableStateFlow(initialViewState) }
+
+    val state: MutableStateFlow<S>
+        get() = internalState
 
     internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
 
@@ -52,11 +54,11 @@ abstract class VROViewModel<S : VROState, D : VRODestination> : ViewModel() {
 
     fun updateDataState(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
-        stateLiveData.value = viewState
+        state.update { viewState }
     }
 
     fun updateDataState() {
-        stateLiveData.value = viewState
+        state.update { viewState }
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
