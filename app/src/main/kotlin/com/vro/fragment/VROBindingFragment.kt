@@ -11,13 +11,18 @@ import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import kotlinx.coroutines.launch
 
-interface VROBindingFragment<VM : VROViewModel<S, D, E>, VB : ViewBinding, S : VROState, D : VRODestination, E : VROEvent> {
+abstract class VROBindingFragment<
+        VM : VROViewModel<S, D, E>,
+        VB : ViewBinding,
+        S : VROState,
+        D : VRODestination,
+        E : VROEvent> : VROInjectionFragment<VM>() {
 
-    var _binding: VB?
+    private var _binding: VB? = null
 
     val binding get() = _binding!!
 
-    fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+    abstract fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     fun setViewBindingObservers(viewModel: VM, binding: VB, fragment: Fragment) {
         fragment.viewLifecycleOwner.lifecycleScope.launch {
@@ -30,13 +35,13 @@ interface VROBindingFragment<VM : VROViewModel<S, D, E>, VB : ViewBinding, S : V
         }
     }
 
-    fun VB.onViewStarted()
+    abstract fun VB.onViewStarted()
 
-    fun onViewUpdate(binding: VB, data: S)
+    abstract fun onViewUpdate(binding: VB, data: S)
 
-    fun VB.onError(error: Throwable)
+    abstract fun VB.onError(error: Throwable)
 
-    fun onCreateViewBindingVro(
+    fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
     ): View {

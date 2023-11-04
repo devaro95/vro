@@ -29,7 +29,7 @@ abstract class VROComposeFragment<VM : VROViewModel<S, D, E>,
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onCreateVro(viewModel)
+        initializeState(viewModel)
     }
 
     override fun onCreateView(
