@@ -1,14 +1,11 @@
-package com.vro.fragment
+package com.vro.fragment.compose
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
-import com.vro.fragment.compose.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.net.MainUseCaseResult
-import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.Serializable
 
-abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel() {
+abstract class VROComposeViewModel<S : VROState, E : VROEvent, D : VRODestination> : ViewModel(), VROEventDispatcher<E> {
 
     abstract val initialViewState: S
 
@@ -39,7 +36,7 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         }
     }
 
-    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+    private val concurrencyManager = VROConcurrencyManager()
 
     internal fun onInitializeState() {
         createInitialState()
@@ -74,7 +71,15 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         dialogState.value = dialogId
     }
 
-    open fun onStart() = Unit
+    fun navigate(destination: D?) {
+        navigationState.value = VRONavigationState(destination)
+    }
+
+    fun navigateBack(result: Serializable? = null) {
+        navigationState.value = VRONavigationState(navigateBack = true, backResult = result)
+    }
+
+    abstract fun onStart()
 
     fun <T> executeCoroutine(
         fullException: Boolean = false,
@@ -87,19 +92,5 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         updateState { viewState }
     }
 
-    fun navigate(destination: D?) {
-        navigationState.value = VRONavigationState(destination)
-    }
-
-    fun navigateBack(result: Serializable? = null) {
-        navigationState.value = VRONavigationState(navigateBack = true, backResult = result)
-    }
-
     open fun setOnResult(result: Serializable) = Unit
-
-    fun unBindObservables(lifecycleOwner: LifecycleOwner) {
-        navigationState.removeObservers(lifecycleOwner)
-        dialogState.removeObservers(lifecycleOwner)
-        errorState.removeObservers(lifecycleOwner)
-    }
 }

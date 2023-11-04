@@ -5,21 +5,22 @@ import android.view.*
 import androidx.annotation.CallSuper
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.vro.dialog.VRODialogState
+import com.vro.fragment.compose.VROEvent
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigator
+import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
-import java.io.Serializable
 
-abstract class VROFragment<VM : VROViewModel<S, D>, S : VROState, VB : ViewBinding, D : VRODestination> : VROInjectionFragment<VM>() {
+abstract class VROFragment<
+        VM : VROViewModel<S, D, E>,
+        S : VROState,
+        VB : ViewBinding,
+        D : VRODestination,
+        E : VROEvent>
+    : VROInjectionFragment<VM>(),
+    VROFragmentBuilder<VM, S, D, E>,
+    VROBindingFragment<VM, VB, S, D, E> {
 
-    private val state: S? by lazy { restoreArguments() }
-
-    private var _binding: VB? = null
-
-    protected val binding get() = _binding!!
-
-    abstract val navigator: VRONavigator<D>
+    override val state: S? by lazy { restoreArguments() }
 
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
@@ -27,8 +28,7 @@ abstract class VROFragment<VM : VROViewModel<S, D>, S : VROState, VB : ViewBindi
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.onInitializeState()
-        viewModel.setInitialState(state)
+        onCreateVro(viewModel)
     }
 
     override fun onCreateView(
@@ -36,61 +36,23 @@ abstract class VROFragment<VM : VROViewModel<S, D>, S : VROState, VB : ViewBindi
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = createViewBinding(inflater, container)
-        return binding.root
+        return onCreateViewBindingVro(inflater, container)
     }
-
-    abstract fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.onStart()
-        getNavigationResult()?.observe(viewLifecycleOwner) { result ->
-            result?.let { viewModel.setOnResult(it) }
-        }
+        onViewCreatedVro(viewModel, findNavController(), viewLifecycleOwner)
         binding.onViewStarted()
-    }
-
-    private fun setStateObserver() {
-        viewModel.state.observe(this) {
-            onViewUpdate(binding, it)
-        }
-        viewModel.dialogState.observe(this) {
-            onLoadDialog(it)
-        }
-        viewModel.errorState.observe(this) {
-            binding.onError(it)
-        }
-        viewModel.navigationState.observe(this) {
-            if (it.navigateBack) navigator.navigateBack(it.backResult)
-            else it.destination?.let { destination -> navigator.navigate(destination) }
-        }
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.unBindObservables(this)
-    }
-
-    abstract fun VB.onViewStarted()
-
-    abstract fun onViewUpdate(binding: VB, data: S)
-
-    abstract fun onLoadDialog(data: VRODialogState)
-
-    abstract fun VB.onError(error: Throwable)
-
-    companion object {
-        const val NAVIGATION_STATE = "NAVIGATION_STATE"
-        const val NAVIGATION_BACK_STATE = "NAVIGATION_BACK_STATE"
+        onPauseVro(viewModel, this)
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.onResume()
-        setStateObserver()
+        onResumeVro(viewModel, this)
+        setViewBindingObservers(viewModel, binding, this)
     }
-
-    private fun getNavigationResult() =
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(NAVIGATION_BACK_STATE)
 }

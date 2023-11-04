@@ -25,6 +25,9 @@ ext {
             mockitoInline            : "org.mockito:mockito-inline:$mockitoInline",
             mockitoCore              : "org.mockito:mockito-core:$mockitoCore",
             junit                    : "androidx.test.ext:junit:$junit",
-            archCore                 : "androidx.arch.core:core-testing:$archCore"
+            archCore                 : "androidx.arch.core:core-testing:$archCore",
+            composeMaterial3Size     : "androidx.compose.material3:material3-window-size-class:1.2.0-alpha10",
+            composeTooling           : "androidx.compose.ui:ui-tooling",
+            composeLifecycle         : "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
     ]
 }

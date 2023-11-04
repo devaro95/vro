@@ -3,6 +3,7 @@ package com.vro.testing
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vro.fragment.VROViewModel
 import com.vro.dialog.VRODialogState
+import com.vro.fragment.compose.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.state.VROState
@@ -16,7 +17,7 @@ import org.mockito.MockitoAnnotations
 import java.io.Serializable
 import kotlin.reflect.KClass
 
-abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *>, D : VRODestination> {
+abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VROEvent> {
 
     protected val viewModel: VM by lazy {
         onSetupViewModel()
