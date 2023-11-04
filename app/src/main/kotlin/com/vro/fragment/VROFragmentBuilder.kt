@@ -17,7 +17,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     val navigator: VRONavigator<D>
 
-    fun onCreateVro(viewModel: VM) {
+    fun initializeState(viewModel: VM) {
         viewModel.onInitializeState()
         viewModel.setInitialState(state)
     }
@@ -46,7 +46,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     fun onLoadDialog(data: VRODialogState)
 
-    fun onPauseVro(viewModel: VM, fragment: Fragment) {
+    fun unbindObservers(viewModel: VM, fragment: Fragment) {
         viewModel.unBindObservables(fragment)
     }
 
