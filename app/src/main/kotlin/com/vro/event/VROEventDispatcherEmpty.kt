@@ -1,7 +1,7 @@
 package com.vro.event
 
-class MBActionDispatcherEmpty<A : VROEvent> : VROEventDispatcher<A> {
-    override fun eventListener(action: A) = Unit
+class MBEventListenerEmpty<A : VROEvent> : VROEventListener<A> {
+    override fun eventListener(event: A) = Unit
 }
 
-fun <A : VROEvent> createActionDispatcherEmpty() = MBActionDispatcherEmpty<A>()
+fun <A : VROEvent> createEmptyEventListener() = MBEventListenerEmpty<A>()
