@@ -56,4 +56,9 @@ dependencies {
     implementation(libraries.mockitoCore)
     implementation(libraries.junit)
     implementation(libraries.archCore)
+    implementation(libraries.composeMaterial3Size)
+    debugImplementation(libraries.composeTooling)
+    implementation(libraries.composeToolingPreview)
+    implementation(libraries.composeActivity)
+    implementation(libraries.composeLifecycle)
 }
