@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
+import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.net.MainUseCaseResult
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.Serializable
 
-abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel() {
+abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
 
     abstract val initialViewState: S
 
