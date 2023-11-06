@@ -15,9 +15,8 @@ abstract class VROFragment<
         S : VROState,
         VB : ViewBinding,
         D : VRODestination,
-        E : VROEvent>
-    : VROBindingFragment<VM, VB, S, D, E>(),
-    VROFragmentBuilder<VM, S, D, E> {
+        E : VROEvent
+        > : VROBindingFragment<VM, VB, S, D, E>(), VROFragmentBuilder<VM, S, D, E> {
 
     override val state: S? by lazy { restoreArguments() }
 
@@ -33,7 +32,7 @@ abstract class VROFragment<
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return createBinding(inflater, container)
     }
@@ -53,5 +52,9 @@ abstract class VROFragment<
         super.onResume()
         onResumeVro(viewModel, this)
         setViewBindingObservers(viewModel, binding, this)
+    }
+
+    fun viewModelEvent(event: E) {
+        viewModel.eventListener(event)
     }
 }

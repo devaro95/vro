@@ -1,9 +1,9 @@
 package com.vro.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.fragment.VROViewModel
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
+import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.state.VROState
@@ -75,5 +75,9 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     fun verifyNavigateBack(result: Serializable? = null) {
         assertNull(getNavigatorState()?.destination)
         assertEquals(getNavigatorState()?.backResult, result)
+    }
+
+    fun viewModelEvent(event: E) {
+        viewModel.eventListener(event)
     }
 }
