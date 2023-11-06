@@ -12,7 +12,7 @@ abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestin
 
     @Composable
     fun CreateScreen(viewModel: VM) {
-        val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsState(viewModel.initialViewState)
         viewModel.onStart()
         CreateContent(state, viewModel)
     }

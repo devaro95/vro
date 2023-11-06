@@ -9,6 +9,7 @@ import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 abstract class VROBindingFragment<
@@ -26,7 +27,7 @@ abstract class VROBindingFragment<
 
     fun setViewBindingObservers(viewModel: VM, binding: VB, fragment: Fragment) {
         fragment.viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.state.collect {
+            viewModel.state.collectLatest {
                 onViewUpdate(binding, it)
             }
         }

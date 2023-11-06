@@ -13,8 +13,9 @@ import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import java.io.Serializable
 
 abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
@@ -23,10 +24,12 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     private lateinit var viewState: S
 
-    private val internalState: MutableStateFlow<S> by lazy { MutableStateFlow(initialViewState) }
+    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    val state: MutableStateFlow<S>
-        get() = internalState
+    val state: Flow<S> = observableState
 
     internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
 
@@ -55,11 +58,11 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     fun updateDataState(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
-        state.update { viewState }
+        observableState.tryEmit(viewState)
     }
 
     fun updateDataState() {
-        state.update { viewState }
+        observableState.tryEmit(viewState)
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
