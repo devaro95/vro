@@ -13,14 +13,7 @@ import java.io.Serializable
 
 interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
 
-    val state: S?
-
     val navigator: VRONavigator<D>
-
-    fun initializeState(viewModel: VM) {
-        viewModel.onInitializeState()
-        viewModel.setInitialState(state)
-    }
 
     fun onViewCreatedVro(viewModel: VM, navController: NavController, viewLifecycleOwner: LifecycleOwner) {
         viewModel.onStart()
