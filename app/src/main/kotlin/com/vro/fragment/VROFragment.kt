@@ -1,13 +1,14 @@
 package com.vro.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
 
 abstract class VROFragment<
@@ -15,18 +16,13 @@ abstract class VROFragment<
         S : VROState,
         VB : ViewBinding,
         D : VRODestination,
-        E : VROEvent
+        E : VROEvent,
         > : VROBindingFragment<VM, VB, S, D, E>(), VROFragmentBuilder<VM, S, D, E> {
-
-    override val state: S? by lazy { restoreArguments() }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeState(viewModel)
+        initializeState()
     }
 
     override fun onCreateView(
@@ -51,7 +47,7 @@ abstract class VROFragment<
     override fun onResume() {
         super.onResume()
         onResumeVro(viewModel, this)
-        setViewBindingObservers(viewModel, binding, this)
+        setViewBindingObservers()
     }
 
     fun viewModelEvent(event: E) {

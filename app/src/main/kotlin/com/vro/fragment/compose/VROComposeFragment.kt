@@ -26,12 +26,6 @@ abstract class VROComposeFragment<VM : VROViewModel<S, D, E>,
     @Composable
     abstract fun composableView(): SC
 
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initializeState(viewModel)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
