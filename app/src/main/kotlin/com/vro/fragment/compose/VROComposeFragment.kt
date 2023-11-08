@@ -48,4 +48,8 @@ abstract class VROComposeFragment<VM : VROViewModel<S, D, E>,
         super.onResume()
         onResumeVro(viewModel, this)
     }
+
+    fun viewModelEvent(event: E) {
+        viewModel.eventListener(event)
+    }
 }
