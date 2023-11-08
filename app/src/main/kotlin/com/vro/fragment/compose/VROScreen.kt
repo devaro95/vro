@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.vro.event.VROEvent
+import com.vro.event.VROEventListener
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
@@ -18,7 +19,10 @@ abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestin
     }
 
     @Composable
-    abstract fun CreateContent(state: S, viewModel: VM)
+    abstract fun CreateContent(
+        state: S,
+        eventListener: VROEventListener<E>
+    )
 
     @VROMultiDevicePreview
     @Composable

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -16,11 +15,13 @@ import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
-abstract class VROComposeFragment<VM : VROViewModel<S, D, E>,
+abstract class VROComposeFragment<
+        VM : VROViewModel<S, D, E>,
         S : VROState,
-        E : VROEvent,
         D : VRODestination,
-        SC : VROScreen<VM, S, D, E>>
+        SC : VROScreen<VM, S, D, E>,
+        E : VROEvent,
+        >
     : VROInjectionFragment<VM>(), VROFragmentBuilder<VM, S, D, E> {
 
     @Composable
@@ -29,7 +30,7 @@ abstract class VROComposeFragment<VM : VROViewModel<S, D, E>,
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
