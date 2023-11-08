@@ -15,6 +15,13 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     val navigator: VRONavigator<D>
 
+    val state: S?
+
+    fun initializeState(viewModel: VM) {
+        viewModel.onInitializeState()
+        viewModel.setInitialState(state)
+    }
+
     fun onViewCreatedVro(viewModel: VM, navController: NavController, viewLifecycleOwner: LifecycleOwner) {
         viewModel.onStart()
         getNavigationResult(navController)?.observe(viewLifecycleOwner) { result ->

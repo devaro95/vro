@@ -21,21 +21,11 @@ abstract class VROBindingFragment<
         D : VRODestination,
         E : VROEvent> : VROInjectionFragment<VM>() {
 
-    val state: S? by lazy { restoreArguments() }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
-
     private var _binding: VB? = null
 
     val binding get() = _binding!!
 
     abstract fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
-
-    fun initializeState() {
-        viewModel.onInitializeState()
-        viewModel.setInitialState(state)
-    }
 
     fun setViewBindingObservers() {
         viewLifecycleOwner.lifecycleScope.launch {

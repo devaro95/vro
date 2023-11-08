@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -13,6 +14,8 @@ import com.vro.fragment.VROFragmentBuilder
 import com.vro.fragment.VROInjectionFragment
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
+import com.vro.navigation.VROFragmentNavigator
+import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
 
 abstract class VROComposeFragment<
@@ -24,8 +27,19 @@ abstract class VROComposeFragment<
         >
     : VROInjectionFragment<VM>(), VROFragmentBuilder<VM, S, D, E> {
 
+    override val state: S? by lazy { restoreArguments() }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
+
     @Composable
     abstract fun composableView(): SC
+
+    @CallSuper
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initializeState(viewModel)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
