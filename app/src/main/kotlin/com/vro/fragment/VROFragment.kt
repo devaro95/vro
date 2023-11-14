@@ -29,7 +29,7 @@ abstract class VROFragment<
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeState(viewModel)
+        initializeState(viewModel, this)
     }
 
     override fun onCreateView(
@@ -46,14 +46,9 @@ abstract class VROFragment<
         binding.onViewStarted()
     }
 
-    override fun onPause() {
-        super.onPause()
-        unbindObservers(viewModel, this)
-    }
-
     override fun onResume() {
         super.onResume()
-        onResumeVro(viewModel, this)
+        onResumeVro(viewModel)
         setViewBindingObservers()
     }
 

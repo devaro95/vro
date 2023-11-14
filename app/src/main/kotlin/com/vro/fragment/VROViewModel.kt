@@ -100,10 +100,4 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
     }
 
     open fun setOnResult(result: Serializable) = Unit
-
-    fun unBindObservables(lifecycleOwner: LifecycleOwner) {
-        navigationState.removeObservers(lifecycleOwner)
-        dialogState.removeObservers(lifecycleOwner)
-        errorState.removeObservers(lifecycleOwner)
-    }
 }

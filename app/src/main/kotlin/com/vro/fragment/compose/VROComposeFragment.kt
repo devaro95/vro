@@ -14,7 +14,6 @@ import com.vro.fragment.VROFragmentBuilder
 import com.vro.fragment.VROInjectionFragment
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VROFragmentNavigator
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
 
@@ -38,7 +37,7 @@ abstract class VROComposeFragment<
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeState(viewModel)
+        initializeState(viewModel, this)
     }
 
     override fun onCreateView(
@@ -61,7 +60,7 @@ abstract class VROComposeFragment<
 
     override fun onResume() {
         super.onResume()
-        onResumeVro(viewModel, this)
+        onResumeVro(viewModel)
     }
 
     fun viewModelEvent(event: E) {

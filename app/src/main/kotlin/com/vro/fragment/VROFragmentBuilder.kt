@@ -17,21 +17,20 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     val state: S?
 
-    fun initializeState(viewModel: VM) {
+    fun initializeState(viewModel: VM, fragment: Fragment) {
+        setStateObserver(viewModel, fragment)
         viewModel.onInitializeState()
         viewModel.setInitialState(state)
     }
 
     fun onViewCreatedVro(viewModel: VM, navController: NavController, viewLifecycleOwner: LifecycleOwner) {
-        viewModel.onStart()
         getNavigationResult(navController)?.observe(viewLifecycleOwner) { result ->
             result?.let { viewModel.setOnResult(it) }
         }
     }
 
-    fun onResumeVro(viewModel: VM, fragment: Fragment) {
+    fun onResumeVro(viewModel: VM) {
         viewModel.onResume()
-        setStateObserver(viewModel, fragment)
     }
 
     private fun setStateObserver(viewModel: VM, fragment: Fragment) {
@@ -45,10 +44,6 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
     }
 
     fun onLoadDialog(data: VRODialogState)
-
-    fun unbindObservers(viewModel: VM, fragment: Fragment) {
-        viewModel.unBindObservables(fragment)
-    }
 
     private fun getNavigationResult(navController: NavController) =
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(NAVIGATION_BACK_STATE)
