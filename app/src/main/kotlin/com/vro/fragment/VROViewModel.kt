@@ -1,6 +1,5 @@
 package com.vro.fragment
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
