@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
@@ -28,11 +33,30 @@ abstract class VROComposeFragment<
 
     override val state: S? by lazy { restoreArguments() }
 
+    abstract val theme: VroComposeTheme?
+
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
 
     @Composable
     abstract fun composableView(): SC
+
+    @Composable
+    private fun SetTheme(
+        lightColors: Colors,
+        darkColors: Colors,
+        typography: Typography,
+        content: @Composable () -> Unit,
+    ) {
+        MaterialTheme(
+            colors = if (isSystemInDarkTheme()) darkColors else lightColors,
+            typography = typography
+        ) {
+            CompositionLocalProvider(
+                content = content
+            )
+        }
+    }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +72,13 @@ abstract class VROComposeFragment<
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                composableView().CreateScreen(viewModel)
+                theme?.also {
+                    SetTheme(it.lightColors, it.darkColors, it.typography) {
+                        composableView().CreateScreen(viewModel)
+                    }
+                } ?: run {
+                    composableView().CreateScreen(viewModel)
+                }
             }
         }
     }

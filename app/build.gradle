@@ -66,4 +66,5 @@ dependencies {
     implementation(libraries.composeToolingPreview)
     implementation(libraries.composeActivity)
     implementation(libraries.composeLifecycle)
+    implementation(libraries.composeMaterial)
 }
