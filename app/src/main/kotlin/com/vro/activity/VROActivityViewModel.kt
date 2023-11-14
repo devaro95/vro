@@ -1,23 +1,20 @@
 package com.vro.activity
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
-import com.vro.net.VROConcurrencyManager
 import com.vro.net.MainUseCaseResult
+import com.vro.net.VROConcurrencyManager
 import kotlinx.coroutines.CoroutineScope
 
 abstract class VROActivityViewModel : ViewModel() {
 
-    private val dialogLiveData: MutableLiveData<VRODialogState> = MutableLiveData()
-    internal val dialog: LiveData<VRODialogState>
-        get() = dialogLiveData
+    internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
 
     private val concurrencyManager = VROConcurrencyManager()
 
     fun updateDialogState(dialogId: VRODialogState) {
-        dialogLiveData.value = dialogId
+        dialogState.value = dialogId
     }
 
     abstract fun onStart()
