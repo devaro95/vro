@@ -30,6 +30,7 @@ abstract class VROFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeState(viewModel, this)
+        viewModel.onStart()
     }
 
     override fun onCreateView(

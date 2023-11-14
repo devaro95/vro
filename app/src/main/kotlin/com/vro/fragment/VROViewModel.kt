@@ -51,7 +51,6 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     internal fun setInitialState(state: S?) {
         updateDataState { state ?: viewState }
-        onStart()
     }
 
     fun checkDataState(): S = viewState
