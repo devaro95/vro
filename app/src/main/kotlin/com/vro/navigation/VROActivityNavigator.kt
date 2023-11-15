@@ -2,17 +2,14 @@ package com.vro.navigation
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.vro.state.VROState
 import java.io.Serializable
 
-abstract class VROFragmentNavigator<D : VRODestination>(private val fragment: Fragment) : VRONavigator<D> {
+abstract class VROActivityNavigator<D : VRODestination>(private val activity: Activity, navHostId: Int) : VRONavigator<D> {
 
-    private val navController: NavController = fragment.findNavController()
-
-    private val activity: Activity = fragment.requireActivity()
+    private val navController: NavController = activity.findNavController(navHostId)
 
     override fun navigateBack(result: Serializable?) {
         navController.previousBackStackEntry?.savedStateHandle?.set(NAVIGATION_BACK_STATE, result)
