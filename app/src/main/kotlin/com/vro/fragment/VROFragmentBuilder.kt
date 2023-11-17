@@ -18,7 +18,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
     val state: S?
 
     fun initializeState(viewModel: VM, fragment: Fragment) {
-        setStateObserver(viewModel, fragment)
+        setObservers(viewModel, fragment)
         viewModel.onInitializeState()
         viewModel.setInitialState(state)
     }
@@ -33,7 +33,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
         viewModel.onResume()
     }
 
-    private fun setStateObserver(viewModel: VM, fragment: Fragment) {
+    private fun setObservers(viewModel: VM, fragment: Fragment) {
         viewModel.dialogState.observe(fragment) {
             onLoadDialog(it)
         }

@@ -58,12 +58,6 @@ abstract class VROComposeFragment<
         }
     }
 
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initializeState(viewModel, this)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,6 +73,7 @@ abstract class VROComposeFragment<
                 } ?: run {
                     composableView().CreateScreen(viewModel)
                 }
+                initializeState(viewModel, this@VROComposeFragment)
             }
         }
     }
