@@ -19,7 +19,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     fun initializeState(viewModel: VM, fragment: Fragment) {
         setObservers(viewModel, fragment)
-        viewModel.onInitializeState()
+        viewModel.createInitialState()
         viewModel.setInitialState(state)
     }
 

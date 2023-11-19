@@ -12,8 +12,8 @@ import com.vro.state.VROState
 abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
 
     @Composable
-    fun CreateScreen(viewModel: VM) {
-        val state by viewModel.state.collectAsState(viewModel.initialViewState)
+    fun CreateScreen(viewModel: VM, initialState: S?) {
+        val state by viewModel.state.collectAsState(initialState ?: viewModel.initialViewState)
         viewModel.onStart()
         CreateContent(state, viewModel)
     }
@@ -21,7 +21,7 @@ abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestin
     @Composable
     abstract fun CreateContent(
         state: S,
-        eventListener: VROEventListener<E>
+        eventListener: VROEventListener<E>,
     )
 
     @VROMultiDevicePreview

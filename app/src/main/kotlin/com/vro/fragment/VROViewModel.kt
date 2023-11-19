@@ -36,17 +36,13 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     internal val navigationState: VROSingleLiveEvent<VRONavigationState<D>> = VROSingleLiveEvent()
 
-    private fun createInitialState() {
+    internal fun createInitialState() {
         if (!this::viewState.isInitialized) {
             viewState = initialViewState
         }
     }
 
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
-
-    internal fun onInitializeState() {
-        createInitialState()
-    }
 
     internal fun setInitialState(state: S?) {
         updateDataState { state ?: viewState }

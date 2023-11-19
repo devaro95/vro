@@ -58,6 +58,12 @@ abstract class VROComposeFragment<
         }
     }
 
+    @CallSuper
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initializeState(viewModel, this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,12 +74,11 @@ abstract class VROComposeFragment<
             setContent {
                 theme?.also {
                     SetTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(viewModel)
+                        composableView().CreateScreen(viewModel, state)
                     }
                 } ?: run {
-                    composableView().CreateScreen(viewModel)
+                    composableView().CreateScreen(viewModel, state)
                 }
-                initializeState(viewModel, this@VROComposeFragment)
             }
         }
     }
