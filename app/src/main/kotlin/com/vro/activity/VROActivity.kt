@@ -27,21 +27,13 @@ abstract class VROActivity<
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStateObserver(viewModel)
         createViewBinding(layoutInflater).let {
             activityBinding = it
             setContentView(it.root)
         }
+        viewModel.createInitialState()
         onCreated(activityBinding)
     }
-
-    private fun setStateObserver(viewModel: VM) {
-        viewModel.dialogState.observe(this) {
-            onLoadDialog(it)
-        }
-    }
-
-    abstract fun onLoadDialog(data: VRODialogState)
 
     private fun setViewBindingObservers() {
         lifecycleScope.launch {
@@ -49,7 +41,19 @@ abstract class VROActivity<
                 onViewUpdate(activityBinding, it)
             }
         }
+
+        viewModel.errorState.observe(this) {
+            activityBinding.onError(it)
+        }
+
+        viewModel.dialogState.observe(this) {
+            onLoadDialog(it)
+        }
     }
+
+    abstract fun VB.onError(error: Throwable)
+
+    abstract fun onLoadDialog(data: VRODialogState)
 
     abstract fun onViewUpdate(binding: VB, data: S)
 
