@@ -9,6 +9,7 @@ import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
+import com.vro.navigation.VRONavigator
 import com.vro.state.VROState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,6 +25,8 @@ abstract class VROActivity<
     abstract fun createViewBinding(inflater: LayoutInflater): VB
 
     open lateinit var activityBinding: VB
+
+    abstract val navigator: VRONavigator<D>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,11 @@ abstract class VROActivity<
 
         viewModel.dialogState.observe(this) {
             onLoadDialog(it)
+        }
+
+        viewModel.navigationState.observe(this) {
+            if (it.navigateBack) navigator.navigateBack(it.backResult)
+            else it.destination?.let { destination -> navigator.navigate(destination) }
         }
     }
 
