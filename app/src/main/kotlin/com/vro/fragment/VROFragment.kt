@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VROFragmentNavigator
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
 
@@ -54,6 +53,6 @@ abstract class VROFragment<
     }
 
     fun viewModelEvent(event: E) {
-        viewModel.eventListener(event)
+        viewModel.sendEvent(event)
     }
 }

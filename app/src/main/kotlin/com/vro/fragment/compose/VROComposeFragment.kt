@@ -72,12 +72,13 @@ abstract class VROComposeFragment<
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
+                composableView().InitializeState(viewModel, state)
                 theme?.also {
                     SetTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(viewModel, state)
+                        composableView().CreateScreen(viewModel)
                     }
                 } ?: run {
-                    composableView().CreateScreen(viewModel, state)
+                    composableView().CreateScreen(viewModel)
                 }
             }
         }
@@ -94,6 +95,6 @@ abstract class VROComposeFragment<
     }
 
     fun viewModelEvent(event: E) {
-        viewModel.eventListener(event)
+        viewModel.sendEvent(event)
     }
 }
