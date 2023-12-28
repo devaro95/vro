@@ -13,8 +13,11 @@ abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestin
 
     lateinit var state: State<S>
 
+    lateinit var viewModel: VM
+
     @Composable
     fun InitializeState(viewModel: VM, initialState: S?) {
+        this.viewModel = viewModel
         state = viewModel.state.collectAsState(initialState ?: viewModel.initialViewState)
     }
 
@@ -33,4 +36,9 @@ abstract class VROScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestin
     @VROMultiDevicePreview
     @Composable
     abstract fun CreatePreview()
+
+
+    fun viewModelEvent(event: E) {
+        viewModel.eventListener(event)
+    }
 }

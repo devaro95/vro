@@ -95,6 +95,6 @@ abstract class VROComposeFragment<
     }
 
     fun viewModelEvent(event: E) {
-        viewModel.sendEvent(event)
+        viewModel.eventListener(event)
     }
 }

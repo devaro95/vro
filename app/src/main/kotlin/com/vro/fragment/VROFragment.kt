@@ -53,6 +53,6 @@ abstract class VROFragment<
     }
 
     fun viewModelEvent(event: E) {
-        viewModel.sendEvent(event)
+        viewModel.eventListener(event)
     }
 }
