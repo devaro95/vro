@@ -79,10 +79,10 @@ abstract class VROComposableFragment<
             setContent {
                 theme?.also {
                     CreateTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(viewModel, state)
+                        composableView().InitializeScreen(viewModel, state)
                     }
                 } ?: run {
-                    composableView().CreateScreen(viewModel, state)
+                    composableView().InitializeScreen(viewModel, state)
                 }
             }
         }
