@@ -78,6 +78,6 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     }
 
     fun viewModelEvent(event: E) {
-        viewModel.sendEvent(event)
+        viewModel.eventListener(event)
     }
 }

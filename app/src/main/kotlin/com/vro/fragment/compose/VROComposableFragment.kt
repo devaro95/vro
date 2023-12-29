@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.vro.event.VROEvent
 import com.vro.fragment.VROFragmentBuilder
@@ -21,8 +22,10 @@ import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-abstract class VROComposeFragment<
+abstract class VROComposableFragment<
         VM : VROViewModel<S, D, E>,
         S : VROState,
         D : VRODestination,
@@ -33,7 +36,7 @@ abstract class VROComposeFragment<
 
     override val state: S? by lazy { restoreArguments() }
 
-    abstract val theme: VroComposeTheme?
+    abstract val theme: VroComposableTheme?
 
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
@@ -41,8 +44,10 @@ abstract class VROComposeFragment<
     @Composable
     abstract fun composableView(): SC
 
+    abstract fun onStateUpdated()
+
     @Composable
-    private fun SetTheme(
+    private fun CreateTheme(
         lightColors: Colors,
         darkColors: Colors,
         typography: Typography,
@@ -72,13 +77,12 @@ abstract class VROComposeFragment<
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                composableView().InitializeState(viewModel, state)
                 theme?.also {
-                    SetTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(viewModel)
+                    CreateTheme(it.lightColors, it.darkColors, it.typography) {
+                        composableView().CreateScreen(viewModel, state)
                     }
                 } ?: run {
-                    composableView().CreateScreen(viewModel)
+                    composableView().CreateScreen(viewModel, state)
                 }
             }
         }
@@ -89,8 +93,17 @@ abstract class VROComposeFragment<
         onViewCreatedVro(viewModel, findNavController(), viewLifecycleOwner)
     }
 
+    private fun setStateObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.state.collectLatest {
+                onStateUpdated()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        setStateObserver()
         onResumeVro(viewModel)
     }
 

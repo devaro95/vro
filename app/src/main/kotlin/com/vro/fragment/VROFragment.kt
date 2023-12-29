@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 abstract class VROFragment<
         VM : VROViewModel<S, D, E>,
@@ -18,9 +21,40 @@ abstract class VROFragment<
         VB : ViewBinding,
         D : VRODestination,
         E : VROEvent,
-        > : VROBindingFragment<VM, VB, S, D, E>(), VROFragmentBuilder<VM, S, D, E> {
+        > : VROInjectionFragment<VM>(), VROFragmentBuilder<VM, S, D, E> {
+
+    private var _binding: VB? = null
+
+    val binding get() = _binding!!
 
     override val state: S? by lazy { restoreArguments() }
+
+    abstract fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+
+    abstract fun VB.onViewStarted()
+
+    abstract fun onViewUpdate(binding: VB, data: S)
+
+    abstract fun VB.onError(error: Throwable)
+
+    private fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ): View {
+        _binding = createViewBinding(inflater, container)
+        return binding.root
+    }
+
+    private fun setViewBindingObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.state.collectLatest {
+                onViewUpdate(binding, it)
+            }
+        }
+        viewModel.errorState.observe(this) {
+            binding.onError(it)
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
