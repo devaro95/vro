@@ -1,7 +1,6 @@
 ext {
     core = "1.10.1"
     appCompat = "1.6.1"
-    material = "1.9.0"
     koin = "3.5.0"
     lifecycle = "2.6.1"
     navigation = "2.7.4"
@@ -13,12 +12,11 @@ ext {
     composeMaterial3Size = "1.2.0-alpha10"
     composeActivity = "1.8.0"
     composeLifecycle = "2.6.2"
-    composeMaterial = "1.5.4"
 
     libraries = [
             core                     : "androidx.core:core-ktx:$core",
             appCompat                : "androidx.appcompat:appcompat:$appCompat",
-            material                 : "com.google.android.material:material:$material",
+            material3                : "androidx.compose.material3:material3",
             koinAndroid              : "io.insert-koin:koin-android:$koin",
             koinCore                 : "io.insert-koin:koin-core:$koin",
             lifecycleViewModel       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle",
@@ -34,7 +32,6 @@ ext {
             composeTooling           : "androidx.compose.ui:ui-tooling",
             composeToolingPreview    : "androidx.compose.ui:ui-tooling-preview",
             composeActivity          : "androidx.activity:activity-compose:$composeActivity",
-            composeLifecycle         : "androidx.lifecycle:lifecycle-viewmodel-compose:$composeLifecycle",
-            composeMaterial          : "androidx.compose.material:material:$composeMaterial"
+            composeLifecycle         : "androidx.lifecycle:lifecycle-viewmodel-compose:$composeLifecycle"
     ]
 }

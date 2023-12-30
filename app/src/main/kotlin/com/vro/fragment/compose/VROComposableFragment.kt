@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
@@ -36,7 +36,7 @@ abstract class VROComposableFragment<
 
     override val state: S? by lazy { restoreArguments() }
 
-    abstract val theme: VroComposableTheme?
+    open val theme: VroComposableTheme? = null
 
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
@@ -48,14 +48,14 @@ abstract class VROComposableFragment<
 
     @Composable
     private fun CreateTheme(
-        lightColors: Colors,
-        darkColors: Colors,
+        lightColors: ColorScheme,
+        darkColors: ColorScheme,
         typography: Typography,
         content: @Composable () -> Unit,
     ) {
         MaterialTheme(
-            colors = if (isSystemInDarkTheme()) darkColors else lightColors,
-            typography = typography
+            colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors,
+            typography = typography,
         ) {
             CompositionLocalProvider(
                 content = content

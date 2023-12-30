@@ -1,10 +1,10 @@
 package com.vro.fragment.compose
 
-import androidx.compose.material.Colors
-import androidx.compose.material.Typography
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.Typography
 
 data class VroComposableTheme(
-    val lightColors: Colors,
-    val darkColors: Colors,
-    val typography: Typography
+    val lightColors: ColorScheme,
+    val darkColors: ColorScheme,
+    val typography: Typography,
 )
