@@ -29,7 +29,7 @@ abstract class VROComposableFragment<
         VM : VROViewModel<S, D, E>,
         S : VROState,
         D : VRODestination,
-        SC : VROScreen<VM, S, D, E>,
+        SC : VROFragmentScreen<VM, S, D, E>,
         E : VROEvent,
         >
     : VROInjectionFragment<VM>(), VROFragmentBuilder<VM, S, D, E> {
@@ -79,10 +79,10 @@ abstract class VROComposableFragment<
             setContent {
                 theme?.also {
                     CreateTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().InitializeScreen(viewModel, state)
+                        composableView().CreateScreen(state, viewModel)
                     }
                 } ?: run {
-                    composableView().InitializeScreen(viewModel, state)
+                    composableView().CreateScreen(state, viewModel)
                 }
             }
         }
