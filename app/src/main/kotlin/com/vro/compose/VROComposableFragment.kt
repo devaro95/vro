@@ -1,4 +1,4 @@
-package com.vro.fragment.compose
+package com.vro.compose
 
 import android.os.Bundle
 import android.view.LayoutInflater

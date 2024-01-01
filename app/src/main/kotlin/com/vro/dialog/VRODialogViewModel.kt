@@ -1,10 +1,8 @@
 package com.vro.dialog
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.vro.net.VROConcurrencyManager
-import com.vro.net.MainUseCaseResult
+import com.vro.usecase.MainUseCaseResult
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow

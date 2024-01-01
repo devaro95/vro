@@ -1,13 +1,14 @@
 package com.vro.fragment
 
 import androidx.lifecycle.ViewModel
-import com.vro.VROSingleLiveEvent
+import com.vro.event.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
-import com.vro.net.MainUseCaseResult
+import com.vro.navparam.VRONavParam
+import com.vro.usecase.MainUseCaseResult
 import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
 import com.vro.state.VROState
@@ -36,13 +37,15 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     internal val navigationState: VROSingleLiveEvent<VRONavigationState<D>> = VROSingleLiveEvent()
 
+    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
     internal fun createInitialState() {
         if (!this::viewState.isInitialized) {
             viewState = initialViewState
         }
     }
 
-    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+    open fun onNavParam(navParam: VRONavParam?) = Unit
 
     internal fun setInitialState(state: S?) {
         updateDataState { state ?: viewState }

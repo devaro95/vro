@@ -1,4 +1,4 @@
-package com.vro.fragment.compose
+package com.vro.compose
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography

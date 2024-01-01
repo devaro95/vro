@@ -68,4 +68,5 @@ dependencies {
     implementation(libraries.composeLifecycle)
     implementation(libraries.composeLifecycle)
     implementation(libraries.koinCompose)
+    implementation(libraries.composeRuntime)
 }

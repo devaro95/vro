@@ -1,4 +1,4 @@
-package com.vro.fragment.compose
+package com.vro.compose.preview
 
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview

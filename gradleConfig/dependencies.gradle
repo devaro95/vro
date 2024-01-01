@@ -13,6 +13,7 @@ ext {
     composeMaterial3Size = "1.2.0-alpha10"
     composeActivity = "1.8.0"
     composeLifecycle = "2.6.2"
+    composeRuntime = "1.5.4"
 
     libraries = [
             core                     : "androidx.core:core-ktx:$core",
@@ -34,6 +35,7 @@ ext {
             composeTooling           : "androidx.compose.ui:ui-tooling",
             composeToolingPreview    : "androidx.compose.ui:ui-tooling-preview",
             composeActivity          : "androidx.activity:activity-compose:$composeActivity",
-            composeLifecycle         : "androidx.lifecycle:lifecycle-viewmodel-compose:$composeLifecycle"
+            composeLifecycle         : "androidx.lifecycle:lifecycle-viewmodel-compose:$composeLifecycle",
+            composeRuntime           : "androidx.compose.runtime:runtime-livedata:$composeRuntime"
     ]
 }

@@ -1,4 +1,4 @@
-package com.vro.activity
+package com.vro.compose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.vro.fragment.compose.VroComposableTheme
 
 abstract class VROSimpleComposableActivity : ComponentActivity() {
 
