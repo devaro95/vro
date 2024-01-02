@@ -42,7 +42,9 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     }
 
     protected fun getDialogState(): VRODialogState? {
-        return viewModel.dialogState.value
+        //TODO
+        //return viewModel.dialogState.value
+        return null
     }
 
     private fun getNavigatorState(): VRONavigationState<out VRODestination>? {

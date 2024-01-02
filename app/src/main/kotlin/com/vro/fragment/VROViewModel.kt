@@ -70,9 +70,9 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         errorState.value = error
     }
 
-    fun updateDialogState(dialogId: VRODialogState, clearView: Boolean = true) {
+    fun updateDialogState(state: VRODialogState, clearView: Boolean = true) {
         if (clearView) updateDataState { viewState }
-        dialogState.value = dialogId
+        dialogState.value = state
     }
 
     open fun onStart() = Unit

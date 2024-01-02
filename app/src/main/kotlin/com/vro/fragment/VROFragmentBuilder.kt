@@ -1,7 +1,9 @@
 package com.vro.fragment
 
+import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
@@ -9,6 +11,8 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_BACK_STATE
 import com.vro.navigation.VRONavigator
 import com.vro.state.VROState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
@@ -34,8 +38,10 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
     }
 
     private fun setObservers(viewModel: VM, fragment: Fragment) {
-        viewModel.dialogState.observe(fragment) {
-            onLoadDialog(it)
+        fragment.lifecycleScope.launch {
+            viewModel.dialogState.observe(fragment) {
+                onLoadDialog(it)
+            }
         }
         viewModel.navigationState.observe(fragment) {
             if (it.navigateBack) navigator.navigateBack(it.backResult)

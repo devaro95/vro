@@ -43,14 +43,13 @@ abstract class VROActivity<
             viewModel.state.collectLatest {
                 onViewUpdate(activityBinding, it)
             }
+            viewModel.dialogState.observe(this@VROActivity) {
+                onLoadDialog(it)
+            }
         }
 
         viewModel.errorState.observe(this) {
             activityBinding.onError(it)
-        }
-
-        viewModel.dialogState.observe(this) {
-            onLoadDialog(it)
         }
 
         viewModel.navigationState.observe(this) {
