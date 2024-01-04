@@ -12,7 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 
 abstract class VROSimpleComposableActivity : ComponentActivity() {
 
-    open val theme: VroComposableTheme? = null
+    open val theme: VROComposableTheme? = null
 
     @Composable
     private fun CreateTheme(

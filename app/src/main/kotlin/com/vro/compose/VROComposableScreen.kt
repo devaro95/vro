@@ -26,6 +26,10 @@ abstract class VROComposableScreen<VM : VROViewModel<S, D, E>, S : VROState, D :
 
     private var initialState: S? = null
 
+    @VROMultiDevicePreview
+    @Composable
+    abstract fun ComposablePreview()
+
     @Composable
     fun CreateScreen(viewModelSeed: VM, navController: NavController) {
         this@VROComposableScreen.navController = remember { navController }
@@ -37,10 +41,6 @@ abstract class VROComposableScreen<VM : VROViewModel<S, D, E>, S : VROState, D :
 
     @Composable
     open fun OnLoadDialog(data: VRODialogState) = Unit
-
-    @VROMultiDevicePreview
-    @Composable
-    abstract fun ComposablePreview()
 
     fun viewModelEvent(event: E) {
         viewModel.eventListener(event)

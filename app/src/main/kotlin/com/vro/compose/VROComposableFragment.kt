@@ -36,7 +36,7 @@ abstract class VROComposableFragment<
 
     override val state: S? by lazy { restoreArguments() }
 
-    open val theme: VroComposableTheme? = null
+    open val theme: VROComposableTheme? = null
 
     @Suppress("UNCHECKED_CAST")
     private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
