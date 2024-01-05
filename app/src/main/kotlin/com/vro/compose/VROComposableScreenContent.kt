@@ -18,13 +18,11 @@ import com.vro.navigation.VRODestination
 import com.vro.navparam.VRONavParam
 import com.vro.state.VROState
 
-abstract class VROComposableScreen<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
+abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
 
     lateinit var viewModel: VM
 
     private lateinit var navController: NavController
-
-    private var initialState: S? = null
 
     @VROMultiDevicePreview
     @Composable
@@ -32,8 +30,17 @@ abstract class VROComposableScreen<VM : VROViewModel<S, D, E>, S : VROState, D :
 
     @Composable
     fun CreateScreen(viewModelSeed: VM, navController: NavController) {
-        this@VROComposableScreen.navController = remember { navController }
-        InitializeScreen(viewModelSeed)
+        this@VROComposableScreenContent.navController = remember { navController }
+        viewModel = createViewModel(remember { viewModelSeed })
+        LaunchedEffect(Unit) {
+            viewModel.createInitialState()
+            viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
+            viewModel.onStart()
+        }
+        val state by viewModel.state.collectAsState(remember { viewModel.initialViewState })
+        val dialogState by viewModel.dialogState.observeAsState()
+        ComposableContent(state)
+        dialogState?.let { OnLoadDialog(it) }
     }
 
     @Composable
@@ -51,19 +58,5 @@ abstract class VROComposableScreen<VM : VROViewModel<S, D, E>, S : VROState, D :
             putNavParam(destination::class.java.name, it)
         }
         navController.navigate(destination::class.java.name)
-    }
-
-    @Composable
-    private fun InitializeScreen(viewModelSeed: VM) {
-        viewModel = createViewModel(remember { viewModelSeed })
-        LaunchedEffect(Unit) {
-            viewModel.createInitialState()
-            viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
-            viewModel.onStart()
-        }
-        val state by viewModel.state.collectAsState(remember { initialState ?: viewModel.initialViewState })
-        val dialogState by viewModel.dialogState.observeAsState()
-        ComposableContent(state)
-        dialogState?.let { OnLoadDialog(it) }
     }
 }
