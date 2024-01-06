@@ -1,9 +1,11 @@
 package com.vro.compose.extensions
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -26,6 +28,23 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     viewModelSeed: @Composable () -> VM,
     navController: NavController,
     destination: VRODestination,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> VROComposableScreenContent<VM, S, D, E>,
+    enterTransition: EnterTransition? = null,
+    exitTransition: ExitTransition? = null,
+) {
+    composable(
+        destination::class.java.name,
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition }
+    ) {
+        content.invoke(this, it).CreateScreen(viewModelSeed.invoke(), navController = navController)
+    }
+}
+
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
+    viewModelSeed: @Composable () -> VM,
+    navController: NavController,
+    destination: VRODestination,
     content: VROComposableScreenContent<VM, S, D, E>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
@@ -34,7 +53,9 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
         destination::class.java.name,
         enterTransition = { enterTransition },
         exitTransition = { exitTransition }
-    ) { content.CreateScreen(viewModelSeed.invoke(), navController = navController) }
+    ) {
+        content.CreateScreen(viewModelSeed.invoke(), navController = navController)
+    }
 }
 
 @Composable
