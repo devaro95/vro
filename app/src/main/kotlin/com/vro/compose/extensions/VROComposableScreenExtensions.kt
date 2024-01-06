@@ -33,7 +33,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     exitTransition: ExitTransition? = null,
 ) {
     composable(
-        destination::class.java.name,
+        destination.destinationRoute(),
         enterTransition = { enterTransition },
         exitTransition = { exitTransition }
     ) {
@@ -50,7 +50,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     exitTransition: ExitTransition? = null,
 ) {
     composable(
-        destination::class.java.name,
+        destination.destinationRoute(),
         enterTransition = { enterTransition },
         exitTransition = { exitTransition }
     ) {

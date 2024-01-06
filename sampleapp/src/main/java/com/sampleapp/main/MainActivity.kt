@@ -1,12 +1,8 @@
 package com.sampleapp.main
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,12 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.sampleapp.home.HomeScreen
 import com.sampleapp.main.Destinations.*
 import com.sampleapp.profile.ProfileScreen
 import com.vro.compose.VROSimpleComposableActivity
+import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.vroComposableScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -33,7 +31,7 @@ class MainActivity : VROSimpleComposableActivity() {
     @Composable
     override fun CreateContent() {
         val navController = rememberNavController()
-        var title by remember { mutableStateOf("STRING_EMPTY") }
+        var title by remember { mutableStateOf("") }
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -41,13 +39,10 @@ class MainActivity : VROSimpleComposableActivity() {
                         containerColor = MaterialTheme.colorScheme.background,
                         titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
-                    title = { Text(title) },
-                    navigationIcon = {
-                        Icon(
-                            modifier = Modifier.size(30.dp),
-                            imageVector = Icons.Filled.ArrowBack,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            contentDescription = null
+                    title = {
+                        Text(
+                            title,
+                            fontSize = 14.sp
                         )
                     },
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -56,16 +51,14 @@ class MainActivity : VROSimpleComposableActivity() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Home::class.java.name,
+                startDestination = Home.destinationRoute(),
                 modifier = Modifier.padding(innerPadding)
             ) {
                 vroComposableScreen(
                     viewModelSeed = { koinViewModel() },
                     navController = navController,
                     content = {
-                        LaunchedEffect(Unit) {
-                            title = "Home"
-                        }
+                        LaunchedEffect(Unit) { title = "Home" }
                         HomeScreen()
                     },
                     destination = Home
@@ -74,9 +67,7 @@ class MainActivity : VROSimpleComposableActivity() {
                     viewModelSeed = { koinViewModel() },
                     navController = navController,
                     content = {
-                        LaunchedEffect(Unit) {
-                            title = "Profile"
-                        }
+                        LaunchedEffect(Unit) { title = "Profile" }
                         ProfileScreen()
                     },
                     destination = Profile

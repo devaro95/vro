@@ -8,6 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.vro.compose.extensions.createViewModel
+import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.extensions.putNavParam
 import com.vro.compose.preview.VROMultiDevicePreview
@@ -55,8 +56,8 @@ abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROSta
 
     fun navigate(destination: VRODestination, state: VRONavParam? = null) {
         state?.let {
-            putNavParam(destination::class.java.name, it)
+            putNavParam(destination.destinationRoute(), it)
         }
-        navController.navigate(destination::class.java.name)
+        navController.navigate(destination.destinationRoute())
     }
 }
