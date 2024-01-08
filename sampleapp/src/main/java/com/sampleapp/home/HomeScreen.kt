@@ -9,11 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.sampleapp.R
 import com.sampleapp.base.BaseScreen
 import com.sampleapp.home.HomeEvent.ButtonClick
 import com.sampleapp.main.Destinations
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.state.VROTopBarState
 
 class HomeScreen : BaseScreen<HomeViewModel, HomeState, Destinations, HomeEvent>() {
 
@@ -28,6 +30,16 @@ class HomeScreen : BaseScreen<HomeViewModel, HomeState, Destinations, HomeEvent>
     @Composable
     override fun ComposableContent(state: HomeState) {
         HomeScreenContent(state)
+    }
+
+    override fun setupTopBar(): VROTopBarState {
+        return VROTopBarState(
+            actionButton =
+            VROTopBarState.VROTopBarButton(
+                icon = R.drawable.ic_profile,
+                onClick = { viewModelEvent(ButtonClick) }
+            )
+        )
     }
 
     @Composable

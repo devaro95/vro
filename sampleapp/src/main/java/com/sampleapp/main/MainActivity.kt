@@ -1,37 +1,46 @@
 package com.sampleapp.main
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.sampleapp.R
 import com.sampleapp.home.HomeScreen
 import com.sampleapp.main.Destinations.*
 import com.sampleapp.profile.ProfileScreen
 import com.vro.compose.VROSimpleComposableActivity
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.vroComposableScreen
+import com.vro.state.VROTopBarState
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : VROSimpleComposableActivity() {
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun CreateContent() {
         val navController = rememberNavController()
         var title by remember { mutableStateOf("") }
+        val topBarState = remember { mutableStateOf(VROTopBarState()) }
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -45,6 +54,7 @@ class MainActivity : VROSimpleComposableActivity() {
                             fontSize = 14.sp
                         )
                     },
+                    actions = { SetTopBar(topBarState = topBarState) },
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             },
@@ -61,7 +71,8 @@ class MainActivity : VROSimpleComposableActivity() {
                         LaunchedEffect(Unit) { title = "Home" }
                         HomeScreen()
                     },
-                    destination = Home
+                    destination = Home,
+                    topBarState = topBarState
                 )
                 vroComposableScreen(
                     viewModelSeed = { koinViewModel() },
@@ -70,7 +81,21 @@ class MainActivity : VROSimpleComposableActivity() {
                         LaunchedEffect(Unit) { title = "Profile" }
                         ProfileScreen()
                     },
-                    destination = Profile
+                    destination = Profile,
+                    topBarState = topBarState
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun SetTopBar(topBarState: MutableState<VROTopBarState>) {
+        topBarState.value.actionButton?.let {
+            IconButton(onClick = it.onClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_profile),
+                    modifier = Modifier.size(30.dp),
+                    contentDescription = null
                 )
             }
         }

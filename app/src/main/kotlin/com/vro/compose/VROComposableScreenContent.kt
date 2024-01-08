@@ -2,6 +2,7 @@ package com.vro.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -18,6 +19,7 @@ import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navparam.VRONavParam
 import com.vro.state.VROState
+import com.vro.state.VROTopBarState
 
 abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> {
 
@@ -30,7 +32,11 @@ abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROSta
     abstract fun ComposablePreview()
 
     @Composable
-    fun CreateScreen(viewModelSeed: VM, navController: NavController) {
+    fun CreateScreen(
+        viewModelSeed: VM,
+        navController: NavController,
+        tobBarState: MutableState<VROTopBarState>? = null,
+    ) {
         this@VROComposableScreenContent.navController = remember { navController }
         viewModel = createViewModel(remember { viewModelSeed })
         LaunchedEffect(Unit) {
@@ -42,7 +48,10 @@ abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROSta
         val dialogState by viewModel.dialogState.observeAsState()
         ComposableContent(state)
         dialogState?.let { OnLoadDialog(it) }
+        tobBarState?.value = remember { setupTopBar() }
     }
+
+    open fun setupTopBar() = VROTopBarState()
 
     @Composable
     abstract fun ComposableContent(state: S)
@@ -59,5 +68,9 @@ abstract class VROComposableScreenContent<VM : VROViewModel<S, D, E>, S : VROSta
             putNavParam(destination.destinationRoute(), it)
         }
         navController.navigate(destination.destinationRoute())
+    }
+
+    fun navigateBack() {
+        navController.popBackStack()
     }
 }
