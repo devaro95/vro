@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "vro"
 include(":app")
- 
+include(":sampleapp")
