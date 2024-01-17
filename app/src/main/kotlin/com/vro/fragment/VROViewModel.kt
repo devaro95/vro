@@ -1,17 +1,17 @@
 package com.vro.fragment
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.vro.VROSingleLiveEvent
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
+import com.vro.event.VROSingleLiveEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
-import com.vro.net.MainUseCaseResult
+import com.vro.navparam.VRONavParam
 import com.vro.net.VROBaseConcurrencyManager
 import com.vro.net.VROConcurrencyManager
 import com.vro.state.VROState
+import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -37,21 +37,18 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     internal val navigationState: VROSingleLiveEvent<VRONavigationState<D>> = VROSingleLiveEvent()
 
-    private fun createInitialState() {
+    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
+    internal fun createInitialState() {
         if (!this::viewState.isInitialized) {
             viewState = initialViewState
         }
     }
 
-    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
-
-    internal fun onInitializeState() {
-        createInitialState()
-    }
+    open fun onNavParam(navParam: VRONavParam?) = Unit
 
     internal fun setInitialState(state: S?) {
         updateDataState { state ?: viewState }
-        onStart()
     }
 
     fun checkDataState(): S = viewState
@@ -73,9 +70,9 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         errorState.value = error
     }
 
-    fun updateDialogState(dialogId: VRODialogState, clearView: Boolean = true) {
+    fun updateDialogState(state: VRODialogState, clearView: Boolean = true) {
         if (clearView) updateDataState { viewState }
-        dialogState.value = dialogId
+        dialogState.value = state
     }
 
     open fun onStart() = Unit
@@ -100,10 +97,4 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
     }
 
     open fun setOnResult(result: Serializable) = Unit
-
-    fun unBindObservables(lifecycleOwner: LifecycleOwner) {
-        navigationState.removeObservers(lifecycleOwner)
-        dialogState.removeObservers(lifecycleOwner)
-        errorState.removeObservers(lifecycleOwner)
-    }
 }

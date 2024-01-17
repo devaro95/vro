@@ -1,5 +1,6 @@
 package com.vro.net
 
+import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 
 fun <T> executeCoroutine(
