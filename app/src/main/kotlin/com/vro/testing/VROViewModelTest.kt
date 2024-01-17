@@ -27,7 +27,7 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     open fun setup() {
         MockitoAnnotations.initMocks(this)
         viewModel.concurrencyManager = VROTestDefaultConcurrencyManager()
-        viewModel.onInitializeState()
+        viewModel.createInitialState()
     }
 
     abstract fun onSetupViewModel(): VM

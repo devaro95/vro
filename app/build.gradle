@@ -23,8 +23,13 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
+    }
     namespace 'com.vro'
-
 }
 
 publishing {
@@ -32,7 +37,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.github.devaro95'
             artifactId = 'vro'
-            version = '0.0.1'
+            version = '0.2.0'
 
             afterEvaluate {
                 from components.release
@@ -44,7 +49,7 @@ publishing {
 dependencies {
     implementation(libraries.core)
     implementation(libraries.appCompat)
-    implementation(libraries.material)
+    implementation(libraries.material3)
     implementation(libraries.koinAndroid)
     implementation(libraries.koinCore)
     implementation(libraries.lifecycleViewModel)
@@ -61,4 +66,7 @@ dependencies {
     implementation(libraries.composeToolingPreview)
     implementation(libraries.composeActivity)
     implementation(libraries.composeLifecycle)
+    implementation(libraries.composeLifecycle)
+    implementation(libraries.koinCompose)
+    implementation(libraries.composeRuntime)
 }

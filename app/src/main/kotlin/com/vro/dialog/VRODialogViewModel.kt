@@ -1,12 +1,13 @@
 package com.vro.dialog
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.vro.net.VROConcurrencyManager
-import com.vro.net.MainUseCaseResult
+import com.vro.usecase.MainUseCaseResult
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 abstract class VRODialogViewModel<S : VROState> : ViewModel() {
 
@@ -16,9 +17,12 @@ abstract class VRODialogViewModel<S : VROState> : ViewModel() {
 
     private val concurrencyManager = VROConcurrencyManager()
 
-    private val _state: MutableLiveData<S> = MutableLiveData()
-    val state: LiveData<S>
-        get() = _state
+    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val state: Flow<S> = observableState
 
     private fun createInitialState() {
         if (!this::viewState.isInitialized) {
@@ -34,7 +38,7 @@ abstract class VRODialogViewModel<S : VROState> : ViewModel() {
 
     fun updateDataState(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
-        _state.value = viewState
+        observableState.tryEmit(viewState)
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
