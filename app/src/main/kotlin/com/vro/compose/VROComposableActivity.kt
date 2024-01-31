@@ -82,7 +82,7 @@ abstract class VROComposableActivity : ComponentActivity() {
             Column(
                 modifier = Modifier.padding(
                     top = innerPadding.calculateTopPadding(),
-                    bottom = if (scaffoldState.value.bottomBarState == null) 0.dp
+                    bottom = if (bottomBarState == null) 0.dp
                     else innerPadding.calculateBottomPadding()
                 )
             ) {
