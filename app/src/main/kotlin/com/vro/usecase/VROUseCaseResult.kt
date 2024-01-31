@@ -1,10 +1,10 @@
 package com.vro.usecase
 
-import com.vro.net.VROBaseConcurrencyManager
-import com.vro.net.VROResult
-import com.vro.net.VROSyncDelegate
-import com.vro.net.onFailure
-import com.vro.net.onSuccess
+import com.vro.coroutine.VROBaseConcurrencyManager
+import com.vro.coroutine.VROResult
+import com.vro.coroutine.VROSyncDelegate
+import com.vro.coroutine.onFailure
+import com.vro.coroutine.onSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.util.concurrent.atomic.AtomicBoolean

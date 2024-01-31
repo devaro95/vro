@@ -30,11 +30,13 @@ import java.io.Serializable
 @ExperimentalMaterial3Api
 abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEvent> {
 
-    internal lateinit var viewModel: VROComposableViewModel<S, D, E>
+    internal lateinit var viewModel: VROComposableViewModel<S, D>
 
     open val skeletonEnabled = true
 
     lateinit var context: Context
+
+    lateinit var eventLauncher: E
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -48,12 +50,13 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
 
     @Composable
     fun CreateScreen(
-        viewModel: VROComposableViewModel<S, D, E>,
+        viewModel: VROComposableViewModel<S, D>,
         navController: NavController,
         scaffoldState: MutableState<VROComposableScaffoldState>,
         navigator: VROComposableNavigator<D>,
     ) {
         this.viewModel = viewModel
+        eventLauncher = viewModel as E
         context = LocalContext.current
         val backResult = navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(VROFragmentNavigator.NAVIGATION_BACK_STATE)
         val screenLifecycle = LocalLifecycleOwner.current.lifecycle
@@ -61,7 +64,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Event.ON_CREATE -> {
-                        viewModel.initialize()
+                        viewModel.isLoaded()
                         viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
                     }
 
@@ -83,10 +86,11 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
                 screenLifecycle.removeObserver(observer)
             }
         }
-        val state by viewModel.state.collectAsState(remember { viewModel.initialViewState })
-        val dialogState by viewModel.dialogState.observeAsState()
+        val state by viewModel.stateHandler.screenState.collectAsState(remember { viewModel.initialState })
+        val dialogState by viewModel.stateHandler.dialogState.observeAsState()
+        dialogState?.let { AddComposableDialog(it) }
         LaunchedEffect(key1 = Unit) {
-            viewModel.navigationState.collect {
+            viewModel.stateHandler.navigationState.collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
@@ -96,10 +100,9 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
             }
         }
         BackHandler(true) { navigator.navigateBack(null) }
-        val isLoaded by viewModel.startLoading
+        val isLoaded by viewModel.screenLoaded
         if (!isLoaded && skeletonEnabled) AddComposableSkeleton()
         else AddComposableContent(state)
-        dialogState?.let { AddComposableDialog(it) }
     }
 
     @Composable
@@ -113,14 +116,9 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
 
     open fun setTopBar(): VROTopBarState? = null
 
-    open fun setBottomBar(): VROBottomBarState? = null
-
-    private fun configureScaffold(
-        scaffoldState: MutableState<VROComposableScaffoldState>,
-    ) {
+    private fun configureScaffold(scaffoldState: MutableState<VROComposableScaffoldState>) {
         scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar(),
-            bottomBarState = setBottomBar()
+            topBarState = setTopBar()
         )
     }
 }

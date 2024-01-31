@@ -18,7 +18,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -36,6 +38,10 @@ abstract class VROComposableActivity : ComponentActivity() {
     open val theme: VROComposableTheme? = null
 
     abstract val startScreen: VROComposableScreen<*, *, *>
+
+    private lateinit var navController: NavController
+
+    abstract val bottomBarState: VROBottomBarState?
 
     @Composable
     private fun CreateTheme(
@@ -66,13 +72,20 @@ abstract class VROComposableActivity : ComponentActivity() {
     @Composable
     fun Initialize() {
         val navController = rememberNavController()
+        this.navController = navController
         val scaffoldState = remember { mutableStateOf(VROComposableScaffoldState()) }
         Scaffold(
             containerColor = Color.Transparent,
             topBar = { TopBar(scaffoldState.value.topBarState) },
-            bottomBar = { BottomBar(scaffoldState.value.bottomBarState) }
+            bottomBar = { BottomBar() }
         ) { innerPadding ->
-            Column(modifier = Modifier.padding(innerPadding)) {
+            Column(
+                modifier = Modifier.padding(
+                    top = innerPadding.calculateTopPadding(),
+                    bottom = if (scaffoldState.value.bottomBarState == null) 0.dp
+                    else innerPadding.calculateBottomPadding()
+                )
+            ) {
                 NavHost(
                     navController = navController,
                     startDestination = startScreen.destinationRoute()
@@ -99,13 +112,18 @@ abstract class VROComposableActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BottomBar(bottomBarState: VROBottomBarState?) {
-        bottomBarState?.let {
+    open fun BottomBar() {
+        (bottomBarState)?.let {
             VROBottomBar(
                 itemList = it.itemList,
-                height = it.height
+                height = it.height,
+                background = it.background
             )
         }
+    }
+
+    fun navigateToScreen(screen: VROComposableScreen<*, *, *>) {
+        navController.navigate(screen.destinationRoute())
     }
 
     abstract fun NavGraphBuilder.createComposableContent(

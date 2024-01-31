@@ -25,7 +25,7 @@ abstract class VRODialog<T : VRODialog.VRODialogData, VB : ViewBinding> : Dialog
 
     protected val binding get() = _binding!!
 
-    var dialogListener: BaseDialogListener? = null
+    var dialogListener: VRODialogListener? = null
 
     override val scope: Scope by lazy { createScope(this) }
 
@@ -141,11 +141,6 @@ abstract class VRODialog<T : VRODialog.VRODialogData, VB : ViewBinding> : Dialog
         dialogListener = null
         super.onDestroyView()
     }
-
-    interface BaseDialogListener {
-        fun onBackPressed()
-    }
-
 
     class Provider constructor(fragmentManager: FragmentManager, private val className: VRODialog<*, *>) : VRODialogProvider(fragmentManager) {
         override fun generateDialog(dialogData: VRODialogData?): VRODialog<*, *> = className

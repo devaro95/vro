@@ -19,24 +19,8 @@ import com.vro.fragment.VROViewModelFactory
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
-@Composable
-fun <VM : VROComposableViewModel<*, *, *>> createViewModel(viewModelSeed: VM): VM {
-    return viewModel(
-        viewModelSeed::class.java,
-        factory = VROViewModelFactory(viewModelSeed)
-    )
-}
-
-@Composable
-fun <VM : VROViewModel<*, *, *>> createViewModel(viewModelSeed: VM): VM {
-    return viewModel(
-        viewModelSeed::class.java,
-        factory = VROViewModelFactory(viewModelSeed)
-    )
-}
-
 @ExperimentalMaterial3Api
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
+fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
     viewModel: @Composable () -> VM,
     navController: NavController,
     navigator: VROComposableNavigator<D>,
@@ -61,7 +45,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 
 @ExperimentalMaterial3Api
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
+fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
     viewModel: VM,
     navController: NavController,
     navigator: VROComposableNavigator<D>,

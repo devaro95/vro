@@ -1,4 +1,4 @@
-package com.vro.net
+package com.vro.coroutine
 
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
