@@ -1,4 +1,4 @@
-package com.vro.net
+package com.vro.coroutine
 
 sealed interface VROResult<T, E> {
     data class Success<T, E>(val data: T) : VROResult<T, E>

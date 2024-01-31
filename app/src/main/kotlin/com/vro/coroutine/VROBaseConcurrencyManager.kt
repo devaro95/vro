@@ -1,4 +1,4 @@
-package com.vro.net
+package com.vro.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

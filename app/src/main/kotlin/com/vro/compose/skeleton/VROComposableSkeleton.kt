@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vro.constants.FLOAT_ZERO
 
 @Composable
 fun VROTextSkeleton(
@@ -73,7 +74,7 @@ fun vroSkeletonBrush(
     )
     val transition = rememberInfiniteTransition(label = "transition")
     val translateAnimation = transition.animateFloat(
-        initialValue = 0f,
+        initialValue = FLOAT_ZERO,
         targetValue = 900f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000),
@@ -84,6 +85,6 @@ fun vroSkeletonBrush(
     return Brush.linearGradient(
         colors = shimmerColors,
         start = Offset.Zero,
-        end = Offset(x = translateAnimation.value, y = 0f)
+        end = Offset(x = translateAnimation.value, y = FLOAT_ZERO)
     )
 }

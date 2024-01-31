@@ -5,15 +5,13 @@ import com.sampleapp.main.SampleDestinations
 import com.sampleapp.profile.SampleProfileNavParam.Initialize
 import com.vro.navparam.VRONavParam
 
-class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
+class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDestinations>() {
 
-    override val initialViewState: SampleProfileState = SampleProfileState.INITIAL
-
-    override fun eventListener(event: SampleProfileEvent) = Unit
+    override val initialState: SampleProfileState = SampleProfileState.INITIAL
 
     override fun onNavParam(navParam: VRONavParam?) {
         when (navParam) {
-            is Initialize -> updateDataState { copy(userId = navParam.userId) }
+            is Initialize -> updateScreen { copy(userId = navParam.userId) }
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.vro.testing
 
-import com.vro.net.VROBaseConcurrencyManager
-import com.vro.net.VROConcurrencyManager
+import com.vro.coroutine.VROBaseConcurrencyManager
+import com.vro.coroutine.VROConcurrencyManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
