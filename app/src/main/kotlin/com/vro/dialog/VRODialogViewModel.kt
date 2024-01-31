@@ -1,7 +1,7 @@
 package com.vro.dialog
 
 import androidx.lifecycle.ViewModel
-import com.vro.net.VROConcurrencyManager
+import com.vro.coroutine.VROConcurrencyManager
 import com.vro.usecase.MainUseCaseResult
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope

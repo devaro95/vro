@@ -1,4 +1,4 @@
-package com.vro.net
+package com.vro.coroutine
 
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
