@@ -1,18 +1,34 @@
 package com.sampleapp.base
 
+import com.sampleapp.dialog.SampleSimpleDialogData
 import com.vro.compose.VROComposableViewModel
 import com.vro.dialog.VRODialogState
-import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
-abstract class SampleBaseViewModel<S : VROState, D : VRODestination, E : VROEvent> : VROComposableViewModel<S, D, E>() {
+abstract class SampleBaseViewModel<S : VROState, D : VRODestination> : VROComposableViewModel<S, D>() {
 
     fun showLoading() {
-        updateDialogState(VRODialogState(DIALOG_LOADING))
+        updateDialog(VRODialogState(DIALOG_LOADING))
+    }
+
+    fun showSimpleDialog() {
+        updateDialog(
+            VRODialogState(
+                DIALOG_SIMPLE,
+                SampleSimpleDialogData(
+                    onButtonClick = ::hideSimpleDialog
+                )
+            )
+        )
+    }
+
+    private fun hideSimpleDialog() {
+        updateScreen()
     }
 
     companion object {
         const val DIALOG_LOADING = 1000
+        const val DIALOG_SIMPLE = 1001
     }
 }

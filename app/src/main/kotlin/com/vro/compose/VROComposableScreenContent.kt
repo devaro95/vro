@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
-import com.vro.event.VROEventLauncher
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import java.io.Serializable
@@ -18,7 +17,7 @@ abstract class VROComposableScreenContent<
         S : VROState,
         D : VRODestination,
         E : VROEvent,
-        > : VROComposableScreen<S, D, E>(), VROEventLauncher<E> {
+        > : VROComposableScreen<S, D, E>() {
 
     @Composable
     override fun AddComposableContent(state: S) {
@@ -50,11 +49,7 @@ abstract class VROComposableScreenContent<
     @Composable
     open fun OnDialog(data: VRODialogState) = Unit
 
-    override fun launchEvent(event: E) {
-        viewModel.eventListener(event)
-    }
-
-    override fun navigateBack(result: Serializable?) {
+    fun navigateBack(result: Serializable? = null) {
         viewModel.navigateBack(result)
     }
 }

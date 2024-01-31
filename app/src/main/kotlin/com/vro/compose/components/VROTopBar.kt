@@ -15,12 +15,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState.VROTopBarButton
+import com.vro.constants.EMPTY_STRING
 
 @ExperimentalMaterial3Api
 @Composable
 fun VroTopBar(
     modifier: Modifier = Modifier,
-    title: String = "",
+    title: String = EMPTY_STRING,
     titleSize: TextUnit = 14.sp,
     actionButton: VROTopBarButton? = null,
     navigationButton: VROTopBarButton? = null,

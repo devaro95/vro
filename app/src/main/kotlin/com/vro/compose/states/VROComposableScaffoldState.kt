@@ -4,13 +4,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vro.constants.EMPTY_STRING
 
 data class VROComposableScaffoldState(
     val topBarState: VROTopBarState? = null,
     val bottomBarState: VROBottomBarState? = null,
 ) {
     data class VROTopBarState(
-        val title: String = "",
+        val title: String = EMPTY_STRING,
         val actionButton: VROTopBarButton? = null,
         val navigationButton: VROTopBarButton? = null,
     ) {
@@ -23,14 +24,17 @@ data class VROComposableScaffoldState(
         )
     }
 
-    data class VROBottomBarState(
-        val itemList: List<VROBottomBarItem> = emptyList(),
-        val height: Dp = 55.dp,
+    open class VROBottomBarState(
+        val height: Dp,
+        val background: Color,
+        val itemList: List<VROBottomBarItem>,
     ) {
-        data class VROBottomBarItem(
-            val icon: Int,
-            val contentDescription: String = "",
-            val text: String = "",
+        open class VROBottomBarItem(
+            open val icon: Int,
+            open val iconTint: Color? = null,
+            val iconSelected: Int? = null,
+            val contentDescription: String = EMPTY_STRING,
+            val text: String = EMPTY_STRING,
             val iconSize: Dp = 24.dp,
             val onClick: (() -> Unit)? = null,
         )

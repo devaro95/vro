@@ -3,115 +3,92 @@ package com.vro.compose
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.vro.coroutine.VROBaseConcurrencyManager
+import com.vro.coroutine.VROConcurrencyManager
 import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
-import com.vro.event.VROSingleLiveEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.navparam.VRONavParam
-import com.vro.net.VROBaseConcurrencyManager
-import com.vro.net.VROConcurrencyManager
 import com.vro.state.VROState
+import com.vro.state.VROStateHandler
+import com.vro.state.VroNavigationSharedFlow
+import com.vro.state.VroStateDelegate
+import com.vro.state.VroStateSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import java.io.Serializable
 
-abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
+abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewModel(), VROEvent {
 
-    abstract val initialViewState: S
+    abstract val initialState: S
 
-    private lateinit var viewState: S
+    private var screenState: S by VroStateDelegate { initialState }
 
-    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    private val observableState = VroStateSharedFlow<S>().create()
+
+    private val observableNavigation = VroNavigationSharedFlow<D>().create()
+
+    internal val stateHandler = VROStateHandler(
+        screenState = observableState,
+        navigationState = observableNavigation
     )
 
-    private val observableNavigation: MutableSharedFlow<VRONavigationState<D>?> = MutableSharedFlow(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val state: Flow<S> = observableState
-
-    internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
-
-    internal val startLoading: MutableState<Boolean> = mutableStateOf(false)
-
-    internal val errorState: VROSingleLiveEvent<Throwable> = VROSingleLiveEvent()
-
-    internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
+    internal val screenLoaded: MutableState<Boolean> = mutableStateOf(false)
 
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
 
-    internal fun initialize() {
-        startLoading.value = false
-        if (!this::viewState.isInitialized) {
-            viewState = initialViewState
-        }
-    }
-
-    open fun onNavParam(navParam: VRONavParam?) = Unit
-
-    fun checkDataState(): S = viewState
-
-    fun updateDataState(changeStateFunction: S.() -> S) {
-        viewState = changeStateFunction.invoke(viewState)
-        observableState.tryEmit(viewState)
-    }
-
-    fun updateDataState() {
-        observableState.tryEmit(viewState)
-    }
-
-    fun updateState(changeStateFunction: S.() -> S) {
-        viewState = changeStateFunction.invoke(viewState)
-    }
-
-    fun updateError(error: Throwable) {
-        errorState.value = error
-    }
-
-    fun updateDialogState(state: VRODialogState, clearView: Boolean = true) {
-        if (clearView) updateDataState { viewState }
-        dialogState.value = state
+    internal fun isLoaded() {
+        screenLoaded.value = false
     }
 
     internal fun startViewModel(result: Serializable?) {
         executeCoroutine {
             onStart()
-            result?.let { setOnResult(result) }
+            result?.let { onNavResult(result) }
             hideStartLoading()
         }
     }
 
     open suspend fun onStart() = Unit
 
-    fun <T> executeCoroutine(
-        fullException: Boolean = false,
-        action: suspend CoroutineScope.() -> T,
-    ): MainUseCaseResult<T> {
-        return MainUseCaseResult(concurrencyManager, fullException, action)
+    open fun onNavParam(navParam: VRONavParam?) = Unit
+
+    fun checkDataState(): S = screenState
+
+    fun updateScreen(changeStateFunction: S.() -> S) {
+        stateHandler.dialogState.value = null
+        screenState = changeStateFunction.invoke(screenState)
+        observableState.tryEmit(screenState)
+    }
+
+    fun updateScreen() {
+        stateHandler.dialogState.value = null
+        observableState.tryEmit(screenState)
+    }
+
+    fun updateState(changeStateFunction: S.() -> S) {
+        screenState = changeStateFunction.invoke(screenState)
+    }
+
+    fun updateDialog(dialogState: VRODialogState, clearScreen: Boolean = true) {
+        if (clearScreen) updateScreen { screenState }
+        stateHandler.dialogState.value = dialogState
+    }
+
+    private fun hideStartLoading() {
+        executeCoroutine {
+            screenLoaded.value = true
+        }
     }
 
     open fun onResume() {
-        updateState { viewState }
+        updateState { screenState }
     }
 
     open fun onPause() = Unit
 
-    private fun hideStartLoading() {
-        executeCoroutine {
-            startLoading.value = true
-        }
-    }
-
-    open fun setOnResult(result: Serializable) = Unit
+    open fun onNavResult(result: Serializable) = Unit
 
     fun navigate(destination: D?) {
         destination?.resetNavigated()
@@ -120,5 +97,12 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     fun navigateBack(result: Serializable? = null) {
         observableNavigation.tryEmit(VRONavigationState(navigateBack = true, backResult = result))
+    }
+
+    fun <T> executeCoroutine(
+        fullException: Boolean = false,
+        action: suspend CoroutineScope.() -> T,
+    ): MainUseCaseResult<T> {
+        return MainUseCaseResult(concurrencyManager, fullException, action)
     }
 }

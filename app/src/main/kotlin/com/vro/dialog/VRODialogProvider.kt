@@ -3,7 +3,6 @@ package com.vro.dialog
 import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.viewbinding.ViewBinding
-import com.vro.dialog.VRODialog.BaseDialogListener
 import com.vro.dialog.VRODialog.VRODialogData
 
 abstract class VRODialogProvider constructor(private val fragmentManager: FragmentManager) : BaseDialogProviderInterface {
@@ -55,7 +54,7 @@ abstract class VRODialogProvider constructor(private val fragmentManager: Fragme
         dialog = null
     }
 
-    override var dialogListener: BaseDialogListener? = null
+    override var dialogListener: VRODialogListener? = null
         set(value) {
             field = value
             dialog?.dialogListener = value
@@ -69,5 +68,5 @@ abstract class VRODialogProvider constructor(private val fragmentManager: Fragme
 interface BaseDialogProviderInterface {
     fun show(dialogData: VRODialogData?)
     fun hide()
-    var dialogListener: BaseDialogListener?
+    var dialogListener: VRODialogListener?
 }

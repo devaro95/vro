@@ -8,8 +8,8 @@ import com.vro.event.VROSingleLiveEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.navparam.VRONavParam
-import com.vro.net.VROBaseConcurrencyManager
-import com.vro.net.VROConcurrencyManager
+import com.vro.coroutine.VROBaseConcurrencyManager
+import com.vro.coroutine.VROConcurrencyManager
 import com.vro.state.VROState
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope

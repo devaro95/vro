@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import com.airbnb.lottie.LottieProperty
@@ -17,7 +19,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import com.sampleapp.R
-import com.vro.compose.VROComposableDialog
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 
@@ -25,35 +26,43 @@ import com.vro.compose.preview.VROMultiDevicePreview
 @Composable
 fun LoadingComposableDialogPreview() {
     GeneratePreview {
-        VROComposableDialog {
-            LoadingDialog()
-        }
+        LoadingDialog()
     }
 }
 
 @Composable
-fun LoadingDialog() {
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.loading)
-    )
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever,
-    )
-    val dynamicProperties = rememberLottieDynamicProperties(
-        rememberLottieDynamicProperty(
-            property = LottieProperty.COLOR_FILTER,
-            value = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                MaterialTheme.colorScheme.secondary.hashCode(),
-                BlendModeCompat.SRC_ATOP
-            ),
-            keyPath = arrayOf("**")
+fun LoadingDialog(
+    isCancelable: Boolean = true,
+) {
+    Dialog(
+        onDismissRequest = { },
+        properties = DialogProperties(
+            dismissOnBackPress = isCancelable,
+            dismissOnClickOutside = isCancelable
         )
-    )
-    LottieAnimation(
-        modifier = Modifier.size(230.dp),
-        composition = composition,
-        progress = progress,
-        dynamicProperties = dynamicProperties
-    )
+    ) {
+        val composition by rememberLottieComposition(
+            LottieCompositionSpec.RawRes(R.raw.loading)
+        )
+        val progress by animateLottieCompositionAsState(
+            composition,
+            iterations = LottieConstants.IterateForever,
+        )
+        val dynamicProperties = rememberLottieDynamicProperties(
+            rememberLottieDynamicProperty(
+                property = LottieProperty.COLOR_FILTER,
+                value = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    MaterialTheme.colorScheme.secondary.hashCode(),
+                    BlendModeCompat.SRC_ATOP
+                ),
+                keyPath = arrayOf("**")
+            )
+        )
+        LottieAnimation(
+            modifier = Modifier.size(230.dp),
+            composition = composition,
+            progress = progress,
+            dynamicProperties = dynamicProperties
+        )
+    }
 }
