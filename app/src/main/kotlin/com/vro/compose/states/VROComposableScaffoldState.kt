@@ -8,7 +8,7 @@ import com.vro.constants.EMPTY_STRING
 
 data class VROComposableScaffoldState(
     val topBarState: VROTopBarState? = null,
-    val bottomBarState: VROBottomBarState? = null,
+    val showBottomBar: Boolean = true,
 ) {
     data class VROTopBarState(
         val title: String = EMPTY_STRING,

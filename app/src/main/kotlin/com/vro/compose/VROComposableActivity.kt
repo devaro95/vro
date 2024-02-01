@@ -77,7 +77,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = { TopBar(scaffoldState.value.topBarState) },
-            bottomBar = { BottomBar() }
+            bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar() }
         ) { innerPadding ->
             Column(
                 modifier = Modifier.padding(
@@ -123,7 +123,10 @@ abstract class VROComposableActivity : ComponentActivity() {
     }
 
     fun navigateToScreen(screen: VROComposableScreen<*, *, *>) {
-        navController.navigate(screen.destinationRoute())
+        navController.navigate(screen.destinationRoute()) {
+            popUpTo(navController.graph.id) { inclusive = true }
+            launchSingleTop = true
+        }
     }
 
     abstract fun NavGraphBuilder.createComposableContent(
