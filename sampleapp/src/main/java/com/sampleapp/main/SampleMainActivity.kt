@@ -57,7 +57,8 @@ class SampleMainActivity : VROComposableActivity() {
             navController = navController,
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
-            scaffoldState = scaffoldState
+            scaffoldState = scaffoldState,
+            showBottomBar = false
         )
     }
 }
