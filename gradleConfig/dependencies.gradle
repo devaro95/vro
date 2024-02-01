@@ -10,6 +10,7 @@ ext {
     mockitoCore = "5.6.0"
     junit = "1.1.5"
     archCore = "2.2.0"
+    material3 = "1.2.0-rc01"
     composeMaterial3Size = "1.2.0-alpha10"
     composeActivity = "1.8.0"
     composeLifecycle = "2.6.2"
@@ -18,7 +19,7 @@ ext {
     libraries = [
             core                     : "androidx.core:core-ktx:$core",
             appCompat                : "androidx.appcompat:appcompat:$appCompat",
-            material3                : "androidx.compose.material3:material3",
+            material3                : "androidx.compose.material3:material3:$material3",
             koinAndroid              : "io.insert-koin:koin-android:$koin",
             koinCore                 : "io.insert-koin:koin-core:$koin",
             koinCompose              : "io.insert-koin:koin-androidx-compose:$koinCompose",
