@@ -5,7 +5,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -14,8 +13,6 @@ import com.vro.compose.VROComposableScreen
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.event.VROEvent
-import com.vro.fragment.VROViewModel
-import com.vro.fragment.VROViewModelFactory
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
@@ -28,12 +25,14 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
     scaffoldState: MutableState<VROComposableScaffoldState>,
+    showBottomBar: Boolean = true,
 ) {
     composable(
         content.destinationRoute(),
         enterTransition = { enterTransition },
         exitTransition = { exitTransition }
     ) {
+        scaffoldState.value = scaffoldState.value.copy(showBottomBar = showBottomBar)
         content.CreateScreen(
             viewModel = viewModel.invoke(),
             navController = navController,
@@ -51,7 +50,9 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     navigator: VROComposableNavigator<D>,
     content: VROComposableScreen<S, D, E>,
     scaffoldState: MutableState<VROComposableScaffoldState>,
+    showBottomBar: Boolean = true,
 ) {
+    scaffoldState.value = scaffoldState.value.copy(showBottomBar = showBottomBar)
     content.CreateScreen(
         viewModel = viewModel,
         navController = navController,
