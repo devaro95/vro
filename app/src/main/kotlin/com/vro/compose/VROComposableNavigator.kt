@@ -22,11 +22,20 @@ abstract class VROComposableNavigator<D : VRODestination>(
         if (!canNavigateBack) finish()
     }
 
-    fun navigateToScreen(screen: VROComposableScreen<*, *, *>, state: VRONavParam? = null) {
+    fun navigateToScreen(
+        screen: VROComposableScreen<*, *, *>,
+        state: VRONavParam? = null,
+        popScreen: VROComposableScreen<*, *, *>? = null,
+        inclusive: Boolean = false,
+    ) {
         state?.let {
             putNavParam(screen.destinationRoute(), it)
         }
-        navController.navigate(screen.destinationRoute())
+        navController.navigate(screen.destinationRoute()) {
+            popScreen?.let {
+                popUpTo(it.destinationRoute()) { this.inclusive = inclusive }
+            }
+        }
     }
 
     override fun finish() {
