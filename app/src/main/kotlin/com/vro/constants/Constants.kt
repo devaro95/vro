@@ -1,16 +1,16 @@
 package com.vro.constants
 
-val EMPTY_STRING = ""
-val COMMA = ","
-val POINT = "."
-val SPACE = " "
-val LINE_JUMP = "\n"
+const val EMPTY_STRING = ""
+const val COMMA = ","
+const val POINT = "."
+const val SPACE = " "
+const val LINE_JUMP = "\n"
 
-val INT_ZERO = 0
-val INT_ONE = 1
-val INT_NEGATIVE = -1
-val HUNDRED = 100
+const val INT_ZERO = 0
+const val INT_ONE = 1
+const val INT_NEGATIVE = -1
+const val HUNDRED = 100
 
-val FLOAT_ZERO = 0F
+const val FLOAT_ZERO = 0F
 
-val DOUBLE_ZERO = 0.0
+const val DOUBLE_ZERO = 0.0

@@ -33,7 +33,7 @@ fun SimpleDialog(
         Column {
             Text("Simple dialog")
             Button(onClick = data.onButtonClick) {
-                Text("Boton")
+                Text("Button")
             }
         }
     }
