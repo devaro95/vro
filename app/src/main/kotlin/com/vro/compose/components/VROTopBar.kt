@@ -1,6 +1,13 @@
 package com.vro.compose.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -12,19 +19,36 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState.VROTopBarButton
-import com.vro.constants.EMPTY_STRING
+
+@ExperimentalMaterial3Api
+@Composable
+@Preview
+fun VroTopBarPreview() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        VroTopBar(
+            state = VROTopBarState(
+                title = "title",
+                navigationButton = VROTopBarButton(
+                    iconVector = Icons.Default.ArrowBack,
+                    iconSize = 16.dp,
+                    onClick = { }
+                )
+            )
+        )
+    }
+}
 
 @ExperimentalMaterial3Api
 @Composable
 fun VroTopBar(
     modifier: Modifier = Modifier,
-    title: String = EMPTY_STRING,
-    titleSize: TextUnit = 14.sp,
-    actionButton: VROTopBarButton? = null,
-    navigationButton: VROTopBarButton? = null,
+    state: VROTopBarState,
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -32,38 +56,53 @@ fun VroTopBar(
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            Text(
-                text = title,
-                fontSize = titleSize
-            )
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = state.title,
+                    fontSize = state.titleSize,
+                    textAlign = TextAlign.Center
+                )
+            }
         },
-        actions = { SetTopBarButton(actionButton) },
-        navigationIcon = { SetTopBarButton(navigationButton) },
-        modifier = modifier
+        actions = { SetTopBarButton(state.actionButton) },
+        navigationIcon = { SetTopBarButton(state.navigationButton) },
+        modifier = modifier.setHeight(state.height)
     )
 }
 
 @Composable
 private fun SetTopBarButton(button: VROTopBarButton?) {
     button?.let {
-        IconButton(onClick = it.onClick) {
-            button.icon?.let { icon ->
-                Icon(
-                    painter = painterResource(id = icon),
-                    modifier = Modifier.size(button.iconSize),
-                    contentDescription = null,
-                    tint = button.tint ?: LocalContentColor.current
-                )
-            } ?: run {
-                button.iconVector?.let { imageVector ->
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            IconButton(onClick = it.onClick) {
+                button.icon?.let { icon ->
                     Icon(
-                        imageVector = imageVector,
+                        painter = painterResource(id = icon),
                         modifier = Modifier.size(button.iconSize),
                         contentDescription = null,
                         tint = button.tint ?: LocalContentColor.current
                     )
+                } ?: run {
+                    button.iconVector?.let { imageVector ->
+                        Icon(
+                            imageVector = imageVector,
+                            modifier = Modifier.size(button.iconSize),
+                            contentDescription = null,
+                            tint = button.tint ?: LocalContentColor.current
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+fun Modifier.setHeight(height: Dp?): Modifier {
+    return height?.let { height(it) } ?: this
 }
