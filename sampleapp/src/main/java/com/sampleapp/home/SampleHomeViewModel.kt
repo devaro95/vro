@@ -12,7 +12,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     override fun onNavResult(result: Serializable) {
         super.onNavResult(result)
         if (result is Boolean) {
-            if (result) updateScreen { copy(text = "esto es una prueba") }
+            if (result) updateScreen { copy(text = "This is a sample") }
         }
     }
 

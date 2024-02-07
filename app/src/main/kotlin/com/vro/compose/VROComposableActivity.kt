@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -102,12 +101,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     @Composable
     fun TopBar(topBarState: VROTopBarState?) {
         topBarState?.let {
-            VroTopBar(
-                title = it.title,
-                titleSize = 14.sp,
-                actionButton = it.actionButton,
-                navigationButton = it.navigationButton
-            )
+            VroTopBar(state = it)
         }
     }
 

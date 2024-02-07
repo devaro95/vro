@@ -41,11 +41,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun TopBarState(toolbarState: VROTopBarState) {
-        VroTopBar(
-            title = toolbarState.title,
-            actionButton = toolbarState.actionButton,
-            navigationButton = toolbarState.navigationButton
-        )
+        VroTopBar(state = toolbarState)
     }
 
     @Composable
