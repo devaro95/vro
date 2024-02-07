@@ -54,6 +54,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
         navController: NavController,
         scaffoldState: MutableState<VROComposableScaffoldState>,
         navigator: VROComposableNavigator<D>,
+        bottomBar: Boolean,
     ) {
         this.viewModel = viewModel
         eventLauncher = viewModel as E
@@ -69,7 +70,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
                     }
 
                     Event.ON_START -> {
-                        configureScaffold(scaffoldState)
+                        configureScaffold(scaffoldState, bottomBar)
                         viewModel.startViewModel(backResult?.value)
                     }
 
@@ -116,9 +117,13 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
 
     open fun setTopBar(): VROTopBarState? = null
 
-    private fun configureScaffold(scaffoldState: MutableState<VROComposableScaffoldState>) {
+    private fun configureScaffold(
+        scaffoldState: MutableState<VROComposableScaffoldState>,
+        bottomBar: Boolean,
+    ) {
         scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar()
+            topBarState = setTopBar(),
+            showBottomBar = bottomBar
         )
     }
 }

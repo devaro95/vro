@@ -38,7 +38,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     override fun navigateToProfile() {
-
+        navigate(SampleDestinations.Profile)
     }
 
     override fun onActionHideDialog() {
