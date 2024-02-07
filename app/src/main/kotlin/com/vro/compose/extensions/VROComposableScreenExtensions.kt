@@ -25,19 +25,19 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
     scaffoldState: MutableState<VROComposableScaffoldState>,
-    showBottomBar: Boolean = true,
+    bottomBar: Boolean = false,
 ) {
     composable(
         content.destinationRoute(),
         enterTransition = { enterTransition },
         exitTransition = { exitTransition }
     ) {
-        scaffoldState.value = scaffoldState.value.copy(showBottomBar = showBottomBar)
         content.CreateScreen(
             viewModel = viewModel.invoke(),
             navController = navController,
             scaffoldState = scaffoldState,
-            navigator = navigator
+            navigator = navigator,
+            bottomBar = bottomBar
         )
     }
 }
@@ -50,13 +50,13 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     navigator: VROComposableNavigator<D>,
     content: VROComposableScreen<S, D, E>,
     scaffoldState: MutableState<VROComposableScaffoldState>,
-    showBottomBar: Boolean = true,
+    bottomBar: Boolean = false,
 ) {
-    scaffoldState.value = scaffoldState.value.copy(showBottomBar = showBottomBar)
     content.CreateScreen(
         viewModel = viewModel,
         navController = navController,
         scaffoldState = scaffoldState,
-        navigator = navigator
+        navigator = navigator,
+        bottomBar = bottomBar
     )
 }
