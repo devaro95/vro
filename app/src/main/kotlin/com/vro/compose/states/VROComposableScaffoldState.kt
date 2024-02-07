@@ -3,17 +3,21 @@ package com.vro.compose.states
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vro.constants.EMPTY_STRING
 
 data class VROComposableScaffoldState(
     val topBarState: VROTopBarState? = null,
     val showBottomBar: Boolean = false,
+    val background: Color = Color.White,
 ) {
     data class VROTopBarState(
         val title: String = EMPTY_STRING,
         val actionButton: VROTopBarButton? = null,
         val navigationButton: VROTopBarButton? = null,
+        val titleSize: TextUnit = 16.sp,
     ) {
         data class VROTopBarButton(
             val icon: Int? = null,
