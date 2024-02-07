@@ -50,15 +50,15 @@ class SampleMainActivity : VROComposableActivity() {
             navController = navController,
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
             content = SampleHomeScreen(),
-            scaffoldState = scaffoldState
+            scaffoldState = scaffoldState,
+            bottomBar = true
         )
         vroComposableScreen(
             viewModel = { koinViewModel<SampleProfileViewModel>() },
             navController = navController,
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
-            scaffoldState = scaffoldState,
-            showBottomBar = false
+            scaffoldState = scaffoldState
         )
     }
 }
