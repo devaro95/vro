@@ -12,7 +12,7 @@ import com.sampleapp.R
 import com.sampleapp.base.SampleBaseScreen
 import com.sampleapp.components.SampleTextSkeleton
 import com.sampleapp.main.SampleDestinations
-import com.sampleapp.topBar.sampleBackToolbar
+import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 

@@ -1,12 +1,11 @@
 package com.sampleapp.base
 
 import com.sampleapp.dialog.SampleSimpleDialogData
-import com.vro.compose.VROComposableViewModel
-import com.vro.dialog.VRODialogState
 import com.vro.navigation.VRODestination
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 
-abstract class SampleBaseViewModel<S : VROState, D : VRODestination> : VROComposableViewModel<S, D>() {
+abstract class SampleBaseViewModel<S : VROState, D : VRODestination> : com.vro.compose.VROComposableViewModel<S, D>() {
 
     fun showLoading() {
         updateDialog(VRODialogState(DIALOG_LOADING))

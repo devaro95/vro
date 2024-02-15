@@ -1,4 +1,4 @@
-package com.vro.dialog
+package com.vro.state
 
 import java.io.Serializable
 

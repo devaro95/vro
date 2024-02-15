@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.util.concurrent.atomic.AtomicBoolean
 
-class MainUseCaseResult<T> internal constructor(
+class MainUseCaseResult<T>(
     concurrencyManager: VROBaseConcurrencyManager,
     fullException: Boolean,
     onAction: suspend CoroutineScope.() -> T,
