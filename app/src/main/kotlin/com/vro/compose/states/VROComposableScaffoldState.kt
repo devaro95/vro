@@ -11,7 +11,6 @@ import com.vro.constants.EMPTY_STRING
 data class VROComposableScaffoldState(
     val topBarState: VROTopBarState? = null,
     val showBottomBar: Boolean = false,
-    val background: Color = Color.White,
 ) {
     data class VROTopBarState(
         val title: String = EMPTY_STRING,
@@ -19,6 +18,7 @@ data class VROComposableScaffoldState(
         val navigationButton: VROTopBarButton? = null,
         val titleSize: TextUnit = 16.sp,
         val height: Dp? = null,
+        val background: Color = Color.White,
     ) {
         data class VROTopBarButton(
             val icon: Int? = null,

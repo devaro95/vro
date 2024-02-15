@@ -47,6 +47,7 @@ publishing {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(libraries.core)
     implementation(libraries.appCompat)
     implementation(libraries.material3)
