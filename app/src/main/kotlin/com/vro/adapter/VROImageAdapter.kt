@@ -10,7 +10,7 @@ import com.vro.R
 
 class VROImageAdapter(
     val context: Context,
-    private val imageList: List<Int>
+    private val imageList: List<Int>,
 ) : PagerAdapter() {
 
     override fun getCount(): Int {

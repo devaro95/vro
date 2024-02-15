@@ -7,7 +7,7 @@ import com.vro.compose.extensions.putNavParam
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
 import com.vro.navigation.VRONavigator
-import com.vro.navparam.VRONavParam
+import com.vro.navstarter.VRONavStarter
 import java.io.Serializable
 
 @ExperimentalMaterial3Api
@@ -24,7 +24,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
 
     fun navigateToScreen(
         screen: VROComposableScreen<*, *, *>,
-        state: VRONavParam? = null,
+        state: VRONavStarter? = null,
         popScreen: VROComposableScreen<*, *, *>? = null,
         inclusive: Boolean = false,
     ) {

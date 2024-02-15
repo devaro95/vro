@@ -11,9 +11,9 @@ import com.vro.compose.VROComposableActivity
 
 @ExperimentalMaterial3Api
 class SampleHomeNavigator(
-    activity: VROComposableActivity,
+    activity: com.vro.compose.VROComposableActivity,
     navController: NavController,
-) : VROComposableNavigator<SampleDestinations>(activity, navController) {
+) : com.vro.compose.VROComposableNavigator<SampleDestinations>(activity, navController) {
 
     override fun navigate(destination: SampleDestinations) {
         when (destination) {

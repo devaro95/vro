@@ -11,14 +11,14 @@ apply from: '../gradleConfig/configuration.gradle'
 android {
     compileSdkVersion compilation.compileSdkVersion
 
-    defaultConfig {
-        aarMetadata {
-            minCompileSdk = compilation.minSdkVersion
-        }
-    }
+            defaultConfig {
+                aarMetadata {
+                    minCompileSdk = compilation.minSdkVersion
+                }
+            }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
@@ -36,7 +36,7 @@ publishing {
     publications {
         release(MavenPublication) {
             groupId = 'com.github.devaro95'
-            artifactId = 'vro'
+            artifactId = 'vro-compose'
             version = '0.2.0'
 
             afterEvaluate {
@@ -48,6 +48,8 @@ publishing {
 
 dependencies {
     api(project(":core"))
+    implementation(project(":app"))
+
     implementation(libraries.core)
     implementation(libraries.appCompat)
     implementation(libraries.material3)

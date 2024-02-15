@@ -20,10 +20,10 @@ import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.*
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import java.io.Serializable
 
