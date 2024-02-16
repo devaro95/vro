@@ -25,24 +25,6 @@ import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState.VROBo
 import com.vro.constants.EMPTY_STRING
 import com.vro.constants.INT_ZERO
 
-@Preview
-@Composable
-fun VROBottomBarPreview() {
-    VROBottomBar(
-        itemList = listOf(
-            VROBottomBarItem(
-                icon = R.drawable.ic_vro_profile,
-                iconSelected = R.drawable.ic_vro_profile,
-            ),
-            VROBottomBarItem(
-                icon = R.drawable.ic_vro_profile,
-                iconSelected = R.drawable.ic_vro_profile,
-            )
-        ),
-        background = Color.Black
-    )
-}
-
 @Composable
 fun VROBottomBar(
     itemList: List<VROBottomBarItem> = emptyList(),

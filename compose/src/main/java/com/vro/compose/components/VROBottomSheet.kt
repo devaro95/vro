@@ -44,7 +44,7 @@ fun VROBottomSheet(
     content: @Composable (SheetStateVro) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = !fullExpanded)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = fullExpanded)
     val sheetStateVro = rememberSheetState()
     sheetStateVro.setHideActionListener {
         coroutineScope.launch {

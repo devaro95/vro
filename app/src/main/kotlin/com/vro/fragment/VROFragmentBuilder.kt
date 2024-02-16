@@ -4,11 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_BACK_STATE
 import com.vro.navigation.VRONavigator
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import kotlinx.coroutines.launch
 import java.io.Serializable

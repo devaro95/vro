@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.sampleapp.R
-import com.sampleapp.bottomBar.SampleBottomBarState
+import com.sampleapp.bottombar.SampleBottomBarState
 import com.sampleapp.home.SampleHomeNavigator
 import com.sampleapp.home.SampleHomeScreen
 import com.sampleapp.home.SampleHomeViewModel
@@ -13,19 +13,17 @@ import com.sampleapp.profile.SampleProfileNavigator
 import com.sampleapp.profile.SampleProfileScreen
 import com.sampleapp.profile.SampleProfileViewModel
 import com.sampleapp.styles.SampleTheme
-import com.vro.compose.VROComposableActivity
-import com.vro.compose.VROComposableTheme
 import com.vro.compose.extensions.vroComposableScreen
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState.VROBottomBarItem
 import org.koin.androidx.compose.koinViewModel
 
 @ExperimentalMaterial3Api
-class SampleMainActivity : VROComposableActivity() {
+class SampleMainActivity : com.vro.compose.VROComposableActivity() {
 
     override val startScreen = SampleHomeScreen()
 
-    override val theme: VROComposableTheme = SampleTheme
+    override val theme: com.vro.compose.VROComposableTheme = SampleTheme
 
     override val bottomBarState = SampleBottomBarState(
         items = listOf(

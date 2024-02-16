@@ -1,4 +1,4 @@
-package com.sampleapp.topBar
+package com.sampleapp.topbar
 
 import android.content.Context
 import androidx.compose.material.icons.Icons

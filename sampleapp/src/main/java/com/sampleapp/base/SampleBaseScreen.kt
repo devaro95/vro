@@ -7,9 +7,9 @@ import com.sampleapp.dialog.LoadingDialog
 import com.sampleapp.dialog.SampleSimpleDialogData
 import com.sampleapp.dialog.SimpleDialog
 import com.vro.compose.VROComposableScreenContent
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 
 abstract class SampleBaseScreen<S : VROState, D : VRODestination, E : VROEvent> :

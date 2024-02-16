@@ -20,7 +20,7 @@ import com.sampleapp.base.SampleBaseScreen
 import com.sampleapp.components.SampleButtonSkeleton
 import com.sampleapp.components.SampleTextSkeleton
 import com.sampleapp.main.SampleDestinations
-import com.sampleapp.topBar.sampleHomeToolbar
+import com.sampleapp.topbar.sampleHomeToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 

@@ -1,11 +1,11 @@
 package com.vro.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
