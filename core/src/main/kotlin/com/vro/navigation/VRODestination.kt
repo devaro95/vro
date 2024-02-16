@@ -4,11 +4,11 @@ open class VRODestination {
     var isNavigated: Boolean = false
         private set
 
-    internal fun setNavigated() {
+    fun setNavigated() {
         isNavigated = true
     }
 
-    internal fun resetNavigated() {
+    fun resetNavigated() {
         isNavigated = false
     }
 }

@@ -5,11 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
-import com.vro.navparam.VRONavParam
+import com.vro.navstarter.VRONavStarter
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import com.vro.state.VROStateHandler
 import com.vro.state.VroNavigationSharedFlow
@@ -52,7 +52,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
 
     open suspend fun onStart() = Unit
 
-    open fun onNavParam(navParam: VRONavParam?) = Unit
+    open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     fun checkDataState(): S = screenState
 

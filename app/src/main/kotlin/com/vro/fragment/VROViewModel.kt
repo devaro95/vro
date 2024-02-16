@@ -1,15 +1,15 @@
 package com.vro.fragment
 
 import androidx.lifecycle.ViewModel
-import com.vro.dialog.VRODialogState
+import com.vro.coroutine.VROBaseConcurrencyManager
+import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.event.VROSingleLiveEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
-import com.vro.navparam.VRONavParam
-import com.vro.coroutine.VROBaseConcurrencyManager
-import com.vro.coroutine.VROConcurrencyManager
+import com.vro.navstarter.VRONavStarter
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +45,7 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         }
     }
 
-    open fun onNavParam(navParam: VRONavParam?) = Unit
+    open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     internal fun setInitialState(state: S?) {
         updateDataState { state ?: viewState }

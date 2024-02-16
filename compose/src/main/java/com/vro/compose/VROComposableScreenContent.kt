@@ -6,9 +6,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROMultiDevicePreview
-import com.vro.dialog.VRODialogState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import java.io.Serializable
 
