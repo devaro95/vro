@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -19,13 +17,17 @@ import androidx.compose.ui.unit.dp
 import com.sampleapp.base.SampleBaseScreen
 import com.sampleapp.components.SampleButtonSkeleton
 import com.sampleapp.components.SampleTextSkeleton
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
+import com.sampleapp.home.SampleHomeViewModel.Companion.DIALOG_BOTTOM_SHEET
 import com.sampleapp.main.SampleDestinations
 import com.sampleapp.topbar.sampleHomeToolbar
 import com.vro.compose.extensions.GeneratePreview
+import com.vro.compose.listeners.VROBottomSheetListener
 import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.state.VRODialogState
 
 @ExperimentalMaterial3Api
-class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, SampleHomeEvent>() {
+class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
     @Composable
     @VROMultiDevicePreview
@@ -72,21 +74,31 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { eventLauncher.onActionButtonClick() }
+                onClick = { eventLauncher.onActionUpdateTextClick() }
             ) {
                 Text(text = "Update text")
             }
-            LazyColumn {
-                items(getItems()) {
-                    Text(text = it)
-                }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { eventLauncher.onActionShowBottomSheetClick() }
+            ) {
+                Text(text = "Show Bottom Sheet")
             }
         }
     }
 
-    private fun getItems(): List<String> {
-        return listOf(
-            "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"
-        )
+    @Composable
+    override fun OnDialog(data: VRODialogState) {
+        when (data.type) {
+            DIALOG_BOTTOM_SHEET -> SampleBottomSheet(
+                onDismissListener = object : VROBottomSheetListener {
+                    override fun onDismiss() {
+                        eventLauncher.onActionBottomSheetDismiss()
+                    }
+                },
+                fullExpanded = true
+            )
+        }
     }
 }
