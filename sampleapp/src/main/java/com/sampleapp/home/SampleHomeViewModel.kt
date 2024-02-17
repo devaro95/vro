@@ -3,9 +3,10 @@ package com.sampleapp.home
 import com.sampleapp.base.SampleBaseViewModel
 import com.sampleapp.main.SampleDestinations
 import com.vro.constants.EMPTY_STRING
+import com.vro.state.VRODialogState
 import java.io.Serializable
 
-class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations>(), SampleHomeEvent {
+class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations>(), SampleHomeEvents {
 
     override val initialState: SampleHomeState = SampleHomeState.INITIAL
 
@@ -22,7 +23,11 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override fun onActionButtonClick() {
+    override fun onActionShowBottomSheetClick() {
+        updateDialog(VRODialogState(DIALOG_BOTTOM_SHEET))
+    }
+
+    override fun onActionUpdateTextClick() {
         checkDataState().also {
             updateScreen {
                 copy(
@@ -37,6 +42,10 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
+    override fun onActionBottomSheetDismiss() {
+        updateScreen()
+    }
+
     override fun navigateToProfile() {
         navigate(SampleDestinations.Profile)
     }
@@ -48,5 +57,6 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     companion object {
         const val FIRST_TEXT = "This is a text"
         const val SECOND_TEXT = "Another text"
+        const val DIALOG_BOTTOM_SHEET = 1002
     }
 }
