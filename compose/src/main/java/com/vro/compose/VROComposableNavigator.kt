@@ -1,7 +1,7 @@
 package com.vro.compose
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
+import com.vro.compose.dialog.VROComposableBottomSheet
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.putNavParam
 import com.vro.navigation.VRODestination
@@ -10,7 +10,6 @@ import com.vro.navigation.VRONavigator
 import com.vro.navstarter.VRONavStarter
 import java.io.Serializable
 
-@ExperimentalMaterial3Api
 abstract class VROComposableNavigator<D : VRODestination>(
     private val activity: VROComposableActivity,
     private val navController: NavController,
@@ -36,6 +35,12 @@ abstract class VROComposableNavigator<D : VRODestination>(
                 popUpTo(it.destinationRoute()) { this.inclusive = inclusive }
             }
         }
+    }
+
+    fun openBottomSheet(
+        bottomSheet: VROComposableBottomSheet<*, *, *>,
+    ) {
+        navController.navigate(bottomSheet.destinationRoute())
     }
 
     override fun finish() {
