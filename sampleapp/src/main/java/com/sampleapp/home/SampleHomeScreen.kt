@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -17,16 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.sampleapp.base.SampleBaseScreen
 import com.sampleapp.components.SampleButtonSkeleton
 import com.sampleapp.components.SampleTextSkeleton
-import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
-import com.sampleapp.home.SampleHomeViewModel.Companion.DIALOG_BOTTOM_SHEET
 import com.sampleapp.main.SampleDestinations
 import com.sampleapp.topbar.sampleHomeToolbar
 import com.vro.compose.extensions.GeneratePreview
-import com.vro.compose.listeners.VROBottomSheetListener
 import com.vro.compose.preview.VROMultiDevicePreview
-import com.vro.state.VRODialogState
 
-@ExperimentalMaterial3Api
 class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
     @Composable
@@ -88,17 +82,15 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
         }
     }
 
-    @Composable
-    override fun OnDialog(data: VRODialogState) {
-        when (data.type) {
-            DIALOG_BOTTOM_SHEET -> SampleBottomSheet(
-                onDismissListener = object : VROBottomSheetListener {
-                    override fun onDismiss() {
-                        eventLauncher.onActionBottomSheetDismiss()
-                    }
-                },
-                fullExpanded = true
-            )
-        }
-    }
+   // @Composable
+   // override fun OnDialog(data: VRODialogState) {
+   //     when (data.type) {
+   //         DIALOG_BOTTOM_SHEET -> vroBottomSheet(
+   //             onDismiss = { eventLauncher.onActionBottomSheetDismiss() },
+   //             fullExpanded = true,
+   //             viewModel = { koinViewModel<SampleBottomSheetViewModel>() },
+   //             content = SampleBottomSheet()
+   //         )
+   //     }
+   // }
 }
