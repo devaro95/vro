@@ -24,7 +24,8 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     override fun onActionShowBottomSheetClick() {
-        updateDialog(VRODialogState(DIALOG_BOTTOM_SHEET))
+        navigate(SampleDestinations.BottomSheet)
+        //updateDialog(VRODialogState(DIALOG_BOTTOM_SHEET))
     }
 
     override fun onActionUpdateTextClick() {

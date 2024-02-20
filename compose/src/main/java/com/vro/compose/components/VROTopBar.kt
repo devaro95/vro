@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState.VROTopBarButton
 
-@ExperimentalMaterial3Api
 @Composable
 @Preview
 fun VroTopBarPreview() {
@@ -44,7 +43,7 @@ fun VroTopBarPreview() {
     }
 }
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VroTopBar(
     modifier: Modifier = Modifier,

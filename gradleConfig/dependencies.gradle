@@ -5,7 +5,7 @@ ext {
     koin = "3.5.0"
     koinCompose = "3.3.0"
     lifecycle = "2.6.1"
-    navigation = "2.7.4"
+    navigation = "2.7.7"
     viewBinding = "8.1.0"
     mockitoInline = "5.2.0"
     mockitoCore = "5.6.0"
