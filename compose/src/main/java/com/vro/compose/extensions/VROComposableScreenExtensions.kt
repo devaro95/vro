@@ -2,7 +2,6 @@ package com.vro.compose.extensions
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
@@ -16,7 +15,6 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
-@ExperimentalMaterial3Api
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
     viewModel: @Composable () -> VM,
     navController: NavController,
@@ -42,7 +40,6 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     }
 }
 
-@ExperimentalMaterial3Api
 @Composable
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
     viewModel: VM,

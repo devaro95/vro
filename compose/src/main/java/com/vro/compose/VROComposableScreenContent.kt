@@ -2,7 +2,6 @@ package com.vro.compose
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROMultiDevicePreview
@@ -12,7 +11,6 @@ import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import java.io.Serializable
 
-@OptIn(ExperimentalMaterial3Api::class)
 abstract class VROComposableScreenContent<
         S : VROState,
         D : VRODestination,

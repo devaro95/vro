@@ -1,32 +1,28 @@
-package com.vro.compose
+package com.vro.compose.dialog
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle.Event
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import com.vro.compose.components.VroTopBar
+import com.vro.compose.VROComposableNavigator
+import com.vro.compose.VROComposableViewModel
 import com.vro.compose.extensions.getNavParamState
-import com.vro.compose.states.VROComposableScaffoldState
-import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
-import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import java.io.Serializable
 
-abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEvent> {
+abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VROEvent> {
 
     internal lateinit var viewModel: VROComposableViewModel<S, D>
 
@@ -37,17 +33,10 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
     lateinit var eventLauncher: E
 
     @Composable
-    fun TopBarState(toolbarState: VROTopBarState) {
-        VroTopBar(state = toolbarState)
-    }
-
-    @Composable
-    fun CreateScreen(
+    fun CreateBottomSheet(
         viewModel: VROComposableViewModel<S, D>,
         navController: NavController,
-        scaffoldState: MutableState<VROComposableScaffoldState>,
         navigator: VROComposableNavigator<D>,
-        bottomBar: Boolean,
     ) {
         this.viewModel = viewModel
         eventLauncher = viewModel as E
@@ -57,21 +46,20 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
         DisposableEffect(screenLifecycle) {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
-                    Event.ON_CREATE -> {
+                    Lifecycle.Event.ON_CREATE -> {
                         viewModel.isLoaded()
                         viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
                     }
 
-                    Event.ON_START -> {
-                        configureScaffold(scaffoldState, bottomBar)
+                    Lifecycle.Event.ON_START -> {
                         viewModel.startViewModel(backResult?.value)
                     }
 
-                    Event.ON_RESUME -> {
+                    Lifecycle.Event.ON_RESUME -> {
                         viewModel.onResume()
                     }
 
-                    Event.ON_PAUSE -> viewModel.onPause()
+                    Lifecycle.Event.ON_PAUSE -> viewModel.onPause()
                     else -> Unit
                 }
             }
@@ -81,8 +69,6 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
             }
         }
         val state by viewModel.stateHandler.screenState.collectAsState(remember { viewModel.initialState })
-        val dialogState by viewModel.stateHandler.dialogState.observeAsState()
-        dialogState?.let { AddComposableDialog(it) }
         LaunchedEffect(key1 = Unit) {
             viewModel.stateHandler.navigationState.collect {
                 it?.destination?.let { destination ->
@@ -103,20 +89,5 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
     internal abstract fun AddComposableContent(state: S)
 
     @Composable
-    internal abstract fun AddComposableDialog(dialogState: VRODialogState)
-
-    @Composable
     internal abstract fun AddComposableSkeleton()
-
-    open fun setTopBar(): VROTopBarState? = null
-
-    private fun configureScaffold(
-        scaffoldState: MutableState<VROComposableScaffoldState>,
-        bottomBar: Boolean,
-    ) {
-        scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar(),
-            showBottomBar = bottomBar
-        )
-    }
 }

@@ -5,9 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Typography
@@ -24,6 +25,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.vro.compose.components.VROBottomBar
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.destinationRoute
@@ -31,7 +35,6 @@ import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 
-@ExperimentalMaterial3Api
 abstract class VROComposableActivity : ComponentActivity() {
 
     open val theme: VROComposableTheme? = null
@@ -68,31 +71,40 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterialNavigationApi::class)
     @Composable
     fun Initialize() {
-        val navController = rememberNavController()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
         val scaffoldState = remember { mutableStateOf(VROComposableScaffoldState()) }
-        Scaffold(
-            containerColor = Color.Transparent,
-            topBar = { TopBar(scaffoldState.value.topBarState) },
-            bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar() }
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = if (bottomBarState == null) 0.dp
-                    else innerPadding.calculateBottomPadding()
-                )
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = startScreen.destinationRoute()
-                ) {
-                    createComposableContent(
-                        navController,
-                        scaffoldState
+        ModalBottomSheetLayout(
+            modifier = Modifier.fillMaxSize(),
+            bottomSheetNavigator = bottomSheetNavigator,
+            sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
+        ) {
+            Scaffold(
+                containerColor = Color.Transparent,
+                topBar = { TopBar(scaffoldState.value.topBarState) },
+                bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar() }
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier.padding(
+                        top = innerPadding.calculateTopPadding(),
+                        bottom = if (bottomBarState == null) 0.dp
+                        else innerPadding.calculateBottomPadding()
                     )
+                ) {
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = startScreen.destinationRoute()
+                    ) {
+                        createComposableContent(
+                            navController,
+                            scaffoldState
+                        )
+                    }
                 }
             }
         }

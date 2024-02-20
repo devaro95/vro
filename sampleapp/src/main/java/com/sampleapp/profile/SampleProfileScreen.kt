@@ -3,7 +3,6 @@ package com.sampleapp.profile
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +15,6 @@ import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 
-@ExperimentalMaterial3Api
 class SampleProfileScreen :
     SampleBaseScreen<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
 
