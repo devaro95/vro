@@ -29,7 +29,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
 
     internal lateinit var viewModel: VROComposableViewModel<S, D>
 
-    open val skeletonEnabled = true
+    open val showSkeleton = false
 
     lateinit var context: Context
 
@@ -51,6 +51,7 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
         this.viewModel = viewModel
         eventLauncher = viewModel as E
         context = LocalContext.current
+        BackHandler(true) { navigator.navigateBack(null) }
         val backResult = navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(VROFragmentNavigator.NAVIGATION_BACK_STATE)
         val screenLifecycle = LocalLifecycleOwner.current.lifecycle
         DisposableEffect(screenLifecycle) {
@@ -82,14 +83,15 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
                 } ?: navigator.navigateBack(it?.backResult)
             }
         }
-        BackHandler(true) { navigator.navigateBack(null) }
         val isLoaded by viewModel.screenLoaded
-
-        if (!isLoaded && skeletonEnabled) AddComposableSkeleton()
+        if (!isLoaded && showSkeleton) AddComposableSkeleton()
         else {
             when (stepper) {
                 is VROScreenStep -> AddComposableContent(stepper.state)
-                is VRODialogStep -> AddComposableDialog(stepper.dialogState)
+                is VRODialogStep -> {
+                    AddComposableContent(stepper.state)
+                    AddComposableDialog(stepper.dialogState)
+                }
             }
         }
     }

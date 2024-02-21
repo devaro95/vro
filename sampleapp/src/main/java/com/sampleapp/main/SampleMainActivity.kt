@@ -5,6 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.sampleapp.R
 import com.sampleapp.bottombar.SampleBottomBarState
+import com.sampleapp.detail.SampleDetailNavigator
+import com.sampleapp.detail.SampleDetailScreen
+import com.sampleapp.detail.SampleDetailViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
@@ -60,6 +63,13 @@ class SampleMainActivity : VROComposableActivity() {
             navController = navController,
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
+            scaffoldState = scaffoldState
+        )
+        vroComposableScreen(
+            viewModel = { koinViewModel<SampleDetailViewModel>() },
+            navController = navController,
+            navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
+            content = SampleDetailScreen(),
             scaffoldState = scaffoldState
         )
         vroBottomSheet(

@@ -9,4 +9,6 @@ interface SampleHomeEvents : VROEvent {
     fun onActionShowBottomSheetClick()
     fun onActionShowSimpleDialogClick()
     fun onActionBottomSheetDismiss()
+    fun onActionProfileNavigationClick()
+    fun onActionDetailNavigationClick()
 }
