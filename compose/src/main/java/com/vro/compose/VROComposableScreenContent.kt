@@ -1,9 +1,6 @@
 package com.vro.compose
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
@@ -29,9 +26,7 @@ abstract class VROComposableScreenContent<
 
     @Composable
     override fun AddComposableSkeleton() {
-        Column(Modifier.fillMaxSize()) {
-            ComposableSkeleton()
-        }
+        ComposableSkeleton()
     }
 
     @VROMultiDevicePreview

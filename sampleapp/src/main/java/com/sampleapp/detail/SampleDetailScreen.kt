@@ -1,4 +1,4 @@
-package com.sampleapp.profile
+package com.sampleapp.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,24 +15,30 @@ import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 
-class SampleProfileScreen :
-    SampleBaseScreen<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
+class SampleDetailScreen :
+    SampleBaseScreen<SampleDetailState, SampleDestinations, SampleDetailEvent>() {
 
     @VROMultiDevicePreview
     @Composable
     override fun ComposablePreview() {
         GeneratePreview {
-            ProfileContent(SampleProfileState.INITIAL)
+            ComposableContent(SampleDetailState.INITIAL)
         }
     }
 
     @Composable
-    override fun ComposableContent(state: SampleProfileState) {
-        ProfileContent(state)
+    override fun ComposableContent(state: SampleDetailState) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(text = "Detail Screen Test")
+        }
     }
 
     override fun setTopBar() = sampleBackToolbar(
-        title = context.getString(R.string.profile_toolbar),
+        title = context.getString(R.string.detail_toolbar),
         onNavigation = { navigateBack() }
     )
 
@@ -44,17 +50,6 @@ class SampleProfileScreen :
                 .padding(horizontal = 16.dp)
         ) {
             SampleTextSkeleton(width = 200.dp)
-        }
-    }
-
-    @Composable
-    private fun ProfileContent(user: SampleProfileState) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(text = "This is the user profile")
         }
     }
 }

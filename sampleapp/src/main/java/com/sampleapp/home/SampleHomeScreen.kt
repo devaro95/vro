@@ -38,13 +38,13 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
 
     @Composable
     override fun ComposableSkeleton() {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SampleTextSkeleton(width = 100.dp)
-            SampleButtonSkeleton(modifier = Modifier.padding(top = 16.dp), width = 100.dp)
-        }
+       // Column(
+       //     modifier = Modifier.fillMaxWidth(),
+       //     horizontalAlignment = Alignment.CenterHorizontally
+       // ) {
+       //     SampleTextSkeleton(width = 100.dp)
+       //     SampleButtonSkeleton(modifier = Modifier.padding(top = 16.dp), width = 100.dp)
+       // }
     }
 
     override fun setTopBar() =
@@ -85,6 +85,20 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
                 onClick = { eventLauncher.onActionShowSimpleDialogClick() }
             ) {
                 Text(text = "Show Dialog Example")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
+            ) {
+                Text(text = "Profile Navigation")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { eventLauncher.onActionDetailNavigationClick() }
+            ) {
+                Text(text = "Detail Navigation")
             }
         }
     }

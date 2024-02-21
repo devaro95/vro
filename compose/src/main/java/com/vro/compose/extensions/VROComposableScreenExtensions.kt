@@ -27,8 +27,8 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
 ) {
     composable(
         content.destinationRoute(),
-        enterTransition = { enterTransition },
-        exitTransition = { exitTransition }
+        enterTransition = { enterTransition ?: EnterTransition.None },
+        exitTransition = { exitTransition ?: ExitTransition.None }
     ) {
         content.CreateScreen(
             viewModel = viewModel.invoke(),
