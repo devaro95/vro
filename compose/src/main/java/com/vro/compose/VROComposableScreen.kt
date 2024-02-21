@@ -9,7 +9,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle.Event
@@ -24,6 +23,8 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
+import com.vro.state.VROStepper.VRODialogStep
+import com.vro.state.VROStepper.VROScreenStep
 import java.io.Serializable
 
 abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEvent> {
@@ -80,11 +81,9 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
                 screenLifecycle.removeObserver(observer)
             }
         }
-        val state by viewModel.stateHandler.screenState.collectAsState(remember { viewModel.initialState })
-        val dialogState by viewModel.stateHandler.dialogState.observeAsState()
-        dialogState?.let { AddComposableDialog(it) }
+        val stepper = viewModel.stepper.collectAsState(VROScreenStep(viewModel.initialState)).value
         LaunchedEffect(key1 = Unit) {
-            viewModel.stateHandler.navigationState.collect {
+            viewModel.navigationState.collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
@@ -95,8 +94,14 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
         }
         BackHandler(true) { navigator.navigateBack(null) }
         val isLoaded by viewModel.screenLoaded
+
         if (!isLoaded && skeletonEnabled) AddComposableSkeleton()
-        else AddComposableContent(state)
+        else {
+            when (stepper) {
+                is VROScreenStep -> AddComposableContent(stepper.state)
+                is VRODialogStep -> AddComposableDialog(stepper.dialogState)
+            }
+        }
     }
 
     @Composable

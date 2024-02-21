@@ -79,18 +79,13 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
             ) {
                 Text(text = "Show Bottom Sheet")
             }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { eventLauncher.onActionShowSimpleDialogClick() }
+            ) {
+                Text(text = "Show Dialog Example")
+            }
         }
     }
-
-   // @Composable
-   // override fun OnDialog(data: VRODialogState) {
-   //     when (data.type) {
-   //         DIALOG_BOTTOM_SHEET -> vroBottomSheet(
-   //             onDismiss = { eventLauncher.onActionBottomSheetDismiss() },
-   //             fullExpanded = true,
-   //             viewModel = { koinViewModel<SampleBottomSheetViewModel>() },
-   //             content = SampleBottomSheet()
-   //         )
-   //     }
-   // }
 }
