@@ -8,14 +8,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle.Event
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.getNavParamState
+import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 import com.vro.event.VROEvent
@@ -56,26 +54,18 @@ abstract class VROComposableScreen<S : VROState, D : VRODestination, E : VROEven
         val backResult = navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(VROFragmentNavigator.NAVIGATION_BACK_STATE)
         val screenLifecycle = LocalLifecycleOwner.current.lifecycle
         DisposableEffect(screenLifecycle) {
-            val observer = LifecycleEventObserver { _, event ->
-                when (event) {
-                    Event.ON_CREATE -> {
-                        viewModel.isLoaded()
-                        viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
-                    }
-
-                    Event.ON_START -> {
-                        configureScaffold(scaffoldState, bottomBar)
-                        viewModel.startViewModel(backResult?.value)
-                    }
-
-                    Event.ON_RESUME -> {
-                        viewModel.onResume()
-                    }
-
-                    Event.ON_PAUSE -> viewModel.onPause()
-                    else -> Unit
-                }
-            }
+            val observer = createLifecycleEventObserver(
+                onCreate = {
+                    viewModel.isLoaded()
+                    viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
+                },
+                onStart = {
+                    configureScaffold(scaffoldState, bottomBar)
+                    viewModel.startViewModel(backResult?.value)
+                },
+                onResume = { viewModel.onResume() },
+                onPause = { viewModel.onPause() }
+            )
             screenLifecycle.addObserver(observer)
             onDispose {
                 screenLifecycle.removeObserver(observer)
