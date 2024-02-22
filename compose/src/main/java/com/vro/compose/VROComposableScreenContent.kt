@@ -1,48 +1,51 @@
 package com.vro.compose
 
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import java.io.Serializable
 
-abstract class VROComposableScreenContent<
-        S : VROState,
-        D : VRODestination,
-        E : VROEvent,
-        > : VROComposableScreen<S, D, E>() {
+abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : VROEvent> {
 
-    @Composable
-    override fun AddComposableContent(state: S) {
-        ComposableContent(state)
-    }
+    internal lateinit var viewModel: VROComposableViewModel<S, D>
 
-    @Composable
-    override fun AddComposableDialog(dialogState: VRODialogState) {
-        OnDialog(dialogState)
-    }
+    lateinit var previewEvents: E
 
-    @Composable
-    override fun AddComposableSkeleton() {
-        ComposableSkeleton()
-    }
+    lateinit var context: Context
 
     @VROMultiDevicePreview
     @Composable
     abstract fun ComposablePreview()
 
     @Composable
-    abstract fun ComposableContent(state: S)
+    abstract fun ComposableContent(state: S, events: E)
 
     @Composable
     open fun ComposableSkeleton() = Unit
 
     @Composable
-    open fun OnDialog(data: VRODialogState) = Unit
+    open fun OnDialog(data: VRODialogState, events: E) = Unit
 
     fun navigateBack(result: Serializable? = null) {
         viewModel.navigateBack(result)
     }
+
+    internal fun configureScaffold(
+        scaffoldState: MutableState<VROComposableScaffoldState>,
+        bottomBar: Boolean,
+        events: E,
+    ) {
+        scaffoldState.value = VROComposableScaffoldState(
+            topBarState = setTopBar(events),
+            showBottomBar = bottomBar
+        )
+    }
+
+    open fun setTopBar(events: E): VROComposableScaffoldState.VROTopBarState? = null
 }

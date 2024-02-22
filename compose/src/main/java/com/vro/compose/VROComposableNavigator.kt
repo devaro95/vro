@@ -16,15 +16,15 @@ abstract class VROComposableNavigator<D : VRODestination>(
 ) : VRONavigator<D> {
 
     override fun navigateBack(result: Serializable?) {
-        navController.previousBackStackEntry?.savedStateHandle?.set(VROFragmentNavigator.NAVIGATION_BACK_STATE, result)
+        navController.previousBackStackEntry?.savedStateHandle?.set(NAVIGATION_BACK_STATE, result)
         val canNavigateBack = navController.popBackStack()
         if (!canNavigateBack) finish()
     }
 
     fun navigateToScreen(
-        screen: VROComposableScreen<*, *, *>,
+        screen: VROComposableScreenContent<*, *, *>,
         state: VRONavStarter? = null,
-        popScreen: VROComposableScreen<*, *, *>? = null,
+        popScreen: VROComposableScreenContent<*, *, *>? = null,
         inclusive: Boolean = false,
     ) {
         state?.let {
@@ -45,5 +45,9 @@ abstract class VROComposableNavigator<D : VRODestination>(
 
     override fun finish() {
         activity.finish()
+    }
+
+    companion object {
+        const val NAVIGATION_BACK_STATE = "NAVIGATION_BACK_STATE"
     }
 }
