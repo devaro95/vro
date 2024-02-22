@@ -10,13 +10,6 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     override val initialState: SampleHomeState = SampleHomeState.INITIAL
 
-    override fun onNavResult(result: Serializable) {
-        super.onNavResult(result)
-        if (result is Boolean) {
-            if (result) updateScreen { copy(text = "This is a sample") }
-        }
-    }
-
     override suspend fun onStart() {
         updateScreen {
             copy(text = FIRST_TEXT)
@@ -25,7 +18,10 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     override fun onActionShowBottomSheetClick() {
         navigate(SampleDestinations.BottomSheet)
-        //updateDialog(VRODialogState(DIALOG_BOTTOM_SHEET))
+    }
+
+    override fun onActionShowSimpleDialogClick() {
+        showSimpleDialog()
     }
 
     override fun onActionUpdateTextClick() {
@@ -58,6 +54,5 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     companion object {
         const val FIRST_TEXT = "This is a text"
         const val SECOND_TEXT = "Another text"
-        const val DIALOG_BOTTOM_SHEET = 1002
     }
 }

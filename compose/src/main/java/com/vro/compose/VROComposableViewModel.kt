@@ -11,12 +11,13 @@ import com.vro.navigation.VRONavigationState
 import com.vro.navstarter.VRONavStarter
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
-import com.vro.state.VROStateHandler
+import com.vro.state.VROStepper
 import com.vro.state.VroNavigationSharedFlow
 import com.vro.state.VroStateDelegate
-import com.vro.state.VroStateSharedFlow
+import com.vro.state.VroStepperSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharedFlow
 import java.io.Serializable
 
 abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewModel(), VROEvent {
@@ -25,14 +26,13 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
 
     private var screenState: S by VroStateDelegate { initialState }
 
-    private val observableState = VroStateSharedFlow<S>().create()
-
     private val observableNavigation = VroNavigationSharedFlow<D>().create()
 
-    internal val stateHandler = VROStateHandler(
-        screenState = observableState,
-        navigationState = observableNavigation
-    )
+    private val observableStepper = VroStepperSharedFlow<S>().create()
+
+    internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
+
+    internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
     internal val screenLoaded: MutableState<Boolean> = mutableStateOf(false)
 
@@ -57,14 +57,12 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
     fun checkDataState(): S = screenState
 
     fun updateScreen(changeStateFunction: S.() -> S) {
-        stateHandler.dialogState.value = null
         screenState = changeStateFunction.invoke(screenState)
-        observableState.tryEmit(screenState)
+        observableStepper.tryEmit(VROStepper.VROScreenStep(screenState))
     }
 
     fun updateScreen() {
-        stateHandler.dialogState.value = null
-        observableState.tryEmit(screenState)
+        observableStepper.tryEmit(VROStepper.VROScreenStep(screenState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
@@ -73,7 +71,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
 
     fun updateDialog(dialogState: VRODialogState, clearScreen: Boolean = true) {
         if (clearScreen) updateScreen { screenState }
-        stateHandler.dialogState.value = dialogState
+        observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
     }
 
     private fun hideStartLoading() {
