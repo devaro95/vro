@@ -51,6 +51,13 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         updateScreen()
     }
 
+    override fun onActionProfileNavigationClick(){
+        navigate(SampleDestinations.Profile)
+    }
+    override fun onActionDetailNavigationClick(){
+        navigate(SampleDestinations.Detail)
+    }
+
     companion object {
         const val FIRST_TEXT = "This is a text"
         const val SECOND_TEXT = "Another text"
