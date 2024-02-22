@@ -2,13 +2,13 @@ package com.sampleapp.topbar
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 
-fun Context.sampleHomeToolbar(onAction: () -> Unit, onNavigation: () -> Unit) = VROTopBarState(
+fun Context.sampleHomeToolbar(onAction: () -> Unit) = VROTopBarState(
     title = getString(R.string.home_toolbar),
     actionButton = VROTopBarState.VROTopBarButton(
         iconVector = Icons.Default.Person,
@@ -20,7 +20,7 @@ fun Context.sampleHomeToolbar(onAction: () -> Unit, onNavigation: () -> Unit) = 
 fun sampleBackToolbar(title: String, onNavigation: () -> Unit) = VROTopBarState(
     title = title,
     navigationButton = VROTopBarState.VROTopBarButton(
-        iconVector = Icons.Default.ArrowBack,
+        iconVector = Icons.AutoMirrored.Filled.ArrowBack,
         iconSize = 16.dp,
         onClick = onNavigation
     )

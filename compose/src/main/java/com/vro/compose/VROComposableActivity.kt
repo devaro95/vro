@@ -39,7 +39,7 @@ abstract class VROComposableActivity : ComponentActivity() {
 
     open val theme: VROComposableTheme? = null
 
-    abstract val startScreen: VROComposableScreen<*, *, *>
+    abstract val startScreen: VROComposableScreenContent<*, *, *>
 
     private lateinit var navController: NavController
 
@@ -95,7 +95,6 @@ abstract class VROComposableActivity : ComponentActivity() {
                         else innerPadding.calculateBottomPadding()
                     )
                 ) {
-
                     NavHost(
                         navController = navController,
                         startDestination = startScreen.destinationRoute()
@@ -128,7 +127,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
-    fun navigateToScreen(screen: VROComposableScreen<*, *, *>) {
+    fun navigateToScreen(screen: VROComposableScreenContent<*, *, *>) {
         navController.navigate(screen.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
