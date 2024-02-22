@@ -11,14 +11,14 @@ apply from: '../gradleConfig/configuration.gradle'
 android {
     compileSdkVersion compilation.compileSdkVersion
 
-            defaultConfig {
-                aarMetadata {
-                    minCompileSdk = compilation.minSdkVersion
-                }
-            }
+    defaultConfig {
+        aarMetadata {
+            minCompileSdk = compilation.minSdkVersion
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
-                targetCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
@@ -50,29 +50,9 @@ dependencies {
     api(project(":core"))
     implementation(project(":app"))
 
-    implementation(libraries.core)
-    implementation(libraries.appCompat)
     implementation(libraries.material3)
-    implementation(libraries.koinAndroid)
-    implementation(libraries.koinCore)
-    implementation(libraries.lifecycleViewModel)
-    implementation(libraries.navigationFragment)
-    implementation(libraries.navigationUi)
     implementation(libraries.navigationDynamicFeatures)
-    implementation(libraries.viewBinding)
-    implementation(libraries.mockitoInline)
-    implementation(libraries.mockitoCore)
-    implementation(libraries.junit)
-    implementation(libraries.archCore)
-    implementation(libraries.composeMaterial3Size)
-    debugImplementation(libraries.composeTooling)
     implementation(libraries.composeToolingPreview)
-    implementation(libraries.composeActivity)
-    implementation(libraries.composeLifecycle)
-    implementation(libraries.composeLifecycle)
     implementation(libraries.koinCompose)
-    implementation(libraries.composeRuntime)
-    implementation "androidx.compose.ui:ui:1.7.0-alpha02"
-    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("com.google.accompanist:accompanist-navigation-material:0.35.0-alpha")
 }

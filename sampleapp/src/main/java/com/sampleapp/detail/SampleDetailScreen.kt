@@ -1,78 +1,63 @@
-package com.sampleapp.home
+package com.sampleapp.detail
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sampleapp.R
 import com.sampleapp.base.SampleBaseScreen
-import com.sampleapp.components.SampleButtonSkeleton
-import com.sampleapp.components.SampleTextSkeleton
-import com.sampleapp.detail.SampleDetailEvent
 import com.sampleapp.main.SampleDestinations
-import com.sampleapp.topbar.sampleHomeToolbar
+import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.event.VROEvent
 
-class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
+class SampleDetailScreen :
+    SampleBaseScreen<SampleDetailState, SampleDestinations, SampleDetailEvent>() {
 
-    @Composable
     @VROMultiDevicePreview
+    @Composable
     override fun ComposablePreview() {
         GeneratePreview {
-            ComposableContent(SampleHomeState.INITIAL,
-                events = object : SampleHomeEvents {
-                    override fun navigateToProfile() = Unit
-                    override fun onActionHideDialog() = Unit
-                    override fun onActionUpdateTextClick() = Unit
-                    override fun onActionShowBottomSheetClick() = Unit
-                    override fun onActionShowSimpleDialogClick() = Unit
-                    override fun onActionBottomSheetDismiss() = Unit
+            ComposableContent(
+                state = SampleDetailState.INITIAL,
+                events = object : SampleDetailEvent {
                     override fun onActionProfileNavigationClick() = Unit
-                    override fun onActionDetailNavigationClick() = Unit
                 })
         }
     }
 
     @Composable
-    override fun ComposableContent(state: SampleHomeState, events: SampleHomeEvents) {
+    override fun ComposableContent(state: SampleDetailState, events: SampleDetailEvent) {
         Column(
-            Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = state.text,
-                textAlign = TextAlign.Center
-            )
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionUpdateTextClick() }
+                onClick = { events.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Update text")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionShowBottomSheetClick() }
+                onClick = { events.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Show Bottom Sheet")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionShowSimpleDialogClick() }
+                onClick = { events.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Show Dialog Example")
             }
@@ -86,15 +71,15 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, S
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionDetailNavigationClick() }
+                onClick = { events.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Detail Navigation")
             }
         }
     }
 
-    override fun setTopBar(events: SampleHomeEvents) =
-        context.sampleHomeToolbar(
-            onAction = { events.navigateToProfile() }
-        )
+    override fun setTopBar(events: SampleDetailEvent) = sampleBackToolbar(
+        title = context.getString(R.string.detail_toolbar),
+        onNavigation = { navigateBack() }
+    )
 }

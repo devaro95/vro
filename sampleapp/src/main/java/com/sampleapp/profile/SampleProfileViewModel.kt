@@ -5,7 +5,7 @@ import com.sampleapp.main.SampleDestinations
 import com.sampleapp.profile.SampleProfileNavStarter.Initialize
 import com.vro.navstarter.VRONavStarter
 
-class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDestinations>() {
+class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDestinations>(), SampleProfileEvent {
 
     override val initialState: SampleProfileState = SampleProfileState.INITIAL
 

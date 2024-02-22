@@ -9,48 +9,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
 import com.sampleapp.base.SampleBaseScreen
-import com.sampleapp.components.SampleTextSkeleton
 import com.sampleapp.main.SampleDestinations
 import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.event.VROEmptyEvent
 
 class SampleProfileScreen :
     SampleBaseScreen<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
-
-    override val skeletonEnabled: Boolean = false
 
     @VROMultiDevicePreview
     @Composable
     override fun ComposablePreview() {
         GeneratePreview {
-            ProfileContent(SampleProfileState.INITIAL)
+            ComposableContent(SampleProfileState.INITIAL,
+                events = object: SampleProfileEvent{
+
+                })
         }
     }
 
     @Composable
-    override fun ComposableContent(state: SampleProfileState) {
-        ProfileContent(state)
-    }
-
-    override fun setTopBar() = sampleBackToolbar(
-        title = context.getString(R.string.profile_toolbar),
-        onNavigation = { navigateBack() }
-    )
-
-    @Composable
-    override fun ComposableSkeleton() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
-            SampleTextSkeleton(width = 200.dp)
-        }
-    }
-
-    @Composable
-    private fun ProfileContent(user: SampleProfileState) {
+    override fun ComposableContent(state: SampleProfileState, events: SampleProfileEvent) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,4 +39,9 @@ class SampleProfileScreen :
             Text(text = "This is the user profile")
         }
     }
+
+    override fun setTopBar(events: SampleProfileEvent) = sampleBackToolbar(
+        title = context.getString(R.string.profile_toolbar),
+        onNavigation = { navigateBack() }
+    )
 }
