@@ -35,7 +35,7 @@ class SampleProfileScreen :
 
     override fun setTopBar() = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
-        onNavigation = { navigateBack(true) }
+        onNavigation = { navigateBack() }
     )
 
     @Composable

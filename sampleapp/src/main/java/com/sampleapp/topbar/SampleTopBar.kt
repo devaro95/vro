@@ -14,11 +14,6 @@ fun Context.sampleHomeToolbar(onAction: () -> Unit, onNavigation: () -> Unit) = 
         iconVector = Icons.Default.Person,
         iconSize = 26.dp,
         onClick = onAction
-    ),
-    navigationButton = VROTopBarState.VROTopBarButton(
-        iconVector = Icons.Default.ArrowBack,
-        iconSize = 26.dp,
-        onClick = onNavigation
     )
 )
 

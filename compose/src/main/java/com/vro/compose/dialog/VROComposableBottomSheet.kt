@@ -7,10 +7,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.*
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableNavigator
@@ -20,6 +20,7 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
 import com.vro.state.VROState
+import com.vro.state.VROStepper
 import java.io.Serializable
 
 abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VROEvent> {
@@ -46,20 +47,20 @@ abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VR
         DisposableEffect(screenLifecycle) {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
-                    Lifecycle.Event.ON_CREATE -> {
+                    Event.ON_CREATE -> {
                         viewModel.isLoaded()
                         viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
                     }
 
-                    Lifecycle.Event.ON_START -> {
+                    Event.ON_START -> {
                         viewModel.startViewModel(backResult?.value)
                     }
 
-                    Lifecycle.Event.ON_RESUME -> {
+                    Event.ON_RESUME -> {
                         viewModel.onResume()
                     }
 
-                    Lifecycle.Event.ON_PAUSE -> viewModel.onPause()
+                    Event.ON_PAUSE -> viewModel.onPause()
                     else -> Unit
                 }
             }
@@ -68,9 +69,9 @@ abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VR
                 screenLifecycle.removeObserver(observer)
             }
         }
-        val state by viewModel.stateHandler.screenState.collectAsState(remember { viewModel.initialState })
+        val stepper = viewModel.stepper.collectAsState(VROStepper.VROScreenStep(viewModel.initialState)).value
         LaunchedEffect(key1 = Unit) {
-            viewModel.stateHandler.navigationState.collect {
+            viewModel.navigationState.collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
@@ -82,7 +83,7 @@ abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VR
         BackHandler(true) { navigator.navigateBack(null) }
         val isLoaded by viewModel.screenLoaded
         if (!isLoaded && skeletonEnabled) AddComposableSkeleton()
-        else AddComposableContent(state)
+        else if (stepper is VROStepper.VROScreenStep) AddComposableContent(stepper.state)
     }
 
     @Composable
