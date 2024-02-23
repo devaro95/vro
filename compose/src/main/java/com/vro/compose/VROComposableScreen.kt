@@ -15,6 +15,7 @@ import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.event.VROEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VRODialogStep
@@ -50,7 +51,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
             onResume = {
                 val savedBackState = navController.currentBackStackEntry?.savedStateHandle
                 savedBackState?.getLiveData<Serializable>(NAVIGATION_BACK_STATE)?.value?.let {
-                    viewModel.onNavResult(it)
+                    viewModel.onNavResult(it as VROBackResult)
                     savedBackState.remove<Serializable>(NAVIGATION_BACK_STATE)
                 }
                 viewModel.onResume()

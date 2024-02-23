@@ -6,6 +6,7 @@ import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.event.VROSingleLiveEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.navstarter.VRONavStarter
@@ -92,7 +93,7 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         navigationState.value = VRONavigationState(destination)
     }
 
-    fun navigateBack(result: Serializable? = null) {
+    fun navigateBack(result: VROBackResult? = null) {
         navigationState.value = VRONavigationState(navigateBack = true, backResult = result)
     }
 

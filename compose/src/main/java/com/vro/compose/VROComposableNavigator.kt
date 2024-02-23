@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.putNavParam
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
 import com.vro.navstarter.VRONavStarter
@@ -14,7 +15,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
     private val navController: NavController,
 ) : VRONavigator<D> {
 
-    override fun navigateBack(result: Serializable?) {
+    override fun navigateBack(result: VROBackResult?) {
         navController.previousBackStackEntry?.savedStateHandle?.set(NAVIGATION_BACK_STATE, result)
         val canNavigateBack = navController.popBackStack()
         if (!canNavigateBack) finish()

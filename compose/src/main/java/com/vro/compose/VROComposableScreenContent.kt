@@ -6,6 +6,7 @@ import androidx.compose.runtime.MutableState
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.event.VROEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
@@ -32,7 +33,7 @@ abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : 
     @Composable
     open fun OnDialog(data: VRODialogState) = Unit
 
-    fun navigateBack(result: Serializable? = null) {
+    fun navigateBack(result: VROBackResult? = null) {
         viewModel.navigateBack(result)
     }
 
