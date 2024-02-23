@@ -3,7 +3,7 @@
 package com.vro.compose.extensions
 
 import com.vro.compose.VROComposableScreenContent
-import com.vro.compose.dialog.VROComposableBottomSheet
+import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.navstarter.VRONavStarter
 
 var navParamList: HashMap<String, VRONavStarter> = hashMapOf()
@@ -20,4 +20,4 @@ fun getNavParamState(route: String): VRONavStarter? {
 
 fun VROComposableScreenContent<*, *, *>.destinationRoute(): String = this::class.java.name
 
-fun VROComposableBottomSheet<*, *, *>.destinationRoute(): String = this::class.java.name
+fun VROComposableBottomSheetContent<*, *, *>.destinationRoute(): String = this::class.java.name
