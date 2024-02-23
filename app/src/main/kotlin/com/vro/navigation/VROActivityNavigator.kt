@@ -11,14 +11,14 @@ abstract class VROActivityNavigator<D : VRODestination>(private val activity: Ac
 
     private val navController: NavController = activity.findNavController(navHostId)
 
-    override fun navigateBack(result: Serializable?) {
+    override fun navigateBack(result: VROBackResult?) {
         navController.previousBackStackEntry?.savedStateHandle?.set(NAVIGATION_BACK_STATE, result)
         navController.popBackStack().also { hasBack ->
             if (!hasBack) activity.finish()
         }
     }
 
-    fun navigateWithAction(action: Int, state: VROState?) =
+    fun navigateWithAction(action: Int, state: VROState? = null) =
         navController.navigate(action, Bundle().apply {
             putSerializable(NAVIGATION_STATE, state)
         })

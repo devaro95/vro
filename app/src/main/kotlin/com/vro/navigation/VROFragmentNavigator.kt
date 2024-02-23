@@ -14,7 +14,7 @@ abstract class VROFragmentNavigator<D : VRODestination>(fragment: Fragment) : VR
 
     val activity: Activity = fragment.requireActivity()
 
-    override fun navigateBack(result: Serializable?) {
+    override fun navigateBack(result: VROBackResult?) {
         navController.previousBackStackEntry?.savedStateHandle?.set(NAVIGATION_BACK_STATE, result)
         navController.popBackStack().also { hasBack ->
             if (!hasBack) activity.finish()
