@@ -1,6 +1,5 @@
 package com.vro.compose.dialog
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -18,67 +17,52 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator
 import com.vro.state.VROState
-import com.vro.state.VROStepper
+import com.vro.state.VROStepper.VROScreenStep
 import java.io.Serializable
 
-abstract class VROComposableBottomSheet<S : VROState, D : VRODestination, E : VROEvent> {
-
-    internal lateinit var viewModel: VROComposableViewModel<S, D>
-
-    open val skeletonEnabled = true
-
-    lateinit var context: Context
-
-    lateinit var eventLauncher: E
-
-    @Composable
-    fun CreateBottomSheet(
-        viewModel: VROComposableViewModel<S, D>,
-        navController: NavController,
-        navigator: VROComposableNavigator<D>,
-    ) {
-        this.viewModel = viewModel
-        eventLauncher = viewModel as E
-        context = LocalContext.current
-        val backResult = navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Serializable>(VROFragmentNavigator.NAVIGATION_BACK_STATE)
-        val screenLifecycle = LocalLifecycleOwner.current.lifecycle
-        DisposableEffect(screenLifecycle) {
-            val observer = createLifecycleEventObserver(
-                onCreate = {
-                    viewModel.isLoaded()
-                    viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
-                },
-                onStart = {
-                    viewModel.startViewModel(backResult?.value)
-                },
-                onResume = { viewModel.onResume() },
-                onPause = { viewModel.onPause() }
-            )
-            screenLifecycle.addObserver(observer)
-            onDispose {
-                screenLifecycle.removeObserver(observer)
-            }
+@Suppress("UNCHECKED_CAST")
+@Composable
+fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> vroComposableBottomSheetContent(
+    viewModel: VM,
+    navController: NavController,
+    navigator: VROComposableNavigator<D>,
+    content: VROComposableBottomSheetContent<S, D, E>,
+    showSkeleton: Boolean,
+) {
+    content.viewModel = viewModel
+    content.eventLauncher = viewModel as E
+    content.context = LocalContext.current
+    BackHandler(true) { navigator.navigateBack(null) }
+    val screenLifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(screenLifecycle) {
+        val observer = createLifecycleEventObserver(
+            onCreate = {
+                viewModel.isLoaded()
+                viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
+            },
+            onStart = {
+                viewModel.startViewModel()
+            },
+            onResume = { viewModel.onResume() },
+            onPause = { viewModel.onPause() }
+        )
+        screenLifecycle.addObserver(observer)
+        onDispose {
+            screenLifecycle.removeObserver(observer)
         }
-        val stepper = viewModel.stepper.collectAsState(VROStepper.VROScreenStep(viewModel.initialState)).value
-        LaunchedEffect(key1 = Unit) {
-            viewModel.navigationState.collect {
-                it?.destination?.let { destination ->
-                    if (!destination.isNavigated) {
-                        navigator.navigate(destination)
-                        destination.setNavigated()
-                    }
-                } ?: navigator.navigateBack(it?.backResult)
-            }
-        }
-        BackHandler(true) { navigator.navigateBack(null) }
-        val isLoaded by viewModel.screenLoaded
-        if (!isLoaded && skeletonEnabled) AddComposableSkeleton()
-        else if (stepper is VROStepper.VROScreenStep) AddComposableContent(stepper.state)
     }
-
-    @Composable
-    internal abstract fun AddComposableContent(state: S)
-
-    @Composable
-    internal abstract fun AddComposableSkeleton()
+    val stepper = viewModel.stepper.collectAsState(VROScreenStep(viewModel.initialState)).value
+    LaunchedEffect(key1 = Unit) {
+        viewModel.navigationState.collect {
+            it?.destination?.let { destination ->
+                if (!destination.isNavigated) {
+                    navigator.navigate(destination)
+                    destination.setNavigated()
+                }
+            } ?: navigator.navigateBack(it?.backResult)
+        }
+    }
+    val isLoaded by viewModel.screenLoaded
+    if (!isLoaded && showSkeleton) content.ComposableSkeleton()
+    else if (stepper is VROScreenStep) content.ComposableContent(stepper.state)
 }

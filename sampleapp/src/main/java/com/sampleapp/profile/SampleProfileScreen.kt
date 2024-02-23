@@ -13,7 +13,6 @@ import com.sampleapp.main.SampleDestinations
 import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
-import com.vro.event.VROEmptyEvent
 
 class SampleProfileScreen :
     SampleBaseScreen<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
@@ -22,15 +21,12 @@ class SampleProfileScreen :
     @Composable
     override fun ComposablePreview() {
         GeneratePreview {
-            ComposableContent(SampleProfileState.INITIAL,
-                events = object: SampleProfileEvent{
-
-                })
+            ComposableContent(SampleProfileState.INITIAL)
         }
     }
 
     @Composable
-    override fun ComposableContent(state: SampleProfileState, events: SampleProfileEvent) {
+    override fun ComposableContent(state: SampleProfileState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -40,7 +36,7 @@ class SampleProfileScreen :
         }
     }
 
-    override fun setTopBar(events: SampleProfileEvent) = sampleBackToolbar(
+    override fun setTopBar() = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
         onNavigation = { navigateBack() }
     )

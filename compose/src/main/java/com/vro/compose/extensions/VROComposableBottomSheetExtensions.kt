@@ -7,7 +7,8 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.bottomSheet
 import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
-import com.vro.compose.dialog.VROComposableBottomSheet
+import com.vro.compose.dialog.VROComposableBottomSheetContent
+import com.vro.compose.dialog.vroComposableBottomSheetContent
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
@@ -15,17 +16,20 @@ import com.vro.state.VROState
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroBottomSheet(
     viewModel: @Composable () -> VM,
-    content: VROComposableBottomSheet<S, D, E>,
+    content: VROComposableBottomSheetContent<S, D, E>,
     navController: NavController,
     navigator: VROComposableNavigator<D>,
+    showSkeleton: Boolean = false
 ) {
     bottomSheet(
         route = content.destinationRoute(),
     ) {
-        content.CreateBottomSheet(
+        vroComposableBottomSheetContent(
             viewModel = viewModel.invoke(),
             navController = navController,
-            navigator = navigator
+            navigator = navigator,
+            content = content,
+            showSkeleton = showSkeleton
         )
     }
 }

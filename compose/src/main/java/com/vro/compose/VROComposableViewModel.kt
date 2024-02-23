@@ -42,10 +42,9 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
         screenLoaded.value = false
     }
 
-    internal fun startViewModel(result: Serializable?) {
+    internal fun startViewModel() {
         executeCoroutine {
             onStart()
-            result?.let { onNavResult(result) }
             hideStartLoading()
         }
     }

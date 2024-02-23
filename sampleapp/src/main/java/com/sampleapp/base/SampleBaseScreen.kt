@@ -16,7 +16,7 @@ abstract class SampleBaseScreen<S : VROState, D : VRODestination, E : VROEvent> 
     VROComposableScreenContent<S, D, E>() {
 
     @Composable
-    override fun OnDialog(data: VRODialogState, events: E) {
+    override fun OnDialog(data: VRODialogState) {
         when (data.type) {
             DIALOG_LOADING -> LoadingDialog()
             DIALOG_SIMPLE -> SimpleDialog(data.value as SampleSimpleDialogData)
