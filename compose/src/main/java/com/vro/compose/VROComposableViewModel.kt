@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import com.vro.navstarter.VRONavStarter
@@ -85,14 +86,14 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
 
     open fun onPause() = Unit
 
-    open fun onNavResult(result: Serializable) = Unit
+    open fun onNavResult(result: VROBackResult) = Unit
 
     fun navigate(destination: D?) {
         destination?.resetNavigated()
         observableNavigation.tryEmit(VRONavigationState(destination))
     }
 
-    fun navigateBack(result: Serializable? = null) {
+    fun navigateBack(result: VROBackResult? = null) {
         observableNavigation.tryEmit(VRONavigationState(navigateBack = true, backResult = result))
     }
 
