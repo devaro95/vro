@@ -15,7 +15,7 @@ abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : 
 
     internal lateinit var viewModel: VROComposableViewModel<S, D>
 
-    lateinit var previewEvents: E
+    lateinit var eventLauncher: E
 
     lateinit var context: Context
 
@@ -24,13 +24,13 @@ abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : 
     abstract fun ComposablePreview()
 
     @Composable
-    abstract fun ComposableContent(state: S, events: E)
+    abstract fun ComposableContent(state: S)
 
     @Composable
     open fun ComposableSkeleton() = Unit
 
     @Composable
-    open fun OnDialog(data: VRODialogState, events: E) = Unit
+    open fun OnDialog(data: VRODialogState) = Unit
 
     fun navigateBack(result: Serializable? = null) {
         viewModel.navigateBack(result)
@@ -39,13 +39,12 @@ abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : 
     internal fun configureScaffold(
         scaffoldState: MutableState<VROComposableScaffoldState>,
         bottomBar: Boolean,
-        events: E,
     ) {
         scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar(events),
+            topBarState = setTopBar(),
             showBottomBar = bottomBar
         )
     }
 
-    open fun setTopBar(events: E): VROComposableScaffoldState.VROTopBarState? = null
+    open fun setTopBar(): VROComposableScaffoldState.VROTopBarState? = null
 }

@@ -16,7 +16,6 @@ import com.sampleapp.main.SampleDestinations
 import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.extensions.GeneratePreview
 import com.vro.compose.preview.VROMultiDevicePreview
-import com.vro.event.VROEvent
 
 class SampleDetailScreen :
     SampleBaseScreen<SampleDetailState, SampleDestinations, SampleDetailEvent>() {
@@ -25,16 +24,12 @@ class SampleDetailScreen :
     @Composable
     override fun ComposablePreview() {
         GeneratePreview {
-            ComposableContent(
-                state = SampleDetailState.INITIAL,
-                events = object : SampleDetailEvent {
-                    override fun onActionProfileNavigationClick() = Unit
-                })
+            ComposableContent(state = SampleDetailState.INITIAL)
         }
     }
 
     @Composable
-    override fun ComposableContent(state: SampleDetailState, events: SampleDetailEvent) {
+    override fun ComposableContent(state: SampleDetailState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -43,42 +38,42 @@ class SampleDetailScreen :
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionProfileNavigationClick() }
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Update text")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionProfileNavigationClick() }
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Show Bottom Sheet")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionProfileNavigationClick() }
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Show Dialog Example")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionProfileNavigationClick() }
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Profile Navigation")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { events.onActionProfileNavigationClick() }
+                onClick = { eventLauncher.onActionProfileNavigationClick() }
             ) {
                 Text(text = "Detail Navigation")
             }
         }
     }
 
-    override fun setTopBar(events: SampleDetailEvent) = sampleBackToolbar(
+    override fun setTopBar() = sampleBackToolbar(
         title = context.getString(R.string.detail_toolbar),
         onNavigation = { navigateBack() }
     )
