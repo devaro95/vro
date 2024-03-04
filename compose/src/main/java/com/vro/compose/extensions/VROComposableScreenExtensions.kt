@@ -21,7 +21,6 @@ import com.vro.state.VROState
 
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
     viewModel: @Composable () -> VM,
-    navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROComposableScreenContent<S, D, E>,
     enterTransition: EnterTransition? = null,
@@ -37,7 +36,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     ) {
         vroComposableScreenContent(
             viewModel = viewModel.invoke(),
-            navController = navController,
+            navController = navigator.navController,
             scaffoldState = scaffoldState,
             navigator = navigator,
             bottomBar = bottomBar,
@@ -50,7 +49,6 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
 @Composable
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
     viewModel: VM,
-    navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROComposableScreenContent<S, D, E>,
     scaffoldState: MutableState<VROComposableScaffoldState>,
@@ -59,7 +57,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
 ) {
     vroComposableScreenContent(
         viewModel = viewModel,
-        navController = navController,
+        navController = navigator.navController,
         scaffoldState = scaffoldState,
         navigator = navigator,
         bottomBar = bottomBar,
