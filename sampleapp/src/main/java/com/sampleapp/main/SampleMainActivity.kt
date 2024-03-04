@@ -52,7 +52,6 @@ class SampleMainActivity : VROComposableActivity() {
     ) {
         vroComposableScreen(
             viewModel = { koinViewModel<SampleHomeViewModel>() },
-            navController = navController,
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
             content = SampleHomeScreen(),
             scaffoldState = scaffoldState,
@@ -60,14 +59,12 @@ class SampleMainActivity : VROComposableActivity() {
         )
         vroComposableScreen(
             viewModel = { koinViewModel<SampleProfileViewModel>() },
-            navController = navController,
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
             scaffoldState = scaffoldState
         )
         vroComposableScreen(
             viewModel = { koinViewModel<SampleDetailViewModel>() },
-            navController = navController,
             navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
             content = SampleDetailScreen(),
             scaffoldState = scaffoldState
