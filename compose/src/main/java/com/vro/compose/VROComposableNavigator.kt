@@ -12,7 +12,7 @@ import java.io.Serializable
 
 abstract class VROComposableNavigator<D : VRODestination>(
     private val activity: VROComposableActivity,
-    private val navController: NavController,
+    internal val navController: NavController,
 ) : VRONavigator<D> {
 
     override fun navigateBack(result: VROBackResult?) {
