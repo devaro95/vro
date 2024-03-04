@@ -66,14 +66,14 @@ abstract class VROComposableActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             theme?.also {
-                CreateTheme(it.lightColors, it.darkColors, it.typography) { Initialize() }
+                CreateTheme(it.lightColors, it.darkColors, it.typography) { Initialize(MaterialTheme.colorScheme.background) }
             } ?: run { Initialize() }
         }
     }
 
     @OptIn(ExperimentalMaterialNavigationApi::class)
     @Composable
-    fun Initialize() {
+    fun Initialize(backgroundColor: Color? = null) {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
@@ -84,7 +84,7 @@ abstract class VROComposableActivity : ComponentActivity() {
             sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
         ) {
             Scaffold(
-                containerColor = Color.Transparent,
+                containerColor = backgroundColor ?: Color.Transparent,
                 topBar = { TopBar(scaffoldState.value.topBarState) },
                 bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar() }
             ) { innerPadding ->
