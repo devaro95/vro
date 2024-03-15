@@ -17,10 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vro.R
 import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState.VROBottomBarItem
 import com.vro.constants.EMPTY_STRING
 import com.vro.constants.INT_ZERO
@@ -47,7 +45,10 @@ fun VROBottomBar(
                         modifier = Modifier.weight(1f),
                         selected = iconSelected == index,
                         selectedIconRes = item.iconSelected ?: item.icon,
-                        iconTint = item.iconTint,
+                        iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
+                            if (iconSelected == index) iconSelectedTint
+                            else item.iconTint
+                        } ?: item.iconTint,
                         iconSize = item.iconSize
                     ) {
                         selected = index
