@@ -47,7 +47,7 @@ fun VROBottomBar(
                         modifier = Modifier.weight(1f),
                         selected = iconSelected == index,
                         selectedIconRes = item.iconSelected ?: item.icon,
-                        iconTint = item.iconTint,
+                        iconTint = item.iconSelectedTint ?: item.iconTint,
                         iconSize = item.iconSize
                     ) {
                         selected = index

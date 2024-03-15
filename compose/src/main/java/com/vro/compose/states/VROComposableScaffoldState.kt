@@ -35,8 +35,9 @@ data class VROComposableScaffoldState(
         val itemList: List<VROBottomBarItem>,
     ) {
         open class VROBottomBarItem(
-            open val icon: Int,
-            open val iconTint: Color? = null,
+            val icon: Int,
+            val iconTint: Color? = null,
+            val iconSelectedTint: Color? = null,
             val iconSelected: Int? = null,
             val contentDescription: String = EMPTY_STRING,
             val text: String = EMPTY_STRING,
