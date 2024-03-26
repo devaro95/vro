@@ -14,7 +14,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
+import com.vro.constants.INT_ZERO
 
 abstract class VROComposableActivity : ComponentActivity() {
 
@@ -78,6 +81,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
         val scaffoldState = remember { mutableStateOf(VROComposableScaffoldState()) }
+        val bottomBarSelectedItem = remember { mutableIntStateOf(INT_ZERO) }
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -86,7 +90,7 @@ abstract class VROComposableActivity : ComponentActivity() {
             Scaffold(
                 containerColor = backgroundColor ?: Color.Transparent,
                 topBar = { TopBar(scaffoldState.value.topBarState) },
-                bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar() }
+                bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar(bottomBarSelectedItem) }
             ) { innerPadding ->
                 Column(
                     modifier = Modifier.padding(
@@ -117,12 +121,13 @@ abstract class VROComposableActivity : ComponentActivity() {
     }
 
     @Composable
-    open fun BottomBar() {
+    open fun BottomBar(selectedItem: MutableIntState) {
         (bottomBarState)?.let {
             VROBottomBar(
                 itemList = it.itemList,
                 height = it.height,
-                background = it.background
+                background = it.background,
+                selectedItem = selectedItem
             )
         }
     }
