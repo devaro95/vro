@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ fun VROBottomBar(
     itemList: List<VROBottomBarItem> = emptyList(),
     height: Dp = 55.dp,
     background: Color,
+    selectedItem: MutableIntState
 ) {
     BottomAppBar(
         containerColor = background,
@@ -36,8 +38,7 @@ fun VROBottomBar(
             .fillMaxWidth(),
         tonalElevation = 0.dp
     ) {
-        var selected by remember { mutableIntStateOf(INT_ZERO) }
-        Crossfade(targetState = selected, label = EMPTY_STRING) { iconSelected ->
+        Crossfade(targetState = selectedItem.value, label = EMPTY_STRING) { iconSelected ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 itemList.forEachIndexed { index, item ->
                     AnimatedIcon(
@@ -51,7 +52,7 @@ fun VROBottomBar(
                         } ?: item.iconTint,
                         iconSize = item.iconSize
                     ) {
-                        selected = index
+                        selectedItem.value = index
                         item.onClick?.invoke()
                     }
                 }
