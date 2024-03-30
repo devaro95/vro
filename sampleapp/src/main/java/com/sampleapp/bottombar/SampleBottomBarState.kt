@@ -7,7 +7,7 @@ import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState
 class SampleBottomBarState(
     val items: List<VROBottomBarItem>,
 ) : VROBottomBarState(
-    background = Color.Transparent,
+    background = Color.White,
     height = 56.dp,
     itemList = items
 )
