@@ -1,5 +1,6 @@
 package com.vro.compose.states
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
@@ -33,6 +34,7 @@ data class VROComposableScaffoldState(
         val height: Dp,
         val background: Color,
         val itemList: List<VROBottomBarItem>,
+        val modifier: Modifier = Modifier,
     ) {
         open class VROBottomBarItem(
             val icon: Int,
