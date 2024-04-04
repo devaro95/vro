@@ -4,5 +4,5 @@ import java.io.Serializable
 
 data class VROBackResult(
     val id: Int,
-    val data: Serializable,
+    val data: Serializable? = null,
 ) : Serializable

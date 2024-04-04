@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.vro.event.VROEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_BACK_STATE
 import com.vro.navigation.VRONavigator
@@ -27,7 +28,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     fun onViewCreatedVro(viewModel: VM, navController: NavController, viewLifecycleOwner: LifecycleOwner) {
         getNavigationResult(navController)?.observe(viewLifecycleOwner) { result ->
-            result?.let { viewModel.setOnResult(it) }
+            result?.let { viewModel.setOnResult(it as VROBackResult) }
         }
     }
 

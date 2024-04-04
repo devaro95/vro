@@ -97,5 +97,5 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         navigationState.value = VRONavigationState(navigateBack = true, backResult = result)
     }
 
-    open fun setOnResult(result: Serializable) = Unit
+    open fun setOnResult(result: VROBackResult) = Unit
 }
