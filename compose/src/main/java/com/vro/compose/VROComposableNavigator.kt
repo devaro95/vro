@@ -26,6 +26,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
         state: VRONavStarter? = null,
         popScreen: VROComposableScreenContent<*, *, *>? = null,
         inclusive: Boolean = false,
+        clearStack: Boolean = false,
     ) {
         state?.let {
             putNavParam(screen.destinationRoute(), it)
@@ -34,6 +35,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
             popScreen?.let {
                 popUpTo(it.destinationRoute()) { this.inclusive = inclusive }
             }
+            launchSingleTop = clearStack
         }
     }
 

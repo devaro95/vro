@@ -124,6 +124,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     open fun BottomBar(selectedItem: MutableIntState) {
         (bottomBarState)?.let {
             VROBottomBar(
+                modifier = it.modifier,
                 itemList = it.itemList,
                 height = it.height,
                 background = it.background,
