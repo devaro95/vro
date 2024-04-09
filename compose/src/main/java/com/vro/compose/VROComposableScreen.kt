@@ -19,7 +19,7 @@ import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VRODialogStep
-import com.vro.state.VROStepper.VROScreenStep
+import com.vro.state.VROStepper.VROStateStep
 import java.io.Serializable
 
 @Suppress("UNCHECKED_CAST")
@@ -63,7 +63,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
             screenLifecycle.removeObserver(observer)
         }
     }
-    val stepper = viewModel.stepper.collectAsState(VROScreenStep(viewModel.initialState)).value
+    val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationState.collect {
             it?.destination?.let { destination ->
@@ -78,7 +78,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
     else {
         when (stepper) {
-            is VROScreenStep -> content.ComposableContent(stepper.state)
+            is VROStateStep -> content.ComposableContent(stepper.state)
             is VRODialogStep -> {
                 content.ComposableContent(stepper.state)
                 content.OnDialog(stepper.dialogState)
