@@ -19,7 +19,6 @@ import com.vro.state.VroStepperSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
-import java.io.Serializable
 
 abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewModel(), VROEvent {
 
@@ -58,11 +57,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
 
     fun updateScreen(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
-        observableStepper.tryEmit(VROStepper.VROScreenStep(screenState))
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
     fun updateScreen() {
-        observableStepper.tryEmit(VROStepper.VROScreenStep(screenState))
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {

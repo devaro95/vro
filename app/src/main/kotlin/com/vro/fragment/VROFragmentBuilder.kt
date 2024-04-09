@@ -11,6 +11,8 @@ import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_BACK_STATE
 import com.vro.navigation.VRONavigator
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
+import com.vro.state.VROStepper
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
@@ -22,7 +24,6 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     fun initializeState(viewModel: VM, fragment: Fragment) {
         setObservers(viewModel, fragment)
-        viewModel.createInitialState()
         viewModel.setInitialState(state)
     }
 
@@ -38,8 +39,10 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     private fun setObservers(viewModel: VM, fragment: Fragment) {
         fragment.lifecycleScope.launch {
-            viewModel.dialogState.observe(fragment) {
-                onLoadDialog(it)
+            viewModel.stepper.collectLatest { stepper ->
+                if (stepper is VROStepper.VRODialogStep) {
+                    onLoadDialog(stepper.dialogState)
+                }
             }
         }
         viewModel.navigationState.observe(fragment) {
