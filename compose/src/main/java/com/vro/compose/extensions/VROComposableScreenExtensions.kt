@@ -3,18 +3,16 @@ package com.vro.compose.extensions
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vro.compose.VROComposableNavigator
-import com.vro.compose.VROComposableScreenContent
+import com.vro.compose.VROScreen
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.states.VROComposableScaffoldState
-import com.vro.compose.vroComposableScreenContent
+import com.vro.compose.VroComposableScreenContent
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
@@ -22,7 +20,7 @@ import com.vro.state.VROState
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
     viewModel: @Composable () -> VM,
     navigator: VROComposableNavigator<D>,
-    content: VROComposableScreenContent<S, D, E>,
+    content: VROScreen<S, D, E>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
     scaffoldState: MutableState<VROComposableScaffoldState>,
@@ -34,7 +32,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
         enterTransition = { enterTransition },
         exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(50)) }
     ) {
-        vroComposableScreenContent(
+        VroComposableScreenContent(
             viewModel = viewModel.invoke(),
             navController = navigator.navController,
             scaffoldState = scaffoldState,
@@ -50,12 +48,12 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
 fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
-    content: VROComposableScreenContent<S, D, E>,
+    content: VROScreen<S, D, E>,
     scaffoldState: MutableState<VROComposableScaffoldState>,
     bottomBar: Boolean = false,
     showSkeleton: Boolean,
 ) {
-    vroComposableScreenContent(
+    VroComposableScreenContent(
         viewModel = viewModel,
         navController = navigator.navController,
         scaffoldState = scaffoldState,
