@@ -24,7 +24,7 @@ import java.io.Serializable
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> vroComposableScreenContent(
+internal fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
     navController: NavController,
     navigator: VROComposableNavigator<D>,
@@ -78,9 +78,9 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
     else {
         when (stepper) {
-            is VROStateStep -> content.ComposableContent(stepper.state)
+            is VROStateStep -> content.ComposableSectionContainer(stepper.state, viewModel as E)
             is VRODialogStep -> {
-                content.ComposableContent(stepper.state)
+                content.ComposableSectionContainer(stepper.state, viewModel as E)
                 content.OnDialog(stepper.dialogState)
             }
         }
