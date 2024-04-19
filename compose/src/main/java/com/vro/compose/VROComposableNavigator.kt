@@ -8,7 +8,6 @@ import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
 import com.vro.navstarter.VRONavStarter
-import java.io.Serializable
 
 abstract class VROComposableNavigator<D : VRODestination>(
     private val activity: VROComposableActivity,
@@ -22,9 +21,9 @@ abstract class VROComposableNavigator<D : VRODestination>(
     }
 
     fun navigateToScreen(
-        screen: VROComposableScreenContent<*, *, *>,
+        screen: VROScreen<*, *, *>,
         state: VRONavStarter? = null,
-        popScreen: VROComposableScreenContent<*, *, *>? = null,
+        popScreen: VROScreen<*, *, *>? = null,
         inclusive: Boolean = false,
         clearStack: Boolean = false,
     ) {

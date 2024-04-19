@@ -19,15 +19,13 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import com.sampleapp.R
-import com.vro.compose.extensions.GeneratePreview
+import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 
-@VROMultiDevicePreview
+@VROLightMultiDevicePreview
 @Composable
 fun LoadingComposableDialogPreview() {
-    GeneratePreview {
-        LoadingDialog()
-    }
+    LoadingDialog()
 }
 
 @Composable

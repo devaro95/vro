@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewbinding.ViewBinding
 import com.vro.dialog.VRODialog.VRODialogData
 
-abstract class VRODialogProvider constructor(private val fragmentManager: FragmentManager) : BaseDialogProviderInterface {
+abstract class VRODialogProvider(private val fragmentManager: FragmentManager) : BaseDialogProviderInterface {
 
     var dialog: VRODialog<VRODialogData, ViewBinding>? = null
 

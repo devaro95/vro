@@ -25,14 +25,9 @@ class SampleBottomSheet : VROComposableBottomSheetContent<
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                modifier = Modifier.padding(top = 24.dp),
+                modifier = Modifier.padding(top = 32.dp),
                 text = "This is a sample BottomSheet",
                 color = Color.Black
-            )
-            TextField(
-                modifier = Modifier.padding(top = 16.dp),
-                value = state.name,
-                onValueChange = { eventLauncher.onNameChange(it) }
             )
         }
     }

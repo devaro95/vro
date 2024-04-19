@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.vro.compose.extensions.createViewModel
+import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.event.VROEvent
 import com.vro.fragment.VROViewModel
@@ -25,7 +26,7 @@ abstract class VROFragmentScreen<VM : VROViewModel<S, D, E>, S : VROState, D : V
     @Composable
     abstract fun ComposableContent(state: S)
 
-    @VROMultiDevicePreview
+    @VROLightMultiDevicePreview
     @Composable
     abstract fun ComposablePreview()
 

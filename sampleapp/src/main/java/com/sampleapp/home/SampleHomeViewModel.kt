@@ -29,8 +29,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         checkDataState().also {
             updateScreen {
                 copy(
-                    text =
-                    when (it.text) {
+                    text = when (it.text) {
                         FIRST_TEXT -> SECOND_TEXT
                         SECOND_TEXT -> FIRST_TEXT
                         else -> EMPTY_STRING
@@ -52,15 +51,16 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         updateScreen()
     }
 
-    override fun onActionProfileNavigationClick(){
+    override fun onActionProfileNavigationClick() {
         navigate(SampleDestinations.Profile)
     }
-    override fun onActionDetailNavigationClick(){
+
+    override fun onActionDetailNavigationClick() {
         navigate(SampleDestinations.Detail)
     }
 
     companion object {
-        const val FIRST_TEXT = "This is a text"
-        const val SECOND_TEXT = "Another text"
+        const val FIRST_TEXT = "Press to update"
+        const val SECOND_TEXT = "Press to update back"
     }
 }
