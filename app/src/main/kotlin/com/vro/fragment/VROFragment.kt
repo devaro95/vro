@@ -11,7 +11,9 @@ import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
+import com.vro.state.VROStepper.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -46,9 +48,11 @@ abstract class VROFragment<
     }
 
     private fun setViewBindingObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.state.collectLatest {
-                onViewUpdate(binding, it)
+        lifecycleScope.launch {
+            viewModel.stepper.collectLatest { stepper ->
+                if (stepper is VROStateStep<S>) {
+                    onViewUpdate(binding, stepper.state)
+                }
             }
         }
         viewModel.errorState.observe(this) {

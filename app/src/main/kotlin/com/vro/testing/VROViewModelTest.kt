@@ -27,7 +27,6 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     open fun setup() {
         MockitoAnnotations.initMocks(this)
         viewModel.concurrencyManager = VROTestDefaultConcurrencyManager()
-        viewModel.createInitialState()
     }
 
     abstract fun onSetupViewModel(): VM
@@ -39,10 +38,6 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
 
     protected fun getDataState(): S {
         return viewModel.checkDataState()
-    }
-
-    protected fun getDialogState(): VRODialogState? {
-        return viewModel.dialogState.value
     }
 
     private fun getNavigatorState(): VRONavigationState<out VRODestination>? {
@@ -66,10 +61,6 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
         getNavigatorState()?.destination?.let {
             assertEquals(it, destination)
         }
-    }
-
-    fun verifyDialog(dialogType: Int) {
-        assertEquals(getDialogState()?.type, dialogType)
     }
 
     fun verifyNavigateBack(result: Serializable? = null) {
