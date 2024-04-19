@@ -2,7 +2,7 @@
 
 package com.vro.compose.extensions
 
-import com.vro.compose.VROComposableScreenContent
+import com.vro.compose.VROScreen
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.navstarter.VRONavStarter
 
@@ -18,6 +18,6 @@ fun getNavParamState(route: String): VRONavStarter? {
     return result
 }
 
-fun VROComposableScreenContent<*, *, *>.destinationRoute(): String = this::class.java.name
+fun VROScreen<*, *, *>.destinationRoute(): String = this::class.java.name
 
 fun VROComposableBottomSheetContent<*, *, *>.destinationRoute(): String = this::class.java.name

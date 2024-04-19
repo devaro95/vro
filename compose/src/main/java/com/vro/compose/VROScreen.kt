@@ -3,16 +3,18 @@ package com.vro.compose
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.compose.extensions.VroComposablePreview
+import com.vro.compose.extensions.VroComposableSectionContainer
+import com.vro.compose.preview.GeneratePreview
 import com.vro.compose.states.VROComposableScaffoldState
+import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
-import java.io.Serializable
 
-abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : VROEvent> {
+abstract class VROScreen<S : VROState, D : VRODestination, E : VROEvent> {
 
     internal lateinit var viewModel: VROComposableViewModel<S, D>
 
@@ -20,12 +22,34 @@ abstract class VROComposableScreenContent<S : VROState, D : VRODestination, E : 
 
     lateinit var context: Context
 
-    @VROMultiDevicePreview
     @Composable
     abstract fun ComposablePreview()
 
     @Composable
-    abstract fun ComposableContent(state: S)
+    fun CreatePreview(theme: VROComposableTheme? = null) {
+        GeneratePreview(theme) {
+            VroComposablePreview(composableContent())
+        }
+    }
+
+    @Composable
+    internal fun ComposableSectionContainer(state: S, eventListener: E) {
+        VroComposableSectionContainer(
+            state,
+            eventListener,
+            if (isTablet() && composableTabletContent().isNotEmpty()) {
+                composableTabletContent()
+            } else {
+                composableContent()
+            }
+        )
+    }
+
+    @Composable
+    abstract fun composableContent(): List<VROSection<S, E>>
+
+    @Composable
+    open fun composableTabletContent(): List<VROSection<S, E>> = emptyList()
 
     @Composable
     open fun ComposableSkeleton() = Unit

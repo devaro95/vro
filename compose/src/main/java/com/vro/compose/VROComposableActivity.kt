@@ -42,7 +42,7 @@ abstract class VROComposableActivity : ComponentActivity() {
 
     open val theme: VROComposableTheme? = null
 
-    abstract val startScreen: VROComposableScreenContent<*, *, *>
+    abstract val startScreen: VROScreen<*, *, *>
 
     private lateinit var navController: NavController
 
@@ -133,7 +133,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
-    fun navigateToScreen(screen: VROComposableScreenContent<*, *, *>) {
+    fun navigateToScreen(screen: VROScreen<*, *, *>) {
         navController.navigate(screen.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true

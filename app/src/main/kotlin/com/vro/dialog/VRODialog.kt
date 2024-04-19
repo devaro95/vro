@@ -142,7 +142,7 @@ abstract class VRODialog<T : VRODialog.VRODialogData, VB : ViewBinding> : Dialog
         super.onDestroyView()
     }
 
-    class Provider constructor(fragmentManager: FragmentManager, private val className: VRODialog<*, *>) : VRODialogProvider(fragmentManager) {
+    class Provider(fragmentManager: FragmentManager, private val className: VRODialog<*, *>) : VRODialogProvider(fragmentManager) {
         override fun generateDialog(dialogData: VRODialogData?): VRODialog<*, *> = className
     }
 }
