@@ -15,10 +15,8 @@ import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VROFragmentNavigator
 import com.vro.state.VROState
-import com.vro.state.VROStepper.VROScreenStep
-import java.io.Serializable
+import com.vro.state.VROStepper.VROStateStep
 
 @Suppress("UNCHECKED_CAST")
 @Composable
@@ -51,7 +49,7 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
             screenLifecycle.removeObserver(observer)
         }
     }
-    val stepper = viewModel.stepper.collectAsState(VROScreenStep(viewModel.initialState)).value
+    val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationState.collect {
             it?.destination?.let { destination ->
@@ -64,5 +62,5 @@ fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VR
     }
     val isLoaded by viewModel.screenLoaded
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
-    else if (stepper is VROScreenStep) content.ComposableContent(stepper.state)
+    else if (stepper is VROStateStep) content.ComposableContent(stepper.state)
 }

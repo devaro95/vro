@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.vro.event.VROEvent
@@ -21,6 +22,7 @@ import com.vro.fragment.VROInjectionFragment
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -43,8 +45,6 @@ abstract class VROComposableFragment<
 
     @Composable
     abstract fun composableView(): SC
-
-    abstract fun onStateUpdated()
 
     @Composable
     private fun CreateTheme(
@@ -79,10 +79,10 @@ abstract class VROComposableFragment<
             setContent {
                 theme?.also {
                     CreateTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(state, viewModel)
+                        composableView().CreateScreen(viewModel)
                     }
                 } ?: run {
-                    composableView().CreateScreen(state, viewModel)
+                    composableView().CreateScreen(viewModel)
                 }
             }
         }
@@ -93,18 +93,9 @@ abstract class VROComposableFragment<
         onViewCreatedVro(viewModel, findNavController(), viewLifecycleOwner)
     }
 
-    private fun setStateObserver() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.state.collectLatest {
-                onStateUpdated()
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        setStateObserver()
-        onResumeVro(viewModel)
+        viewModel.onResume()
     }
 
     fun viewModelEvent(event: E) {

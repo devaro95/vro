@@ -12,39 +12,28 @@ import com.vro.navigation.VRONavigationState
 import com.vro.navstarter.VRONavStarter
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
+import com.vro.state.VROStepper
+import com.vro.state.VroStateDelegate
+import com.vro.state.VroStepperSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import java.io.Serializable
+import kotlinx.coroutines.flow.SharedFlow
 
 abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
 
     abstract val initialViewState: S
 
-    private lateinit var viewState: S
+    private var viewState: S by VroStateDelegate { initialViewState }
 
-    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val observableStepper = VroStepperSharedFlow<S>().create()
 
-    val state: Flow<S> = observableState
-
-    internal val dialogState: VROSingleLiveEvent<VRODialogState> = VROSingleLiveEvent()
+    val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
     internal val errorState: VROSingleLiveEvent<Throwable> = VROSingleLiveEvent()
 
     internal val navigationState: VROSingleLiveEvent<VRONavigationState<D>> = VROSingleLiveEvent()
 
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
-
-    internal fun createInitialState() {
-        if (!this::viewState.isInitialized) {
-            viewState = initialViewState
-        }
-    }
 
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 
@@ -56,11 +45,11 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     fun updateDataState(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
-        observableState.tryEmit(viewState)
+        observableStepper.tryEmit(VROStepper.VROStateStep(viewState))
     }
 
     fun updateDataState() {
-        observableState.tryEmit(viewState)
+        observableStepper.tryEmit(VROStepper.VROStateStep(viewState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
@@ -71,9 +60,9 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
         errorState.value = error
     }
 
-    fun updateDialogState(state: VRODialogState, clearView: Boolean = true) {
+    fun updateDialogState(dialogState: VRODialogState, clearView: Boolean = true) {
         if (clearView) updateDataState { viewState }
-        dialogState.value = state
+        observableStepper.tryEmit(VROStepper.VRODialogStep(viewState, dialogState))
     }
 
     open fun onStart() = Unit
