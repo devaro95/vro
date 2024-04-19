@@ -9,13 +9,13 @@ private val mainBlue = Color(0xff00798C)
 private val background = Color(0xffffffff)
 
 val SampleLightColors = lightColorScheme(
-    primary = White,
+    primary = Color.Black,
     secondary = mainBlue,
     background = background
 )
 
 val SampleDarkColors = darkColorScheme(
-    primary = White,
+    primary = Color.Black,
     secondary = mainBlue,
     background = background
 )
