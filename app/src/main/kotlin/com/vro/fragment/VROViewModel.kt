@@ -79,4 +79,8 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
     }
 
     open fun setOnResult(result: VROBackResult) = Unit
+
+    override fun eventBack(result: VROBackResult?) {
+        navigateBack(result)
+    }
 }
