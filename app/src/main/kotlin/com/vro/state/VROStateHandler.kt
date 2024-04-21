@@ -5,7 +5,6 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 
 class VroNavigationSharedFlow<D : VRODestination> {
     fun create() =
