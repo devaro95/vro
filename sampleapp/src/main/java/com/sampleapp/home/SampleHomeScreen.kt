@@ -9,11 +9,12 @@ import com.sampleapp.topbar.sampleHomeToolbar
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.preview.VROMultiDevicePreview
 
-class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
+class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleHomeEvents>() {
 
     override fun setTopBar() =
-        context.sampleHomeToolbar(
-            onAction = { eventLauncher.navigateToProfile() }
+        sampleHomeToolbar(
+            context = context,
+            onAction = { event(SampleHomeEvents.ProfileNavigation) }
         )
 
     @Composable

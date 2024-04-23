@@ -4,9 +4,9 @@ import com.vro.constants.EMPTY_STRING
 import com.vro.state.VROState
 
 data class SampleBottomSheetState(
-    val name: String,
+    val buttonText: String,
 ) : VROState {
     companion object {
-        val INITIAL = SampleBottomSheetState(name = EMPTY_STRING)
+        val INITIAL = SampleBottomSheetState(buttonText = EMPTY_STRING)
     }
 }

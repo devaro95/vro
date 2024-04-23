@@ -13,19 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.vro.compose.screen.VROFragmentScreen
 import com.vro.event.VROEvent
 import com.vro.fragment.VROFragmentBuilder
 import com.vro.fragment.VROInjectionFragment
 import com.vro.fragment.VROViewModel
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
-import com.vro.state.VRODialogState
 import com.vro.state.VROState
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 abstract class VROComposableFragment<
         VM : VROViewModel<S, D, E>,
@@ -98,7 +95,11 @@ abstract class VROComposableFragment<
         viewModel.onResume()
     }
 
-    fun viewModelEvent(event: E) {
+    fun event(event: E) {
         viewModel.eventListener(event)
+    }
+
+    fun navigateBack(result: VROBackResult?) {
+        viewModel.eventBack(result)
     }
 }

@@ -9,16 +9,15 @@ import com.sampleapp.topbar.sampleBackToolbar
 import com.vro.compose.preview.VROLightMultiDevicePreview
 
 class SampleProfileScreen :
-    SampleBaseScreen<SampleProfileState, SampleDestinations, SampleProfileEvent>() {
+    SampleBaseScreen<SampleProfileState, SampleProfileEvent>() {
 
     @Composable
     override fun composableContent() = listOf(ContentSection())
 
     override fun setTopBar() = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
-        onNavigation = { navigateBack() }
+        onNavigation = {  navigateBack() }
     )
-
 
     @VROLightMultiDevicePreview
     @Composable
