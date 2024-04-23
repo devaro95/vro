@@ -9,11 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
+import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
-import com.vro.state.VRODialogState
 import com.vro.state.VROState
-import com.vro.state.VROStepper.*
+import com.vro.state.VROStepper.VROStateStep
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -92,7 +92,11 @@ abstract class VROFragment<
         setViewBindingObservers()
     }
 
-    fun viewModelEvent(event: E) {
+    fun event(event: E) {
         viewModel.eventListener(event)
+    }
+
+    fun navigateBack(result: VROBackResult?) {
+        viewModel.eventBack(result)
     }
 }

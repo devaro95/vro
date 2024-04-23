@@ -32,14 +32,14 @@ class TopButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { eventLauncher.onActionUpdateTextClick() }
+                onClick = { event(SampleHomeEvents.UpdateTextClick) }
             ) {
                 Text(text = state.text)
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { eventLauncher.onActionShowBottomSheetClick() }
+                onClick = { event(SampleHomeEvents.ShowBottomSheetClick) }
             ) {
                 Text(text = "Show Bottom Sheet")
             }

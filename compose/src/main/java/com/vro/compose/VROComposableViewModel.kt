@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
+import com.vro.event.VROEventListener
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
@@ -20,7 +21,7 @@ import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 
-abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewModel(), VROEvent {
+abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
 
     abstract val initialState: S
 
@@ -37,6 +38,10 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination> : ViewMo
     internal val screenLoaded: MutableState<Boolean> = mutableStateOf(false)
 
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
+    override fun eventBack(result: VROBackResult?) {
+        navigateBack(result)
+    }
 
     internal fun isLoaded() {
         screenLoaded.value = false

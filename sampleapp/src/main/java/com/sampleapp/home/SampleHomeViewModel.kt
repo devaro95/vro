@@ -1,15 +1,28 @@
 package com.sampleapp.home
 
 import com.sampleapp.base.SampleBaseViewModel
+import com.sampleapp.home.SampleHomeEvents.*
 import com.sampleapp.main.SampleDestinations
 import com.vro.constants.EMPTY_STRING
 import com.vro.navigation.VROBackResult
 import com.vro.state.VRODialogState
 import java.io.Serializable
 
-class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations>(), SampleHomeEvents {
+class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
     override val initialState: SampleHomeState = SampleHomeState.INITIAL
+
+    override fun eventListener(event: SampleHomeEvents) {
+        when (event) {
+            BottomSheetDismiss -> onActionBottomSheetDismiss()
+            DetailNavigation -> onActionDetailNavigationClick()
+            HideDialog -> onActionHideDialog()
+            ProfileNavigation -> navigateToProfile()
+            ShowBottomSheetClick -> onActionShowBottomSheetClick()
+            ShowSimpleDialogClick -> onActionShowSimpleDialogClick()
+            UpdateTextClick -> onActionUpdateTextClick()
+        }
+    }
 
     override suspend fun onStart() {
         updateScreen {
@@ -17,15 +30,15 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override fun onActionShowBottomSheetClick() {
+    private fun onActionShowBottomSheetClick() {
         navigate(SampleDestinations.BottomSheet)
     }
 
-    override fun onActionShowSimpleDialogClick() {
+    private fun onActionShowSimpleDialogClick() {
         showSimpleDialog()
     }
 
-    override fun onActionUpdateTextClick() {
+    private fun onActionUpdateTextClick() {
         checkDataState().also {
             updateScreen {
                 copy(
@@ -39,28 +52,24 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override fun onActionBottomSheetDismiss() {
+    private fun onActionBottomSheetDismiss() {
         updateScreen()
     }
 
-    override fun navigateToProfile() {
+    private fun navigateToProfile() {
         navigate(SampleDestinations.Profile)
     }
 
-    override fun onActionHideDialog() {
+    private fun onActionHideDialog() {
         updateScreen()
     }
 
-    override fun onActionProfileNavigationClick() {
-        navigate(SampleDestinations.Profile)
-    }
-
-    override fun onActionDetailNavigationClick() {
+    private fun onActionDetailNavigationClick() {
         navigate(SampleDestinations.Detail)
     }
 
     companion object {
-        const val FIRST_TEXT = "Press to update"
-        const val SECOND_TEXT = "Press to update back"
+        private const val FIRST_TEXT = "Press to update"
+        private const val SECOND_TEXT = "Press to update back"
     }
 }

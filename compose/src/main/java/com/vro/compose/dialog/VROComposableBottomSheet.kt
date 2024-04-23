@@ -1,11 +1,7 @@
 package com.vro.compose.dialog
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -18,17 +14,15 @@ import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VROStateStep
 
-@Suppress("UNCHECKED_CAST")
 @Composable
-fun <VM : VROComposableViewModel<S, D>, S : VROState, D : VRODestination, E : VROEvent> vroComposableBottomSheetContent(
+fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableBottomSheetContent(
     viewModel: VM,
     navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROComposableBottomSheetContent<S, D, E>,
     showSkeleton: Boolean,
 ) {
-    content.viewModel = viewModel
-    content.eventLauncher = viewModel as E
+    content.eventListener = viewModel
     content.context = LocalContext.current
     BackHandler(true) { navigator.navigateBack(null) }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle

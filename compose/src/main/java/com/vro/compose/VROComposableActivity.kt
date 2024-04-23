@@ -33,6 +33,7 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.vro.compose.components.VROBottomBar
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.destinationRoute
+import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
@@ -42,7 +43,7 @@ abstract class VROComposableActivity : ComponentActivity() {
 
     open val theme: VROComposableTheme? = null
 
-    abstract val startScreen: VROScreen<*, *, *>
+    abstract val startScreen: VROScreen<*, *>
 
     private lateinit var navController: NavController
 
@@ -133,7 +134,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
-    fun navigateToScreen(screen: VROScreen<*, *, *>) {
+    fun navigateToScreen(screen: VROScreen<*, *>) {
         navController.navigate(screen.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
