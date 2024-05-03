@@ -8,8 +8,8 @@ import androidx.compose.ui.unit.dp
 import com.sampleapp.R
 import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
 
-fun Context.sampleHomeToolbar(onAction: () -> Unit) = VROTopBarState(
-    title = getString(R.string.home_toolbar),
+fun sampleHomeToolbar(context: Context, onAction: () -> Unit) = VROTopBarState(
+    title = context.getString(R.string.home_toolbar),
     actionButton = VROTopBarState.VROTopBarButton(
         iconVector = Icons.Default.Person,
         iconSize = 26.dp,

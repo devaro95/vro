@@ -6,13 +6,13 @@ import com.sampleapp.base.SampleBaseViewModel.Companion.DIALOG_SIMPLE
 import com.sampleapp.dialog.LoadingDialog
 import com.sampleapp.dialog.SampleSimpleDialogData
 import com.sampleapp.dialog.SampleSimpleDialog
-import com.vro.compose.VROScreen
+import com.vro.compose.screen.VROScreen
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 
-abstract class SampleBaseScreen<S : VROState, D : VRODestination, E : VROEvent>: VROScreen<S, D, E>() {
+abstract class SampleBaseScreen<S : VROState, E : VROEvent> : VROScreen<S, E>() {
 
     @Composable
     override fun OnDialog(data: VRODialogState) {

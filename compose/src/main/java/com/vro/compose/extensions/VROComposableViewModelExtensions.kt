@@ -7,7 +7,7 @@ import com.vro.fragment.VROViewModel
 import com.vro.fragment.VROViewModelFactory
 
 @Composable
-fun <VM : VROComposableViewModel<*, *>> createViewModel(viewModelSeed: VM): VM {
+fun <VM : VROComposableViewModel<*, *, *>> createViewModel(viewModelSeed: VM): VM {
     return viewModel(
         viewModelSeed::class.java,
         factory = VROViewModelFactory(viewModelSeed)

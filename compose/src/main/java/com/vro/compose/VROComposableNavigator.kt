@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.putNavParam
+import com.vro.compose.screen.VROScreen
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
@@ -21,9 +22,9 @@ abstract class VROComposableNavigator<D : VRODestination>(
     }
 
     fun navigateToScreen(
-        screen: VROScreen<*, *, *>,
+        screen: VROScreen<*, *>,
         state: VRONavStarter? = null,
-        popScreen: VROScreen<*, *, *>? = null,
+        popScreen: VROScreen<*, *>? = null,
         inclusive: Boolean = false,
         clearStack: Boolean = false,
     ) {

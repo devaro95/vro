@@ -1,6 +1,6 @@
 package com.vro.compose.lifecycleevent
 
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.LifecycleEventObserver
 
 fun createLifecycleEventObserver(
@@ -10,10 +10,10 @@ fun createLifecycleEventObserver(
     onPause: () -> Unit,
 ) = LifecycleEventObserver { _, event ->
     when (event) {
-        Lifecycle.Event.ON_CREATE -> onCreate.invoke()
-        Lifecycle.Event.ON_START -> onStart.invoke()
-        Lifecycle.Event.ON_RESUME -> onResume.invoke()
-        Lifecycle.Event.ON_PAUSE -> onPause.invoke()
+        Event.ON_CREATE -> onCreate.invoke()
+        Event.ON_START -> onStart.invoke()
+        Event.ON_RESUME -> onResume.invoke()
+        Event.ON_PAUSE -> onPause.invoke()
         else -> Unit
     }
 }
