@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations
 import java.io.Serializable
 import kotlin.reflect.KClass
 
-abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VROEvent> {
+abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, *>> {
 
     protected val viewModel: VM by lazy {
         onSetupViewModel()
@@ -66,9 +66,5 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
     fun verifyNavigateBack(result: Serializable? = null) {
         assertNull(getNavigatorState()?.destination)
         assertEquals(getNavigatorState()?.backResult, result)
-    }
-
-    fun viewModelEvent(event: E) {
-        viewModel.eventListener(event)
     }
 }
