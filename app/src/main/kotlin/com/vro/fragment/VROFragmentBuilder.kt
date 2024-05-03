@@ -40,7 +40,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
     private fun setObservers(viewModel: VM, fragment: Fragment) {
         fragment.lifecycleScope.launch {
             viewModel.stepper.collectLatest { stepper ->
-                if (stepper is VROStepper.VRODialogStep) {
+                if (stepper is VROStepper.VRODialogStep<S>) {
                     onLoadDialog(stepper.dialogState)
                 }
             }
