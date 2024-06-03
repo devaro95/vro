@@ -3,8 +3,9 @@ package com.sampleapp.main
 import com.vro.navigation.VRODestination
 
 sealed class SampleDestinations : VRODestination() {
-    data object Home : SampleDestinations()
-    data object Profile : SampleDestinations()
-    data object Detail : SampleDestinations()
-    data object BottomSheet : SampleDestinations()
+    data object HomeNavigation : SampleDestinations()
+    data object ProfileNavigation : SampleDestinations()
+    data object DetailNavigation : SampleDestinations()
+    data object BottomSheetNavigation : SampleDestinations()
+    data object ActivityFragmentNavigation : SampleDestinations()
 }

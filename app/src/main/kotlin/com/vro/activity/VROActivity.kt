@@ -11,8 +11,8 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
-import com.vro.state.VROStepper
-import com.vro.state.VROStepper.*
+import com.vro.state.VROStepper.VRODialogStep
+import com.vro.state.VROStepper.VROStateStep
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

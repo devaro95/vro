@@ -1,12 +1,22 @@
 package com.sampleapp.home
 
 import com.sampleapp.base.SampleBaseViewModel
-import com.sampleapp.home.SampleHomeEvents.*
+import com.sampleapp.home.SampleHomeEvents.ActivityFragment
+import com.sampleapp.home.SampleHomeEvents.BottomSheetDismiss
+import com.sampleapp.home.SampleHomeEvents.DetailNavigation
+import com.sampleapp.home.SampleHomeEvents.HideDialog
+import com.sampleapp.home.SampleHomeEvents.ProfileNavigation
+import com.sampleapp.home.SampleHomeEvents.ShowBottomSheetClick
+import com.sampleapp.home.SampleHomeEvents.ShowNavigationBottomSheetClick
+import com.sampleapp.home.SampleHomeEvents.ShowSimpleDialogClick
+import com.sampleapp.home.SampleHomeEvents.ShowSimpleDialogWithViewModelClick
+import com.sampleapp.home.SampleHomeEvents.UpdateTextClick
+import com.sampleapp.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.main.SampleDestinations
+import com.sampleapp.main.SampleDestinations.ActivityFragmentNavigation
+import com.sampleapp.main.SampleDestinations.BottomSheetNavigation
 import com.vro.constants.EMPTY_STRING
-import com.vro.navigation.VROBackResult
 import com.vro.state.VRODialogState
-import java.io.Serializable
 
 class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
@@ -18,9 +28,13 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
             DetailNavigation -> onActionDetailNavigationClick()
             HideDialog -> onActionHideDialog()
             ProfileNavigation -> navigateToProfile()
+            ShowNavigationBottomSheetClick -> onActionShowNavigationBottomSheetClick()
             ShowBottomSheetClick -> onActionShowBottomSheetClick()
             ShowSimpleDialogClick -> onActionShowSimpleDialogClick()
+            ShowSimpleDialogWithViewModelClick -> onActionShowSimpleDialogWithViewModelClick()
             UpdateTextClick -> onActionUpdateTextClick()
+            VmDialogDismiss -> onVmDialogDismiss()
+            ActivityFragment -> onActivityFragmentClick()
         }
     }
 
@@ -30,12 +44,24 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
+    private fun onActionShowNavigationBottomSheetClick() {
+        navigate(BottomSheetNavigation)
+    }
+
     private fun onActionShowBottomSheetClick() {
-        navigate(SampleDestinations.BottomSheet)
+        updateDialog(
+            VRODialogState(BOTTOM_SHEET)
+        )
     }
 
     private fun onActionShowSimpleDialogClick() {
         showSimpleDialog()
+    }
+
+    private fun onActionShowSimpleDialogWithViewModelClick() {
+        updateDialog(
+            VRODialogState(SIMPLE_VIEW_MODEL_DIALOG)
+        )
     }
 
     private fun onActionUpdateTextClick() {
@@ -57,7 +83,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun navigateToProfile() {
-        navigate(SampleDestinations.Profile)
+        navigate(SampleDestinations.ProfileNavigation)
     }
 
     private fun onActionHideDialog() {
@@ -65,11 +91,21 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onActionDetailNavigationClick() {
-        navigate(SampleDestinations.Detail)
+        navigate(SampleDestinations.DetailNavigation)
+    }
+
+    private fun onVmDialogDismiss() {
+        updateScreen()
+    }
+
+    private fun onActivityFragmentClick() {
+        navigate(ActivityFragmentNavigation)
     }
 
     companion object {
         private const val FIRST_TEXT = "Press to update"
         private const val SECOND_TEXT = "Press to update back"
+        const val SIMPLE_VIEW_MODEL_DIALOG = 1
+        const val BOTTOM_SHEET = 2
     }
 }

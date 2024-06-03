@@ -20,4 +20,4 @@ fun getNavParamState(route: String): VRONavStarter? {
 
 fun VROScreen<*, *>.destinationRoute(): String = this::class.java.name
 
-fun VROComposableBottomSheetContent<*, *, *>.destinationRoute(): String = this::class.java.name
+fun VROComposableBottomSheetContent<*, *>.destinationRoute(): String = this::class.java.name

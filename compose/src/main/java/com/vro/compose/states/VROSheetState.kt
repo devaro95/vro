@@ -3,7 +3,12 @@ package com.vro.compose.states
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
-class VROSheetState {
+@Composable
+fun rememberSheetState(): SheetStateVro {
+    return remember { SheetStateVro() }
+}
+
+class SheetStateVro {
     private var hideActionListener: (() -> Unit)? = null
 
     @Composable
@@ -14,9 +19,4 @@ class VROSheetState {
     fun hide() {
         hideActionListener?.invoke()
     }
-}
-
-@Composable
-fun rememberVROSheetState(): VROSheetState {
-    return remember { VROSheetState() }
 }

@@ -5,9 +5,7 @@ import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.extensions.putNavParam
 import com.vro.compose.screen.VROScreen
-import com.vro.navigation.VROBackResult
-import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigator
+import com.vro.navigation.*
 import com.vro.navstarter.VRONavStarter
 
 abstract class VROComposableNavigator<D : VRODestination>(
@@ -40,7 +38,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
     }
 
     fun openBottomSheet(
-        bottomSheet: VROComposableBottomSheetContent<*, *, *>,
+        bottomSheet: VROComposableBottomSheetContent<*, *>,
         state: VRONavStarter? = null,
     ) {
         state?.let {

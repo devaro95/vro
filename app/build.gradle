@@ -71,4 +71,9 @@ dependencies {
     implementation(libraries.composeLifecycle)
     implementation(libraries.koinCompose)
     implementation(libraries.composeRuntime)
+    implementation(libraries.retrofit)
+    implementation(libraries.retrofitScalars)
+    implementation(libraries.retrofitGson)
+    implementation(libraries.retrofitCoroutines)
+    implementation(libraries.loggingInterceptor)
 }
