@@ -15,8 +15,6 @@ import com.sampleapp.home.SampleHomeEvents
 import com.sampleapp.home.SampleHomeState
 import com.vro.compose.VROSection
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.utils.mobileModifier
-import com.vro.compose.utils.tabletModifier
 
 class TopButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
 
@@ -35,6 +33,13 @@ class TopButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
                 onClick = { event(SampleHomeEvents.UpdateTextClick) }
             ) {
                 Text(text = state.text)
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.ShowNavigationBottomSheetClick) }
+            ) {
+                Text(text = "Show Navigation Bottom Sheet")
             }
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),

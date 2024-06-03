@@ -1,3 +1,4 @@
 <resources>
-    <style name="Theme.Vro" parent="Theme.Material3.DayNight.NoActionBar"></style>
+
+    <style name="Theme.Vro" parent="Theme.Material3.Light.NoActionBar" />
 </resources>

@@ -33,6 +33,13 @@ class BottomButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.ShowSimpleDialogWithViewModelClick) }
+            ) {
+                Text(text = "Show Dialog VM Example")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
                 onClick = { event(SampleHomeEvents.ProfileNavigation) }
             ) {
                 Text(text = "Profile Navigation")
@@ -43,6 +50,13 @@ class BottomButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
                 onClick = { event(SampleHomeEvents.DetailNavigation) }
             ) {
                 Text(text = "Detail Navigation")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.ActivityFragment) }
+            ) {
+                Text(text = "Activity Fragment")
             }
         }
     }
