@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-apply from: '../gradleConfig/dependencies.gradle'
+apply from: '../gradleConfig/configuration.gradle'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -17,7 +17,7 @@ compileKotlin {
 }
 
 dependencies{
-    implementation(libraries.coroutines)
+    implementation(libs.coroutines.core)
 }
 
 afterEvaluate {
@@ -25,9 +25,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components["java"]
-                groupId = "com.github.devaro95"
+                groupId = jitpack.groupId
+                version = jitpack.version
                 artifactId = "vro-core"
-                version = "0.2.0"
             }
         }
     }
