@@ -1,12 +1,10 @@
 package com.sampleapp.dialog.bottomsheet
 
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
-import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
-import com.vro.compose.VROComposableViewModel
+import com.vro.compose.dialog.VROComposableDialogViewModel
 import com.vro.constants.EMPTY_STRING
 
-class SampleBottomSheetViewModel :
-    VROComposableViewModel<SampleBottomSheetState, SampleBottomSheetDestinations, SampleBottomSheetEvents>() {
+class SampleBottomSheetViewModel : VROComposableDialogViewModel<SampleBottomSheetState, SampleBottomSheetEvents>() {
 
     override val initialState = SampleBottomSheetState.INITIAL
 
@@ -17,11 +15,11 @@ class SampleBottomSheetViewModel :
     }
 
     override suspend fun onStart() {
-        updateScreen {
-            copy(
-                buttonText = FIRST_TEXT
-            )
-        }
+        //updateScreen {
+        //    copy(
+        //        buttonText = FIRST_TEXT
+        //    )
+        //}
     }
 
     private fun onNameChange() {
@@ -29,7 +27,7 @@ class SampleBottomSheetViewModel :
             updateScreen {
                 copy(
                     buttonText = when (it.buttonText) {
-                        FIRST_TEXT -> SECOND_TEXT
+                        FIRST_TEXT, EMPTY_STRING -> SECOND_TEXT
                         SECOND_TEXT -> FIRST_TEXT
                         else -> EMPTY_STRING
                     }
@@ -42,5 +40,4 @@ class SampleBottomSheetViewModel :
         private const val FIRST_TEXT = "Press to update"
         private const val SECOND_TEXT = "Press to update back"
     }
-
 }

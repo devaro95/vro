@@ -30,6 +30,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.0"
@@ -47,5 +48,6 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("io.insert-koin:koin-androidx-compose:3.3.0")
     implementation("com.airbnb.android:lottie-compose:4.0.0")
+    implementation("androidx.databinding:viewbinding:8.4.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

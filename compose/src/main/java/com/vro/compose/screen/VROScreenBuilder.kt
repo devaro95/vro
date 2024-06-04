@@ -1,6 +1,7 @@
 package com.vro.compose.screen
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.vro.compose.VROComposableTheme
 import com.vro.compose.VROSection
 import com.vro.compose.extensions.VroComposablePreview
@@ -19,12 +20,16 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
     private lateinit var eventListener: VROEventListener<E>
 
     @Composable
+    open fun Modifier.setModifier(): Modifier = this
+
+    @Composable
     internal fun ComposableSectionContainer(state: S, eventListener: VROEventListener<E>) {
         this.eventListener = eventListener
         VroComposableSectionContainer(
-            state,
-            eventListener,
-            if (isTablet() && composableTabletContent().isNotEmpty()) {
+            modifier = Modifier.setModifier(),
+            state = state,
+            eventListener = eventListener,
+            sectionList = if (isTablet() && composableTabletContent().isNotEmpty()) {
                 composableTabletContent()
             } else {
                 composableContent()
@@ -48,7 +53,10 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
     @Composable
     fun CreatePreview(theme: VROComposableTheme? = null) {
         GeneratePreview(theme) {
-            VroComposablePreview(composableContent())
+            VroComposablePreview(
+                modifier = Modifier.setModifier(),
+                contentList = composableContent()
+            )
         }
     }
 

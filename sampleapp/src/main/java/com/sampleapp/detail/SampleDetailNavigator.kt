@@ -13,10 +13,11 @@ class SampleDetailNavigator(
 
     override fun navigate(destination: SampleDestinations) {
         when (destination) {
-            SampleDestinations.BottomSheet -> Unit
-            SampleDestinations.Detail -> Unit
-            SampleDestinations.Home -> Unit
-            SampleDestinations.Profile -> navigateToScreen(SampleProfileScreen())
+            SampleDestinations.BottomSheetNavigation -> Unit
+            SampleDestinations.DetailNavigation -> Unit
+            SampleDestinations.HomeNavigation -> Unit
+            SampleDestinations.ProfileNavigation -> navigateToScreen(SampleProfileScreen())
+            SampleDestinations.ActivityFragmentNavigation -> Unit
         }
     }
 }

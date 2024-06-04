@@ -1,23 +1,34 @@
 package com.vro.compose.dialog
 
 import android.content.Context
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import com.vro.compose.VROComposableViewModel
+import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 
-abstract class VROComposableBottomSheetContent<S : VROState, D : VRODestination, E : VROEvent> {
+abstract class VROComposableBottomSheetContent<S : VROState, E : VROEvent> {
 
-    internal lateinit var eventListener: VROEventListener<E>
+    private lateinit var eventListener: VROEventListener<E>
 
     open val skeletonEnabled = true
 
     lateinit var context: Context
 
     @Composable
-    abstract fun ComposableContent(state: S)
+    internal fun ComposableContainer(state: S, eventListener: VROEventListener<E>, dismiss: () -> Unit) {
+        this.eventListener = eventListener
+        ComposableContent(state, dismiss)
+    }
+
+    @Composable
+    abstract fun ComposableContent(state: S, dismiss: () -> Unit)
+
+    @VROLightMultiDevicePreview
+    @Composable
+    abstract fun ComposablePreview()
 
     @Composable
     open fun ComposableSkeleton() = Unit

@@ -15,7 +15,7 @@ class SampleDetailViewModel : SampleBaseViewModel<SampleDetailState, SampleDesti
     }
 
     private fun onActionProfileNavigationClick() {
-        navigate(SampleDestinations.Profile)
+        navigate(SampleDestinations.ProfileNavigation)
     }
 
 }
