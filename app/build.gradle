@@ -5,7 +5,6 @@ plugins {
     id("maven-publish")
 }
 
-apply from: '../gradleConfig/dependencies.gradle'
 apply from: '../gradleConfig/configuration.gradle'
 
 android {
@@ -35,9 +34,9 @@ android {
 publishing {
     publications {
         release(MavenPublication) {
-            groupId = 'com.github.devaro95'
+            groupId = jitpack.groupId
+            version = jitpack.version
             artifactId = 'vro'
-            version = '0.2.0'
 
             afterEvaluate {
                 from components.release
@@ -49,31 +48,30 @@ publishing {
 dependencies {
     api(project(":core"))
     api(project(":common"))
-    implementation(libraries.core)
-    implementation(libraries.appCompat)
-    implementation(libraries.material3)
-    implementation(libraries.koinAndroid)
-    implementation(libraries.koinCore)
-    implementation(libraries.lifecycleViewModel)
-    implementation(libraries.navigationFragment)
-    implementation(libraries.navigationUi)
-    implementation(libraries.navigationDynamicFeatures)
-    implementation(libraries.viewBinding)
-    implementation(libraries.mockitoInline)
-    implementation(libraries.mockitoCore)
-    implementation(libraries.junit)
-    implementation(libraries.archCore)
-    implementation(libraries.composeMaterial3Size)
-    debugImplementation(libraries.composeTooling)
-    implementation(libraries.composeToolingPreview)
-    implementation(libraries.composeActivity)
-    implementation(libraries.composeLifecycle)
-    implementation(libraries.composeLifecycle)
-    implementation(libraries.koinCompose)
-    implementation(libraries.composeRuntime)
-    implementation(libraries.retrofit)
-    implementation(libraries.retrofitScalars)
-    implementation(libraries.retrofitGson)
-    implementation(libraries.retrofitCoroutines)
-    implementation(libraries.loggingInterceptor)
+    implementation(libs.core)
+    implementation(libs.arch.core)
+    implementation(libs.app.compat)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.material3)
+    implementation(libs.material3.size)
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    implementation(libs.navigation.dynamic.features)
+    implementation(libs.view.binding)
+    implementation(libs.mockito.inline)
+    implementation(libs.mockito.core)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.scalars)
+    implementation(libs.retrofit.gson)
+    implementation(libs.retrofit.coroutines)
+    implementation(libs.logging.interceptor)
+    implementation(libs.junit)
+    implementation(libs.compose.activity)
+    implementation(libs.compose.runtime)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
 }
