@@ -5,7 +5,6 @@ plugins {
     id("maven-publish")
 }
 
-apply from: '../gradleConfig/dependencies.gradle'
 apply from: '../gradleConfig/configuration.gradle'
 
 android {
@@ -35,9 +34,9 @@ android {
 publishing {
     publications {
         release(MavenPublication) {
-            groupId = 'com.github.devaro95'
+            groupId = jitpack.groupId
+            version = jitpack.version
             artifactId = 'vro-compose'
-            version = '0.2.0'
 
             afterEvaluate {
                 from components.release
@@ -50,9 +49,9 @@ dependencies {
     api(project(":core"))
     implementation(project(":app"))
 
-    implementation(libraries.material3)
-    implementation(libraries.navigationDynamicFeatures)
-    implementation(libraries.composeToolingPreview)
-    implementation(libraries.koinCompose)
-    implementation("com.google.accompanist:accompanist-navigation-material:0.35.0-alpha")
+    implementation(libs.material3)
+    implementation(libs.navigation.dynamic.features)
+    implementation(libs.koin.compose)
+    implementation(libs.accompanist.navigation.material)
+    implementation(libs.ui.tooling.preview)
 }
