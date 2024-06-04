@@ -10,4 +10,10 @@ ext {
             minSdkVersion    : 24,
             targetSdkVersion : 33
     ]
+
+    jitpack = [
+            groupId   : 'com.github.devaro95',
+            artifactId: 'vro',
+            version   : '1.6.0'
+    ]
 }

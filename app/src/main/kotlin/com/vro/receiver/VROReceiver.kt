@@ -22,11 +22,11 @@ abstract class VROReceiver : BroadcastReceiver(), KoinComponent, CoroutineScope 
     override fun onReceive(context: Context, intent: Intent) {
         launch {
             if (intentList.isEmpty() || intentList.contains(intent.action)) {
-                onReceive(intent)
+                doOnReceive(context, intent)
             }
             job.cancel()
         }
     }
 
-    abstract suspend fun onReceive(intent: Intent)
+    abstract suspend fun doOnReceive(context: Context, intent: Intent)
 }
