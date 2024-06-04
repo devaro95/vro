@@ -4,10 +4,10 @@ import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.LifecycleEventObserver
 
 fun createLifecycleEventObserver(
-    onCreate: () -> Unit,
-    onStart: () -> Unit,
-    onResume: () -> Unit,
-    onPause: () -> Unit,
+    onCreate: () -> Unit = {},
+    onStart: () -> Unit = {},
+    onResume: () -> Unit = {},
+    onPause: () -> Unit = {},
 ) = LifecycleEventObserver { _, event ->
     when (event) {
         Event.ON_CREATE -> onCreate.invoke()

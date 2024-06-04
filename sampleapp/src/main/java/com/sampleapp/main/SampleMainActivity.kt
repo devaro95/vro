@@ -71,9 +71,7 @@ class SampleMainActivity : VROComposableActivity() {
         )
         vroBottomSheet(
             content = SampleBottomSheet(),
-            viewModel = { koinViewModel<SampleBottomSheetViewModel>() },
-            navigator = SampleBottomSheetNavigator(this@SampleMainActivity, navController),
-            navController = navController
+            viewModel = { koinViewModel<SampleBottomSheetViewModel>() }
         )
     }
 }

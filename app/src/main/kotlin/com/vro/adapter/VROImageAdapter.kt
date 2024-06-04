@@ -1,6 +1,7 @@
 package com.vro.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +24,10 @@ class VROImageAdapter(
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView = LayoutInflater.from(context).inflate(R.layout.item_image_adapter, container, false)
-        val imageView = itemView.findViewById<ImageView>(R.id.ivImageAdapter).apply {
-            setImageResource(imageList[position])
-        }
-        container.addView(imageView, position)
-        return imageView
+        val imageView = itemView.findViewById<ImageView>(R.id.ivImageAdapter)
+        imageView.setImageResource(imageList[position])
+        container.addView(itemView)
+        return itemView
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
