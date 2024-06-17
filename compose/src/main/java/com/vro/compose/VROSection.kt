@@ -1,5 +1,6 @@
 package com.vro.compose
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.event.VROEvent
@@ -9,14 +10,22 @@ import com.vro.state.VROState
 
 abstract class VROSection<S : VROState, E : VROEvent> {
 
-    internal lateinit var eventListener: VROEventListener<E>
+    private lateinit var eventListener: VROEventListener<E>
 
     @Composable
-    abstract fun CreateSection(state: S)
+    internal fun CreateSection(state: S, eventListener: VROEventListener<E>) {
+        this.eventListener = eventListener
+        Column {
+            SectionContent(state = state)
+        }
+    }
+
+    @Composable
+    abstract fun SectionContent(state: S)
 
     @VROLightMultiDevicePreview
     @Composable
-    abstract fun CreatePreview()
+    abstract fun SectionPreview()
 
     fun event(event: E) {
         eventListener.eventListener(event)

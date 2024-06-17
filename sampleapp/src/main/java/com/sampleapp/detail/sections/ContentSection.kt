@@ -7,15 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.detail.SampleDetailEvent
 import com.sampleapp.detail.SampleDetailState
-import com.sampleapp.main.SampleDestinations
 import com.vro.compose.VROSection
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.event.VROEvent
 
 class ContentSection : VROSection<SampleDetailState, SampleDetailEvent>() {
 
     @Composable
-    override fun CreateSection(state: SampleDetailState) {
+    override fun SectionContent(state: SampleDetailState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -28,7 +26,7 @@ class ContentSection : VROSection<SampleDetailState, SampleDetailEvent>() {
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun CreatePreview() {
-        CreateSection(SampleDetailState.INITIAL)
+    override fun SectionPreview() {
+        SectionContent(SampleDetailState.INITIAL)
     }
 }
