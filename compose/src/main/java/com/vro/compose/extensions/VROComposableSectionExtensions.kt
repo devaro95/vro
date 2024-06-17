@@ -28,19 +28,17 @@ internal fun <S : VROState, E : VROEvent> VroComposableSection(
     eventListener: VROEventListener<E>,
     content: VROSection<S, E>,
 ) {
-    content.eventListener = eventListener
-    content.CreateSection(state)
+    content.CreateSection(state, eventListener)
 }
 
-
 @Composable
-internal fun <S : VROState, E : VROEvent> VroComposablePreview(
+internal fun <S : VROState, E : VROEvent> VroScreenComposablePreview(
     modifier: Modifier,
     contentList: List<VROSection<S, E>>,
 ) {
     Column(modifier = modifier) {
         contentList.forEach {
-            it.CreatePreview()
+            it.SectionPreview()
         }
     }
 }

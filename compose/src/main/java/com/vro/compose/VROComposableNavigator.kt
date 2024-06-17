@@ -30,10 +30,11 @@ abstract class VROComposableNavigator<D : VRODestination>(
             putNavParam(screen.destinationRoute(), it)
         }
         navController.navigate(screen.destinationRoute()) {
-            popScreen?.let {
-                popUpTo(it.destinationRoute()) { this.inclusive = inclusive }
+            popScreen?.destinationRoute()?.let {
+                popUpTo(it) {
+                    this.inclusive = inclusive
+                }
             }
-            launchSingleTop = clearStack
         }
     }
 

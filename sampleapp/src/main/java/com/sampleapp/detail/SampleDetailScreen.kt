@@ -15,11 +15,11 @@ class SampleDetailScreen : SampleBaseScreen<SampleDetailState, SampleDetailEvent
     )
 
     @Composable
-    override fun composableContent() = listOf(ContentSection())
+    override fun screenSections() = listOf(ContentSection())
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun ComposablePreview() {
+    override fun ScreenPreview() {
         CreatePreview()
     }
 }
