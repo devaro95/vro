@@ -47,5 +47,6 @@ dependencies {
     implementation(libs.view.binding)
     implementation(libs.lottie.compose)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.junit)
     debugImplementation(libs.ui.tooling)
 }
