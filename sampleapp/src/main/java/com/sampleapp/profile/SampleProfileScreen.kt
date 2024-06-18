@@ -12,7 +12,7 @@ class SampleProfileScreen :
     SampleBaseScreen<SampleProfileState, SampleProfileEvent>() {
 
     @Composable
-    override fun composableContent() = listOf(ContentSection())
+    override fun screenSections() = listOf(ContentSection())
 
     override fun setTopBar() = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
@@ -21,7 +21,7 @@ class SampleProfileScreen :
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun ComposablePreview() {
+    override fun ScreenPreview() {
         CreatePreview()
     }
 }

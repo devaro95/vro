@@ -15,11 +15,9 @@ import com.vro.compose.preview.VROLightMultiDevicePreview
 class BottomButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
 
     @Composable
-    override fun CreateSection(state: SampleHomeState) {
+    override fun SectionContent(state: SampleHomeState) {
         Column(
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Bottom Button Section")
@@ -63,7 +61,7 @@ class BottomButtonSection : VROSection<SampleHomeState, SampleHomeEvents>() {
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun CreatePreview() {
-        CreateSection(SampleHomeState.INITIAL)
+    override fun SectionPreview() {
+        SectionContent(SampleHomeState.INITIAL)
     }
 }

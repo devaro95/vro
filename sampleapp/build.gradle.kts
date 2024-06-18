@@ -1,7 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("maven-publish")
+    `maven-publish`
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -31,9 +32,6 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
     }
 }
 
