@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Vro">
         <activity
-            android:name="com.sampleapp.main.SampleMainActivity"
+            android:name="com.sampleapp.ui.main.SampleMainActivity"
             android:exported="true"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -19,6 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fragmentactivity.SampleFragmentActivity" />
+        <activity android:name=".ui.fragmentactivity.SampleFragmentActivity" />
     </application>
 </manifest>
