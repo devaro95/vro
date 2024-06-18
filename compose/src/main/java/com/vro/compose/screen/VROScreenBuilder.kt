@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vro.compose.VROComposableTheme
 import com.vro.compose.VROSection
-import com.vro.compose.extensions.VroComposablePreview
+import com.vro.compose.extensions.VroScreenComposablePreview
 import com.vro.compose.extensions.VroComposableSectionContainer
 import com.vro.compose.preview.GeneratePreview
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -29,23 +29,23 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
             modifier = Modifier.setModifier(),
             state = state,
             eventListener = eventListener,
-            sectionList = if (isTablet() && composableTabletContent().isNotEmpty()) {
-                composableTabletContent()
+            sectionList = if (isTablet() && screenTabletSections().isNotEmpty()) {
+                screenTabletSections()
             } else {
-                composableContent()
+                screenSections()
             }
         )
     }
 
     @Composable
-    abstract fun composableContent(): List<VROSection<S, E>>
+    abstract fun screenSections(): List<VROSection<S, E>>
 
     @Composable
-    open fun composableTabletContent(): List<VROSection<S, E>> = emptyList()
+    open fun screenTabletSections(): List<VROSection<S, E>> = emptyList()
 
     @VROLightMultiDevicePreview
     @Composable
-    abstract fun ComposablePreview()
+    abstract fun ScreenPreview()
 
     @Composable
     open fun OnDialog(data: VRODialogState) = Unit
@@ -53,9 +53,9 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
     @Composable
     fun CreatePreview(theme: VROComposableTheme? = null) {
         GeneratePreview(theme) {
-            VroComposablePreview(
+            VroScreenComposablePreview(
                 modifier = Modifier.setModifier(),
-                contentList = composableContent()
+                contentList = screenSections()
             )
         }
     }

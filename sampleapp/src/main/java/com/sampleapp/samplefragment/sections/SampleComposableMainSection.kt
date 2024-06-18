@@ -10,10 +10,8 @@ import com.vro.compose.preview.VROLightMultiDevicePreview
 
 class SampleComposableMainSection : VROSection<SampleComposableFragmentState, SampleComposableFragmentEvents>() {
 
-
-
     @Composable
-    override fun CreateSection(state: SampleComposableFragmentState) {
+    override fun SectionContent(state: SampleComposableFragmentState) {
         Column {
             Text(text = "This is a Composable Fragment Screen")
         }
@@ -21,7 +19,7 @@ class SampleComposableMainSection : VROSection<SampleComposableFragmentState, Sa
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun CreatePreview() {
-        CreateSection(SampleComposableFragmentState.INITIAL)
+    override fun SectionPreview() {
+        SectionContent(SampleComposableFragmentState.INITIAL)
     }
 }

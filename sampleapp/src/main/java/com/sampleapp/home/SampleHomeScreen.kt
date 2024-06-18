@@ -26,14 +26,14 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleHomeEvents>() {
         )
 
     @Composable
-    override fun composableContent() =
+    override fun screenSections() =
         listOf(
             TopButtonSection(),
             BottomButtonSection()
         )
 
     @Composable
-    override fun composableTabletContent() =
+    override fun screenTabletSections() =
         listOf(
             TopButtonSection(),
             BottomButtonSection()
@@ -41,7 +41,7 @@ class SampleHomeScreen : SampleBaseScreen<SampleHomeState, SampleHomeEvents>() {
 
     @Composable
     @VROLightMultiDevicePreview
-    override fun ComposablePreview() {
+    override fun ScreenPreview() {
         CreatePreview()
     }
 

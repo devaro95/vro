@@ -15,7 +15,7 @@ import com.vro.compose.preview.VROLightMultiDevicePreview
 class ContentSection : VROSection<SampleProfileState, SampleProfileEvent>() {
 
     @Composable
-    override fun CreateSection(state: SampleProfileState) {
+    override fun SectionContent(state: SampleProfileState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -28,8 +28,7 @@ class ContentSection : VROSection<SampleProfileState, SampleProfileEvent>() {
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun CreatePreview() {
-        CreateSection(SampleProfileState.INITIAL)
+    override fun SectionPreview() {
+        SectionContent(SampleProfileState.INITIAL)
     }
-
 }

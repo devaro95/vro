@@ -16,11 +16,11 @@ class SampleComposableFragmentScreen :
     override fun Modifier.setModifier() = this.padding(32.dp)
 
     @Composable
-    override fun composableContent() = listOf(SampleComposableMainSection())
+    override fun screenSections() = listOf(SampleComposableMainSection())
 
     @VROLightMultiDevicePreview
     @Composable
-    override fun ComposablePreview() {
+    override fun ScreenPreview() {
         CreatePreview()
     }
 }
