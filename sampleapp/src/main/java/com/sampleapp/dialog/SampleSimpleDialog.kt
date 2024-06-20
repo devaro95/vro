@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.dialog.VRODialogListener
 
 @VROLightMultiDevicePreview

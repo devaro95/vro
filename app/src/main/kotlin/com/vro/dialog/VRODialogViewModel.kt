@@ -36,12 +36,12 @@ abstract class VRODialogViewModel<S : VROState> : ViewModel() {
 
     fun getState() = viewState
 
-    fun updateDataState(changeStateFunction: S.() -> S) {
+    fun updateState(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
         observableState.tryEmit(viewState)
     }
 
-    fun updateState(changeStateFunction: S.() -> S) {
+    fun updateStateWithoutRefresh(changeStateFunction: S.() -> S) {
         viewState = changeStateFunction.invoke(viewState)
     }
 

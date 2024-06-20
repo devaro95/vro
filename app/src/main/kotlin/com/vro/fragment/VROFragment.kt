@@ -1,9 +1,7 @@
 package com.vro.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.CallSuper
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,6 +12,7 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VROStateStep
+import com.vro.viewmodel.VROViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -55,8 +54,10 @@ abstract class VROFragment<
                 }
             }
         }
-        viewModel.errorState.observe(this) {
-            binding.onError(it)
+        lifecycleScope.launch {
+            viewModel.errorState.collect {
+                binding.onError(it)
+            }
         }
     }
 
@@ -67,9 +68,7 @@ abstract class VROFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeState(viewModel, this)
-        lifecycleScope.launch {
-            viewModel.onStart()
-        }
+        viewModel.onStart()
     }
 
     override fun onCreateView(

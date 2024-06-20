@@ -48,5 +48,6 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.ui.tooling.preview)
     implementation(libs.junit)
+    testImplementation(libs.coroutines.test)
     debugImplementation(libs.ui.tooling)
 }

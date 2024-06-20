@@ -8,7 +8,6 @@ import com.sampleapp.dialog.SampleSimpleDialogData
 import com.sampleapp.dialog.SampleSimpleDialog
 import com.vro.compose.screen.VROScreen
 import com.vro.event.VROEvent
-import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 

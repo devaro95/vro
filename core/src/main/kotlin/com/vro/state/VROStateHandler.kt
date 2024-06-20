@@ -1,6 +1,7 @@
 package com.vro.state
 
 import com.vro.constants.INT_ONE
+import com.vro.constants.INT_ZERO
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigationState
 import kotlinx.coroutines.channels.BufferOverflow
@@ -20,4 +21,9 @@ class VroStepperSharedFlow<S : VROState> {
             replay = INT_ONE,
             onBufferOverflow = BufferOverflow.DROP_OLDEST
         )
+}
+
+class VroMutableSharedFlow<T> {
+    fun create() =
+        MutableSharedFlow<T>(replay = INT_ZERO, extraBufferCapacity = INT_ONE, BufferOverflow.DROP_OLDEST)
 }

@@ -10,15 +10,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vro.compose.VROComposableNavigator
-import com.vro.compose.VROComposableViewModel
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.VROComposableScaffoldState
 import com.vro.event.VROEvent
+import com.vro.compose.viewmodel.VROComposableViewModel
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper
+import kotlinx.coroutines.flow.collectLatest
 import java.io.Serializable
 
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
@@ -117,7 +118,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
             } ?: navigator.navigateBack(it?.backResult)
         }
     }
-    val isLoaded by viewModel.screenLoaded
+    val isLoaded by viewModel.screenLoaded.collectAsState(initial = false)
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
     else {
         when (stepper) {

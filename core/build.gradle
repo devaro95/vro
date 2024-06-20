@@ -17,6 +17,7 @@ compileKotlin {
 }
 
 dependencies{
+    api(project(":common"))
     implementation(libs.coroutines.core)
 }
 

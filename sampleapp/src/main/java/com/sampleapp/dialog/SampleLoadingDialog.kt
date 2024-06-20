@@ -20,7 +20,6 @@ import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import com.sampleapp.R
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.preview.VROMultiDevicePreview
 
 @VROLightMultiDevicePreview
 @Composable

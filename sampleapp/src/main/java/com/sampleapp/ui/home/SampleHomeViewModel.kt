@@ -37,8 +37,8 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override suspend fun onStart() {
-        updateScreen {
+    override fun onStart() {
+        updateState {
             copy(text = FIRST_TEXT)
         }
     }
@@ -63,7 +63,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     private fun onActionUpdateTextClick() {
         checkDataState().also {
-            updateScreen {
+            updateState {
                 copy(
                     text = when (it.text) {
                         FIRST_TEXT -> SECOND_TEXT
@@ -76,7 +76,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onActionBottomSheetDismiss() {
-        updateScreen()
+        updateState()
     }
 
     private fun navigateToProfile() {
@@ -84,7 +84,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onActionHideDialog() {
-        updateScreen()
+        updateState()
     }
 
     private fun onActionDetailNavigationClick() {
@@ -92,7 +92,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onVmDialogDismiss() {
-        updateScreen()
+        updateState()
     }
 
     private fun onActivityFragmentClick() {

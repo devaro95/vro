@@ -18,7 +18,7 @@ class SampleVMDialogViewModel : VROComposableDialogViewModel<SampleVMDialogState
     }
 
     private fun onTextChange() {
-        updateScreen {
+        updateState {
             copy(
                 buttonText = "New Text"
             )
