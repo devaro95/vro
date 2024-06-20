@@ -1,8 +1,8 @@
 package com.sampleapp.ui.base
 
 import com.sampleapp.dialog.SampleSimpleDialogData
-import com.vro.compose.VROComposableViewModel
 import com.vro.event.VROEvent
+import com.vro.compose.viewmodel.VROComposableViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
@@ -25,7 +25,7 @@ abstract class SampleBaseViewModel<S : VROState, D : VRODestination, E : VROEven
     }
 
     private fun hideSimpleDialog() {
-        updateScreen()
+        updateState()
     }
 
     companion object {

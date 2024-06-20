@@ -12,6 +12,7 @@ import com.vro.navigation.VRONavigator
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import com.vro.state.VROStepper
+import com.vro.viewmodel.VROViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -29,7 +30,7 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
 
     fun onViewCreatedVro(viewModel: VM, navController: NavController, viewLifecycleOwner: LifecycleOwner) {
         getNavigationResult(navController)?.observe(viewLifecycleOwner) { result ->
-            result?.let { viewModel.setOnResult(it as VROBackResult) }
+            result?.let { viewModel.onNavResult(it as VROBackResult) }
         }
     }
 
@@ -45,9 +46,15 @@ interface VROFragmentBuilder<VM : VROViewModel<S, D, E>, S : VROState, D : VRODe
                 }
             }
         }
-        viewModel.navigationState.observe(fragment) {
-            if (it.navigateBack) navigator.navigateBack(it.backResult)
-            else it.destination?.let { destination -> navigator.navigate(destination) }
+        fragment.lifecycleScope.launch {
+            viewModel.navigationState.collect {
+                it?.destination?.let { destination ->
+                    if (!destination.isNavigated) {
+                        navigator.navigate(destination)
+                        destination.setNavigated()
+                    }
+                } ?: navigator.navigateBack(it?.backResult)
+            }
         }
     }
 

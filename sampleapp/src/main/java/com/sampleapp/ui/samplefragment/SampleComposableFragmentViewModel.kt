@@ -1,12 +1,12 @@
 package com.sampleapp.ui.samplefragment
 
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations
-import com.vro.fragment.VROViewModel
+import com.vro.viewmodel.VROViewModel
 
 class SampleComposableFragmentViewModel : VROViewModel<SampleComposableFragmentState, SampleComposableFragmentDestinations, SampleComposableFragmentEvents>() {
 
-    override val initialViewState: SampleComposableFragmentState = SampleComposableFragmentState.INITIAL
-    
+    override val initialState = SampleComposableFragmentState.INITIAL
+
     override fun eventListener(event: SampleComposableFragmentEvents) {
 
     }

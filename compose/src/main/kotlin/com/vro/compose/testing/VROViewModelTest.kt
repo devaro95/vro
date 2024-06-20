@@ -1,12 +1,13 @@
 package com.vro.compose.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.compose.VROComposableViewModel
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper
+import com.vro.compose.viewmodel.VROComposableViewModel
+import com.vro.testing.VROTestDefaultConcurrencyManager
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.flow.first
@@ -61,13 +62,13 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
         }
     }
 
-    fun verifyUpdateScreen() {
+    fun verifyUpdateState() {
         runTest {
             withTimeoutOrNull(5000) {
                 viewModel.stepper.firstOrNull()?.let {
                     assertEquals(it::class.java, VROStepper.VROStateStep::class.java)
                 }
-            } ?: throw MissingMethodInvocationException("updateScreen not being called")
+            } ?: throw MissingMethodInvocationException("updateState not being called")
         }
     }
 

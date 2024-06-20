@@ -1,22 +1,13 @@
-package com.vro.compose
+package com.vro.compose.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
-import com.vro.navigation.VROBackResult
-import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigationState
+import com.vro.navigation.*
 import com.vro.navstarter.VRONavStarter
-import com.vro.state.VRODialogState
-import com.vro.state.VROState
-import com.vro.state.VROStepper
-import com.vro.state.VroNavigationSharedFlow
-import com.vro.state.VroStateDelegate
-import com.vro.state.VroStepperSharedFlow
+import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
@@ -25,26 +16,30 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     abstract val initialState: S
 
-    private var screenState: S by VroStateDelegate { initialState }
-
-    private val observableNavigation = VroNavigationSharedFlow<D>().create()
+    private var state: S by VroStateDelegate { initialState }
 
     private val observableStepper = VroStepperSharedFlow<S>().create()
 
-    internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
+    private val observableNavigation = VroNavigationSharedFlow<D>().create()
+
+    private val observableScreenLoaded = VroMutableSharedFlow<Boolean>().create()
+
+    val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
     internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
-    internal val screenLoaded: MutableState<Boolean> = mutableStateOf(false)
+    internal val screenLoaded: SharedFlow<Boolean> = observableScreenLoaded
 
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
+    open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     override fun eventBack(result: VROBackResult?) {
         navigateBack(result)
     }
 
     internal fun isLoaded() {
-        screenLoaded.value = false
+        observableScreenLoaded.tryEmit(false)
     }
 
     internal fun startViewModel() {
@@ -54,38 +49,36 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
         }
     }
 
-    open suspend fun onStart() = Unit
+    open fun onStart() = Unit
 
-    open fun onNavParam(navParam: VRONavStarter?) = Unit
-
-    fun checkDataState(): S = screenState
-
-    fun updateScreen(changeStateFunction: S.() -> S) {
-        screenState = changeStateFunction.invoke(screenState)
-        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
-    }
-
-    fun updateScreen() {
-        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
-    }
+    fun checkDataState(): S = state
 
     fun updateState(changeStateFunction: S.() -> S) {
-        screenState = changeStateFunction.invoke(screenState)
+        state = changeStateFunction.invoke(state)
+        observableStepper.tryEmit(VROStepper.VROStateStep(state))
     }
 
-    fun updateDialog(dialogState: VRODialogState, clearScreen: Boolean = true) {
-        if (clearScreen) updateScreen { screenState }
-        observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
+    fun updateState() {
+        observableStepper.tryEmit(VROStepper.VROStateStep(state))
+    }
+
+    fun updateStateWithoutRefresh(changeStateFunction: S.() -> S) {
+        state = changeStateFunction.invoke(state)
+    }
+
+    fun updateDialog(dialogState: VRODialogState, clear: Boolean = true) {
+        if (clear) updateState { state }
+        observableStepper.tryEmit(VROStepper.VRODialogStep(state, dialogState))
     }
 
     private fun hideStartLoading() {
         executeCoroutine {
-            screenLoaded.value = true
+            observableScreenLoaded.tryEmit(true)
         }
     }
 
     open fun onResume() {
-        updateState { screenState }
+        updateStateWithoutRefresh { state }
     }
 
     open fun onPause() = Unit

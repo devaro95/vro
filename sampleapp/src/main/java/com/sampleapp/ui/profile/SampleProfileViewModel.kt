@@ -13,7 +13,7 @@ class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDes
 
     override fun onNavParam(navParam: VRONavStarter?) {
         when (navParam) {
-            is Initialize -> updateScreen { copy(userId = navParam.userId) }
+            is Initialize -> updateState { copy(userId = navParam.userId) }
         }
     }
 }

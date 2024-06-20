@@ -1,10 +1,10 @@
 package com.sampleapp.ui.fragmentactivity
 
-import com.vro.fragment.VROViewModel
+import com.vro.viewmodel.VROViewModel
 
 class SampleFragmentViewModel : VROViewModel<SampleFragmentState, SampleFragmentNavigator.SampleFragmentDestinations, SampleFragmentEvents>() {
 
-    override val initialViewState = SampleFragmentState.INITIAL
+    override val initialState = SampleFragmentState.INITIAL
 
     override fun eventListener(event: SampleFragmentEvents) {
 

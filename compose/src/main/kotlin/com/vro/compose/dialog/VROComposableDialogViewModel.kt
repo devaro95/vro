@@ -8,6 +8,7 @@ import com.vro.event.VROEventListener
 import com.vro.navigation.VROBackResult
 import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
+import com.vro.state.VroStepperSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
@@ -41,25 +42,25 @@ abstract class VROComposableDialogViewModel<S : VROState, E : VROEvent> : ViewMo
         }
     }
 
-    open suspend fun onStart() = Unit
+    open fun onStart() = Unit
 
     fun checkDataState(): S = screenState
 
-    fun updateScreen(changeStateFunction: S.() -> S) {
+    fun updateState(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
         observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
-    fun updateScreen() {
+    fun updateState() {
         observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
-    fun updateState(changeStateFunction: S.() -> S) {
+    fun updateStateWithoutRefresh(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
     }
 
     open fun onResume() {
-        updateState { screenState }
+        updateStateWithoutRefresh { screenState }
     }
 
     fun <T> executeCoroutine(

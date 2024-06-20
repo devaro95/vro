@@ -6,13 +6,13 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.vro.event.VROEvent
-import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.navigation.VRONavigator
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VRODialogStep
 import com.vro.state.VROStepper.VROStateStep
+import com.vro.viewmodel.VROViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -41,21 +41,29 @@ abstract class VROActivity<
 
     private fun setViewBindingObservers() {
         lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
-                when (stepper) {
-                    is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
-                    is VRODialogStep -> onLoadDialog(stepper.dialogState)
+            launch {
+                viewModel.stepper.collectLatest { stepper ->
+                    when (stepper) {
+                        is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
+                        is VRODialogStep -> onLoadDialog(stepper.dialogState)
+                    }
                 }
             }
-        }
-
-        viewModel.errorState.observe(this) {
-            activityBinding.onError(it)
-        }
-
-        viewModel.navigationState.observe(this) {
-            if (it.navigateBack) navigator.navigateBack(it.backResult)
-            else it.destination?.let { destination -> navigator.navigate(destination) }
+            launch {
+                viewModel.navigationState.collectLatest {
+                    it?.destination?.let { destination ->
+                        if (!destination.isNavigated) {
+                            navigator.navigate(destination)
+                            destination.setNavigated()
+                        }
+                    } ?: navigator.navigateBack(it?.backResult)
+                }
+            }
+            launch {
+                viewModel.errorState.collectLatest {
+                    activityBinding.onError(it)
+                }
+            }
         }
     }
 

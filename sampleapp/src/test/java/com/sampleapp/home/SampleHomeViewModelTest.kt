@@ -22,6 +22,7 @@ import com.sampleapp.ui.main.SampleDestinations.DetailNavigation
 import com.sampleapp.ui.main.SampleDestinations.ProfileNavigation
 import com.vro.compose.testing.VROComposableViewModelTest
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, SampleHomeViewModel, SampleHomeEvents>() {
@@ -32,16 +33,18 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
 
     @Test
     fun `onStart should update screen state`() {
-        onStart()
-        getDataState().also {
-            assertEquals(FIRST_TEXT, it.text)
+        runTest {
+            viewModel.onStart()
+            getDataState().also {
+                assertEquals(FIRST_TEXT, it.text)
+            }
         }
     }
 
     @Test
     fun `BottomSheetDismiss Event should updateScreen`() {
         event(BottomSheetDismiss)
-        verifyUpdateScreen()
+        verifyUpdateState()
     }
 
     @Test
@@ -53,7 +56,7 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
     @Test
     fun `HideDialog Event should updateScreen`() {
         event(HideDialog)
-        verifyUpdateScreen()
+        verifyUpdateState()
     }
 
     @Test
@@ -97,7 +100,7 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
     @Test
     fun `VmDialogDismiss Event should update screen`() {
         event(VmDialogDismiss)
-        verifyUpdateScreen()
+        verifyUpdateState()
     }
 
     @Test

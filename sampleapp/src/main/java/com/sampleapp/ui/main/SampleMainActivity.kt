@@ -9,7 +9,6 @@ import com.sampleapp.ui.detail.SampleDetailNavigator
 import com.sampleapp.ui.detail.SampleDetailScreen
 import com.sampleapp.ui.detail.SampleDetailViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
-import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
 import com.sampleapp.ui.home.SampleHomeNavigator
 import com.sampleapp.ui.home.SampleHomeScreen

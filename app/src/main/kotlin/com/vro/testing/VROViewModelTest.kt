@@ -3,9 +3,8 @@ package com.vro.testing
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
-import com.vro.fragment.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigationState
 import com.vro.state.VROState
 import com.vro.state.VROStepper
 import junit.framework.TestCase.assertEquals
@@ -54,47 +53,64 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModel<S, *, E>, E : VR
 
     fun verifyDialog(dialogType: Int) {
         runTest {
-            viewModel.stepper.first().let {
-                assertEquals((it as VROStepper.VRODialogStep<S>).dialogState.type, dialogType)
-            }
+            withTimeoutOrNull(5000) {
+                viewModel.stepper.firstOrNull()?.let {
+                    assertEquals((it as? VROStepper.VRODialogStep<S>)?.dialogState?.type, dialogType)
+                }
+            } ?: throw MissingMethodInvocationException("updateDialogState not being called")
         }
     }
 
-    fun verifyUpdateScreen() {
+    fun verifyUpdateState() {
         runTest {
             withTimeoutOrNull(5000) {
                 viewModel.stepper.firstOrNull()?.let {
                     assertEquals(it::class.java, VROStepper.VROStateStep::class.java)
                 }
-            } ?: throw MissingMethodInvocationException("updateScreen not being called")
+            } ?: throw MissingMethodInvocationException("updateState not being called")
         }
     }
 
-    private fun getNavigatorState(): VRONavigationState<out VRODestination>? {
-        return viewModel.navigationState.value
+    fun verifyNavigation(destination: VRODestination) {
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.navigationState.firstOrNull()?.destination?.let {
+                    assertEquals(it, destination)
+                }
+            } ?: throw MissingMethodInvocationException("navigate not being called")
+        }
     }
 
     fun verifyNavigation(destination: KClass<*>) {
-        getNavigatorState()?.destination?.let {
-            assertEquals(it::class, destination)
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.navigationState.firstOrNull()?.destination?.let {
+                    assertEquals(it::class, destination)
+                }
+            } ?: throw MissingMethodInvocationException("navigate not being called")
         }
     }
 
     fun verifyNoNavigation(destination: KClass<*>) {
-        getNavigatorState()?.destination?.let {
-            assertNotEquals(it::class, destination)
-        }
-    }
-
-
-    fun verifyNavigation(destination: VRODestination) {
-        getNavigatorState()?.destination?.let {
-            assertEquals(it, destination)
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.navigationState.first()?.destination?.let {
+                    assertNotEquals(it::class, destination)
+                }
+            } ?: throw MissingMethodInvocationException("navigate not being called")
         }
     }
 
     fun verifyNavigateBack(result: Serializable? = null) {
-        assertNull(getNavigatorState()?.destination)
-        assertEquals(getNavigatorState()?.backResult, result)
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.navigationState.firstOrNull()?.let {
+                    assertNull(it.destination)
+                    it.backResult?.let { backResult ->
+                        assertEquals(backResult, result)
+                    }
+                }
+            } ?: throw MissingMethodInvocationException("navigate not being called")
+        }
     }
 }

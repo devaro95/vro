@@ -14,17 +14,17 @@ class SampleBottomSheetViewModel : VROComposableDialogViewModel<SampleBottomShee
         }
     }
 
-    override suspend fun onStart() {
-        //updateScreen {
-        //    copy(
-        //        buttonText = FIRST_TEXT
-        //    )
-        //}
+    override fun onStart() {
+        updateState {
+            copy(
+                buttonText = FIRST_TEXT
+            )
+        }
     }
 
     private fun onNameChange() {
         checkDataState().also {
-            updateScreen {
+            updateState {
                 copy(
                     buttonText = when (it.buttonText) {
                         FIRST_TEXT, EMPTY_STRING -> SECOND_TEXT
