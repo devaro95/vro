@@ -3,17 +3,24 @@ package com.vro.compose.extensions
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vro.compose.VROComposableNavigator
-import com.vro.compose.VROComposableViewModel
+import com.vro.compose.*
+import com.vro.compose.components.VROBottomBar
+import com.vro.compose.components.VroTopBar
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.VROComposableScaffoldState
+import com.vro.constants.INT_ZERO
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -88,7 +95,6 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
                 viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
             },
             onStart = {
-                content.configureScaffold(scaffoldState, bottomBar)
                 viewModel.startViewModel()
             },
             onResume = {
@@ -121,11 +127,46 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
     else {
         when (stepper) {
-            is VROStepper.VROStateStep -> content.ComposableSectionContainer(stepper.state, viewModel)
+            is VROStepper.VROStateStep -> content.ComposableContainer(stepper.state, viewModel)
             is VROStepper.VRODialogStep -> {
-                content.ComposableSectionContainer(stepper.state, viewModel)
+                content.ComposableContainer(stepper.state, viewModel)
                 content.OnDialog(stepper.dialogState)
             }
+        }
+    }
+}
+
+@Composable
+internal fun VroComposableScreenContainer(
+    topBarState: VROComposableScaffoldState.VROTopBarState? = null,
+    bottomBarState: VROComposableScaffoldState.VROBottomBarState? = null,
+    bottomBarSelectedItem: Int = INT_ZERO,
+    content: @Composable () -> Unit,
+) {
+    val selectedItem = remember { mutableIntStateOf(bottomBarSelectedItem) }
+    Scaffold(
+        // containerColor = backgroundColor ?: Color.Transparent,
+        topBar = { topBarState?.let { VroTopBar(state = topBarState) } },
+        bottomBar = {
+            bottomBarState?.let {
+                VROBottomBar(
+                    modifier = it.modifier,
+                    itemList = it.itemList,
+                    height = it.height,
+                    background = it.background,
+                    selectedItem = selectedItem
+                )
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier.padding(
+                top = innerPadding.calculateTopPadding(),
+                bottom = if (bottomBarState == null) 0.dp
+                else innerPadding.calculateBottomPadding()
+            )
+        ) {
+            content()
         }
     }
 }

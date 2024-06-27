@@ -18,9 +18,9 @@ abstract class VROFragmentScreen<S : VROState, D : VRODestination, E : VROEvent>
             viewModel.onStart()
         }
         when (val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialViewState)).value) {
-            is VROStateStep -> ComposableSectionContainer(stepper.state, viewModel)
+            is VROStateStep -> ComposableContainer(stepper.state, viewModel)
             is VRODialogStep -> {
-                ComposableSectionContainer(stepper.state, viewModel)
+                ComposableContainer(stepper.state, viewModel)
                 OnDialog(stepper.dialogState)
             }
         }

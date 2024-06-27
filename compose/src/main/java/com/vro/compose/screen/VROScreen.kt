@@ -13,16 +13,4 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBuilder<S, E>() 
 
     @Composable
     open fun ComposableSkeleton() = Unit
-
-    open fun setTopBar(): VROComposableScaffoldState.VROTopBarState? = null
-
-    internal fun configureScaffold(
-        scaffoldState: MutableState<VROComposableScaffoldState>,
-        bottomBar: Boolean,
-    ) {
-        scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar(),
-            showBottomBar = bottomBar
-        )
-    }
 }
