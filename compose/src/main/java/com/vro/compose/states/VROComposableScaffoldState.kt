@@ -15,11 +15,12 @@ data class VROComposableScaffoldState(
 ) {
     data class VROTopBarState(
         val title: String = EMPTY_STRING,
+        val titleColor: Color? = null,
         val actionButton: VROTopBarButton? = null,
         val navigationButton: VROTopBarButton? = null,
         val titleSize: TextUnit = 16.sp,
         val height: Dp? = null,
-        val background: Color = Color.White,
+        val background: Color? = null,
     ) {
         data class VROTopBarButton(
             val icon: Int? = null,

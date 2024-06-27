@@ -39,8 +39,8 @@ fun VroTopBar(
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            containerColor = state.background ?: MaterialTheme.colorScheme.background,
+            titleContentColor = state.titleColor ?: MaterialTheme.colorScheme.primary,
         ),
         title = {
             Column(
