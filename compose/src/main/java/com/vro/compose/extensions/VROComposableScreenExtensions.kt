@@ -13,7 +13,8 @@ import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROComposableScaffoldState
+import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROTopBarState
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -27,21 +28,21 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean = false,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
     showSkeleton: Boolean = false,
 ) {
     composable(
         content.destinationRoute(),
         enterTransition = { enterTransition },
-        exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(50)) }
+        exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(0)) }
     ) {
         VroComposableScreenContent(
             viewModel = viewModel.invoke(),
             navController = navigator.navController,
-            scaffoldState = scaffoldState,
+            topBarState = topBarState,
+            bottomBarState = bottomBarState,
             navigator = navigator,
-            bottomBar = bottomBar,
             content = content,
             showSkeleton = showSkeleton
         )
@@ -53,16 +54,16 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean = false,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
     showSkeleton: Boolean,
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
         navController = navigator.navController,
-        scaffoldState = scaffoldState,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState,
         navigator = navigator,
-        bottomBar = bottomBar,
         content = content,
         showSkeleton = showSkeleton
     )
@@ -74,8 +75,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
     showSkeleton: Boolean,
 ) {
     content.context = LocalContext.current
@@ -84,13 +85,11 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
             onCreate = {
+                content.configureScaffold(topBarState, bottomBarState)
                 viewModel.isLoaded()
                 viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
             },
-            onStart = {
-                content.configureScaffold(scaffoldState, bottomBar)
-                viewModel.startViewModel()
-            },
+            onStart = { viewModel.startViewModel() },
             onResume = {
                 val savedBackState = navController.currentBackStackEntry?.savedStateHandle
                 savedBackState?.getLiveData<Serializable>(VROComposableNavigator.NAVIGATION_BACK_STATE)?.value?.let {
@@ -121,9 +120,9 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     if (!isLoaded && showSkeleton) content.ComposableSkeleton()
     else {
         when (stepper) {
-            is VROStepper.VROStateStep -> content.ComposableSectionContainer(stepper.state, viewModel)
+            is VROStepper.VROStateStep -> content.ComposableScreenContainer(stepper.state, viewModel)
             is VROStepper.VRODialogStep -> {
-                content.ComposableSectionContainer(stepper.state, viewModel)
+                content.ComposableScreenContainer(stepper.state, viewModel)
                 content.OnDialog(stepper.dialogState)
             }
         }
