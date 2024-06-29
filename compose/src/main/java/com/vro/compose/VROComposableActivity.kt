@@ -4,40 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Typography
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.ModalBottomSheetLayout
-import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import com.vro.compose.components.VROBottomBar
+import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROComposableScaffoldState
-import com.vro.compose.states.VROComposableScaffoldState.VROBottomBarState
-import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
-import com.vro.constants.INT_ZERO
+import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROTopBarState
 
 abstract class VROComposableActivity : ComponentActivity() {
 
@@ -46,8 +28,6 @@ abstract class VROComposableActivity : ComponentActivity() {
     abstract val startScreen: VROScreen<*, *>
 
     private lateinit var navController: NavController
-
-    abstract val bottomBarState: VROBottomBarState?
 
     @Composable
     private fun CreateTheme(
@@ -81,8 +61,8 @@ abstract class VROComposableActivity : ComponentActivity() {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
-        val scaffoldState = remember { mutableStateOf(VROComposableScaffoldState()) }
-        val bottomBarSelectedItem = remember { mutableIntStateOf(INT_ZERO) }
+        val topBarState = remember { mutableStateOf<VROTopBarState?>(VROTopBarState()) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(VROBottomBarState()) }
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -90,23 +70,26 @@ abstract class VROComposableActivity : ComponentActivity() {
         ) {
             Scaffold(
                 containerColor = backgroundColor ?: Color.Transparent,
-                topBar = { TopBar(scaffoldState.value.topBarState) },
-                bottomBar = { if (scaffoldState.value.showBottomBar) BottomBar(bottomBarSelectedItem) }
+                topBar = { topBarState.value?.let { VroTopBar(state = it) } },
+                bottomBar = { bottomBarState.value?.let { BottomBar(it.selectedItem) } }
             ) { innerPadding ->
                 Column(
-                    modifier = Modifier.padding(
-                        top = innerPadding.calculateTopPadding(),
-                        bottom = if (bottomBarState == null) 0.dp
-                        else innerPadding.calculateBottomPadding()
-                    )
+                    modifier = Modifier
+                        .padding(
+                            top = innerPadding.calculateTopPadding(),
+                            bottom = if (bottomBarState.value == null) 0.dp
+                            else innerPadding.calculateBottomPadding()
+                        )
+                        .fillMaxSize()
                 ) {
                     NavHost(
                         navController = navController,
                         startDestination = startScreen.destinationRoute()
                     ) {
                         createComposableContent(
-                            navController,
-                            scaffoldState
+                            navController = navController,
+                            topBarState = topBarState,
+                            bottomBarState = bottomBarState
                         )
                     }
                 }
@@ -115,24 +98,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TopBar(topBarState: VROTopBarState?) {
-        topBarState?.let {
-            VroTopBar(state = it)
-        }
-    }
-
-    @Composable
-    open fun BottomBar(selectedItem: MutableIntState) {
-        (bottomBarState)?.let {
-            VROBottomBar(
-                modifier = it.modifier,
-                itemList = it.itemList,
-                height = it.height,
-                background = it.background,
-                selectedItem = selectedItem
-            )
-        }
-    }
+    open fun BottomBar(selectedItem: Int) = Unit
 
     fun navigateToScreen(screen: VROScreen<*, *>) {
         navController.navigate(screen.destinationRoute()) {
@@ -143,6 +109,7 @@ abstract class VROComposableActivity : ComponentActivity() {
 
     abstract fun NavGraphBuilder.createComposableContent(
         navController: NavHostController,
-        scaffoldState: MutableState<VROComposableScaffoldState>,
+        topBarState: MutableState<VROTopBarState?>,
+        bottomBarState: MutableState<VROBottomBarState?>,
     )
 }

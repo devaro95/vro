@@ -19,6 +19,7 @@ import com.vro.state.VroStateDelegate
 import com.vro.state.VroStepperSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 
 abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
@@ -54,7 +55,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
         }
     }
 
-    open suspend fun onStart() = Unit
+    open fun onStart() = Unit
 
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 

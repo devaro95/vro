@@ -37,7 +37,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override suspend fun onStart() {
+    override fun onStart() {
         updateScreen {
             copy(text = FIRST_TEXT)
         }

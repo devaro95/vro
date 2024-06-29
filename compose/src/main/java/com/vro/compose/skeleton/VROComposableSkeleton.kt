@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +65,7 @@ fun VROButtonSkeleton(
 
 @Composable
 fun vroSkeletonBrush(
-    color: Color = Color.White,
+    color: Color = MaterialTheme.colorScheme.primary,
     repeatMode: RepeatMode = RepeatMode.Reverse,
 ): Brush {
     val shimmerColors = listOf(
