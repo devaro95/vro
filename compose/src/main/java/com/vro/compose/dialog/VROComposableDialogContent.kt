@@ -1,7 +1,10 @@
 package com.vro.compose.dialog
 
 import android.content.Context
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vro.event.VROEvent
@@ -36,6 +39,18 @@ abstract class VROComposableDialogContent<S : VROState, E : VROEvent> {
 
     @Composable
     abstract fun ComposableContent(state: S, dismiss: () -> Unit)
+
+    @Composable
+    internal fun ComposableDialogSkeleton() {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ComposableSkeleton()
+        }
+    }
+
+    @Composable
+    open fun ComposableSkeleton() = Unit
 
     fun event(event: E) {
         eventListener.eventListener(event)

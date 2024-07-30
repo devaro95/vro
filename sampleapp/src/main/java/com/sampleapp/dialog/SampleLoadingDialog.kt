@@ -11,16 +11,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import com.airbnb.lottie.LottieProperty
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.airbnb.lottie.compose.rememberLottieDynamicProperties
-import com.airbnb.lottie.compose.rememberLottieDynamicProperty
+import com.airbnb.lottie.compose.*
 import com.sampleapp.R
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.preview.VROMultiDevicePreview
 
 @VROLightMultiDevicePreview
 @Composable

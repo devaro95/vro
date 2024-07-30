@@ -23,8 +23,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
         screen: VROScreen<*, *>,
         state: VRONavStarter? = null,
         popScreen: VROScreen<*, *>? = null,
-        inclusive: Boolean = false,
-        clearStack: Boolean = false,
+        inclusive: Boolean = false
     ) {
         state?.let {
             putNavParam(screen.destinationRoute(), it)

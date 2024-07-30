@@ -13,7 +13,8 @@ import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROComposableScaffoldState
+import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROTopBarState
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -27,23 +28,21 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean = false,
-    showSkeleton: Boolean = false,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>
 ) {
     composable(
         content.destinationRoute(),
         enterTransition = { enterTransition },
-        exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(50)) }
+        exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(0)) }
     ) {
         VroComposableScreenContent(
             viewModel = viewModel.invoke(),
             navController = navigator.navController,
-            scaffoldState = scaffoldState,
+            topBarState = topBarState,
+            bottomBarState = bottomBarState,
             navigator = navigator,
-            bottomBar = bottomBar,
-            content = content,
-            showSkeleton = showSkeleton
+            content = content
         )
     }
 }
@@ -53,18 +52,16 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean = false,
-    showSkeleton: Boolean,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
         navController = navigator.navController,
-        scaffoldState = scaffoldState,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState,
         navigator = navigator,
-        bottomBar = bottomBar,
-        content = content,
-        showSkeleton = showSkeleton
+        content = content
     )
 }
 
@@ -74,9 +71,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    scaffoldState: MutableState<VROComposableScaffoldState>,
-    bottomBar: Boolean,
-    showSkeleton: Boolean,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>
 ) {
     content.context = LocalContext.current
     BackHandler(true) { navigator.navigateBack(null) }
@@ -84,13 +80,10 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
             onCreate = {
-                viewModel.isLoaded()
+                content.configureScaffold(topBarState, bottomBarState)
                 viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
             },
-            onStart = {
-                content.configureScaffold(scaffoldState, bottomBar)
-                viewModel.startViewModel()
-            },
+            onStart = { viewModel.startViewModel() },
             onResume = {
                 val savedBackState = navController.currentBackStackEntry?.savedStateHandle
                 savedBackState?.getLiveData<Serializable>(VROComposableNavigator.NAVIGATION_BACK_STATE)?.value?.let {
@@ -106,7 +99,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
             screenLifecycle.removeObserver(observer)
         }
     }
-    val stepper = viewModel.stepper.collectAsState(VROStepper.VROStateStep(viewModel.initialState)).value
+    val stepper =
+        viewModel.stepper.collectAsState(VROStepper.VROStateStep(viewModel.initialState)).value
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationState.collect {
             it?.destination?.let { destination ->
@@ -117,15 +111,13 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
             } ?: navigator.navigateBack(it?.backResult)
         }
     }
-    val isLoaded by viewModel.screenLoaded
-    if (!isLoaded && showSkeleton) content.ComposableSkeleton()
-    else {
-        when (stepper) {
-            is VROStepper.VROStateStep -> content.ComposableSectionContainer(stepper.state, viewModel)
-            is VROStepper.VRODialogStep -> {
-                content.ComposableSectionContainer(stepper.state, viewModel)
-                content.OnDialog(stepper.dialogState)
-            }
+    content.eventListener = viewModel
+    when (stepper) {
+        is VROStepper.VROStateStep -> content.ComposableScreenContainer(stepper.state)
+        is VROStepper.VROSkeletonStep -> content.ComposableScreenSkeleton()
+        is VROStepper.VRODialogStep -> {
+            content.ComposableScreenContainer(stepper.state)
+            content.OnDialog(stepper.dialogState)
         }
     }
 }

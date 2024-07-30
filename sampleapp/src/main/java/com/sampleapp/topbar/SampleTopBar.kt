@@ -6,7 +6,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
-import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
+import com.vro.compose.states.VROTopBarState
 
 fun sampleHomeToolbar(context: Context, onAction: () -> Unit) = VROTopBarState(
     title = context.getString(R.string.home_toolbar),

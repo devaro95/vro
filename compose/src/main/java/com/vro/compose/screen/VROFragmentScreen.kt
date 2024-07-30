@@ -6,6 +6,7 @@ import com.vro.event.VROEvent
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
+import com.vro.state.VROStepper
 import com.vro.state.VROStepper.VRODialogStep
 import com.vro.state.VROStepper.VROStateStep
 
@@ -18,11 +19,13 @@ abstract class VROFragmentScreen<S : VROState, D : VRODestination, E : VROEvent>
             viewModel.onStart()
         }
         when (val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialViewState)).value) {
-            is VROStateStep -> ComposableSectionContainer(stepper.state, viewModel)
+            is VROStateStep -> ComposableScreenContainer(stepper.state)
             is VRODialogStep -> {
-                ComposableSectionContainer(stepper.state, viewModel)
+                ComposableScreenContainer(stepper.state)
                 OnDialog(stepper.dialogState)
             }
+
+            is VROStepper.VROSkeletonStep -> Unit
         }
     }
 }
