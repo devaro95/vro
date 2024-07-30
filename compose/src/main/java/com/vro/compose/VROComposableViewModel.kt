@@ -1,7 +1,5 @@
 package com.vro.compose
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
@@ -21,7 +19,8 @@ import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 
-abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
+abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(),
+    VROEventListener<E> {
 
     abstract val initialState: S
 
@@ -35,26 +34,21 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
-    internal val screenLoaded: MutableState<Boolean> = mutableStateOf(false)
-
     internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
+    open fun onBackSystem() {
+        navigateBack(null)
+    }
 
     override fun eventBack(result: VROBackResult?) {
         navigateBack(result)
     }
 
-    internal fun isLoaded() {
-        screenLoaded.value = false
-    }
-
     internal fun startViewModel() {
-        executeCoroutine {
-            onStart()
-            hideStartLoading()
-        }
+        onStart()
     }
 
-    open suspend fun onStart() = Unit
+    open fun onStart() = Unit
 
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 
@@ -78,12 +72,6 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
         observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
     }
 
-    private fun hideStartLoading() {
-        executeCoroutine {
-            screenLoaded.value = true
-        }
-    }
-
     open fun onResume() {
         updateState { screenState }
     }
@@ -99,6 +87,10 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     fun navigateBack(result: VROBackResult? = null) {
         observableNavigation.tryEmit(VRONavigationState(navigateBack = true, backResult = result))
+    }
+
+    fun showSkeleton() {
+        observableStepper.tryEmit(VROStepper.VROSkeletonStep(screenState))
     }
 
     fun <T> executeCoroutine(

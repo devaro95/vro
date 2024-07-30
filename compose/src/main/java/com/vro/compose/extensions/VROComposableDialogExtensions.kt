@@ -54,5 +54,7 @@ private fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent
         is VROStepper.VRODialogStep -> {
             content.CreateDialog(stepper.state, viewModel, onDismiss, dismissOnBackPress, dismissOnClickOutside)
         }
+
+        is VROStepper.VROSkeletonStep -> content.ComposableDialogSkeleton()
     }
 }

@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.vro.state.VROState
-import java.io.Serializable
 
 abstract class VROFragmentNavigator<D : VRODestination>(fragment: Fragment) : VRONavigator<D> {
 

@@ -44,6 +44,6 @@ class SampleBottomSheet : VROComposableBottomSheetContent<SampleBottomSheetState
     @VROMultiDevicePreview
     @Composable
     override fun ComposablePreview() {
-        ComposableContent(SampleBottomSheetState.INITIAL, {})
+        ComposableContent(SampleBottomSheetState.INITIAL) {}
     }
 }

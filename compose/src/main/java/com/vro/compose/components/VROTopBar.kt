@@ -11,8 +11,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState
-import com.vro.compose.states.VROComposableScaffoldState.VROTopBarState.VROTopBarButton
+import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.VROTopBarState.VROTopBarButton
 
 @Composable
 @VROLightMultiDevicePreview
@@ -39,8 +39,8 @@ fun VroTopBar(
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            containerColor = state.background ?: MaterialTheme.colorScheme.background,
+            titleContentColor = state.titleColor ?: MaterialTheme.colorScheme.primary,
         ),
         title = {
             Column(

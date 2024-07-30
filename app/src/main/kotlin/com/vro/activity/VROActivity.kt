@@ -45,6 +45,7 @@ abstract class VROActivity<
                 when (stepper) {
                     is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
                     is VRODialogStep -> onLoadDialog(stepper.dialogState)
+                    else -> Unit
                 }
             }
         }
