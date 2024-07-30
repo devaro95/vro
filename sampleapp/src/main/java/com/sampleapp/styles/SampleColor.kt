@@ -4,9 +4,9 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val White = Color(0xffffffff)
 private val mainBlue = Color(0xff00798C)
 private val background = Color(0xffffffff)
+val Skeleton = Color(0x4DBEBEBE)
 
 val SampleLightColors = lightColorScheme(
     primary = Color.Black,

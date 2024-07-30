@@ -1,9 +1,9 @@
 package com.vro.compose.screen
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.vro.compose.states.VROComposableScaffoldState
+import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROTopBarState
 import com.vro.event.VROEvent
 import com.vro.state.VROState
 
@@ -11,18 +11,15 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBuilder<S, E>() 
 
     lateinit var context: Context
 
-    @Composable
-    open fun ComposableSkeleton() = Unit
+    open fun setTopBar(): VROTopBarState? = null
 
-    open fun setTopBar(): VROComposableScaffoldState.VROTopBarState? = null
+    open fun setBottomBar(): VROBottomBarState? = null
 
     internal fun configureScaffold(
-        scaffoldState: MutableState<VROComposableScaffoldState>,
-        bottomBar: Boolean,
+        topBarState: MutableState<VROTopBarState?>,
+        bottomBarState: MutableState<VROBottomBarState?>,
     ) {
-        scaffoldState.value = VROComposableScaffoldState(
-            topBarState = setTopBar(),
-            showBottomBar = bottomBar
-        )
+        topBarState.value = setTopBar()
+        bottomBarState.value = setBottomBar()
     }
 }

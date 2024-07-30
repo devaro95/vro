@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.vro.state.VROState
-import java.io.Serializable
 
 abstract class VROActivityNavigator<D : VRODestination>(private val activity: Activity, navHostId: Int) : VRONavigator<D> {
 
