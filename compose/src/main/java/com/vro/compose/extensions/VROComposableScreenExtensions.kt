@@ -1,9 +1,15 @@
 package com.vro.compose.extensions
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.*
+import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -115,6 +121,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     when (stepper) {
         is VROStepper.VROStateStep -> content.ComposableScreenContainer(stepper.state)
         is VROStepper.VROSkeletonStep -> content.ComposableScreenSkeleton()
+        is VROStepper.VROErrorStep -> content.OnError(stepper.error, stepper.data)
         is VROStepper.VRODialogStep -> {
             content.ComposableScreenContainer(stepper.state)
             content.OnDialog(stepper.dialogState)
