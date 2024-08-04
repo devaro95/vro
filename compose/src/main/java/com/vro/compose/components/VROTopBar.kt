@@ -1,13 +1,25 @@
 package com.vro.compose.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -20,7 +32,12 @@ fun VroTopBarPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
         VroTopBar(
             state = VROTopBarState(
-                title = "title",
+                title = {
+                    Text(
+                        text = "Title",
+                        color = Color.Blue
+                    )
+                },
                 navigationButton = VROTopBarButton(
                     iconVector = Icons.AutoMirrored.Filled.ArrowBack,
                     iconSize = 16.dp,
@@ -39,19 +56,14 @@ fun VroTopBar(
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = state.background ?: MaterialTheme.colorScheme.background,
-            titleContentColor = state.titleColor ?: MaterialTheme.colorScheme.primary,
+            containerColor = state.background ?: MaterialTheme.colorScheme.background
         ),
         title = {
             Column(
                 modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
-                Text(
-                    text = state.title,
-                    fontSize = state.titleSize,
-                    textAlign = TextAlign.Center
-                )
+                state.title?.invoke()
             }
         },
         actions = { SetTopBarButton(state.actionButton) },
