@@ -57,7 +57,27 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                 viewModel.stepper.firstOrNull()?.let {
                     assertEquals((it as? VROStepper.VRODialogStep<S>)?.dialogState?.type, dialogType)
                 }
-            } ?: throw MissingMethodInvocationException("updateDialogState not being called")
+            } ?: throw MissingMethodInvocationException("updateDialogState not being called with this type")
+        }
+    }
+
+    fun verifyError() {
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.stepper.firstOrNull()?.let {
+                    assertEquals(it::class.java, VROStepper.VROErrorStep::class.java)
+                }
+            } ?: throw MissingMethodInvocationException("updateError not being called")
+        }
+    }
+
+    fun verifyError(error: Throwable) {
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.stepper.firstOrNull()?.let {
+                    assertEquals((it as? VROStepper.VROErrorStep<S>)?.error, error)
+                }
+            } ?: throw MissingMethodInvocationException("updateError not being called with this error")
         }
     }
 
@@ -77,7 +97,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                 viewModel.navigationState.firstOrNull()?.destination?.let {
                     assertEquals(it, destination)
                 }
-            } ?: throw MissingMethodInvocationException("navigate not being called")
+            } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
         }
     }
 
@@ -87,7 +107,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                 viewModel.navigationState.firstOrNull()?.destination?.let {
                     assertEquals(it::class, destination)
                 }
-            } ?: throw MissingMethodInvocationException("navigate not being called")
+            } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
         }
     }
 
@@ -97,7 +117,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                 viewModel.navigationState.first()?.destination?.let {
                     assertNotEquals(it::class, destination)
                 }
-            } ?: throw MissingMethodInvocationException("navigate not being called")
+            } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
         }
     }
 
@@ -110,7 +130,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                         assertEquals(backResult, result)
                     }
                 }
-            } ?: throw MissingMethodInvocationException("navigate not being called")
+            } ?: throw MissingMethodInvocationException("navigateBack not being called")
         }
     }
 }

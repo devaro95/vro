@@ -72,6 +72,10 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
         observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
     }
 
+    fun updateError(error: Throwable, data: Any? = null) {
+        observableStepper.tryEmit(VROStepper.VROErrorStep(error, data))
+    }
+
     open fun onResume() {
         updateState { screenState }
     }

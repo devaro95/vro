@@ -9,6 +9,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
+import com.vro.state.VRODialogState
 import com.vro.state.VROState
 
 abstract class VROComposableDialogContent<S : VROState, E : VROEvent> {
@@ -51,6 +52,12 @@ abstract class VROComposableDialogContent<S : VROState, E : VROEvent> {
 
     @Composable
     open fun ComposableSkeleton() = Unit
+
+    @Composable
+    open fun OnDialog(data: VRODialogState) = Unit
+
+    @Composable
+    open fun OnError(error: Throwable, data: Any?) = Unit
 
     fun event(event: E) {
         eventListener.eventListener(event)
