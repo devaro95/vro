@@ -10,6 +10,7 @@ import com.sampleapp.ui.home.SampleHomeEvents.ShowBottomSheet
 import com.sampleapp.ui.home.SampleHomeEvents.ShowNavigationBottomSheet
 import com.sampleapp.ui.home.SampleHomeEvents.ShowSimpleDialog
 import com.sampleapp.ui.home.SampleHomeEvents.ShowSimpleDialogWithViewModel
+import com.sampleapp.ui.home.SampleHomeEvents.ShowSnackBar
 import com.sampleapp.ui.home.SampleHomeEvents.UpdateText
 import com.sampleapp.ui.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.ui.main.SampleDestinations
@@ -17,7 +18,8 @@ import com.sampleapp.ui.main.SampleDestinations.ActivityFragmentNavigation
 import com.sampleapp.ui.main.SampleDestinations.BottomSheetNavigation
 import com.vro.state.VRODialogState
 
-class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
+class SampleHomeViewModel :
+    SampleBaseViewModel<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
     override val initialState: SampleHomeState = SampleHomeState.INITIAL
 
@@ -31,17 +33,14 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
             ShowBottomSheet -> onActionShowBottomSheetClick()
             ShowSimpleDialog -> onActionShowSimpleDialogClick()
             ShowSimpleDialogWithViewModel -> onActionShowSimpleDialogWithViewModelClick()
+            ShowSnackBar -> onActionShowSnackBarClick()
             UpdateText -> onActionUpdateTextClick()
             VmDialogDismiss -> onVmDialogDismiss()
             ActivityFragment -> onActivityFragmentClick()
         }
     }
 
-    override fun onStart() {
-        updateScreen {
-            copy(text = FIRST_TEXT)
-        }
-    }
+    override fun onStart() = Unit
 
     private fun onActionShowNavigationBottomSheetClick() {
         navigate(BottomSheetNavigation)
@@ -58,6 +57,12 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     private fun onActionShowSimpleDialogWithViewModelClick() {
         updateDialog(
             VRODialogState(SIMPLE_VIEW_MODEL_DIALOG)
+        )
+    }
+
+    private fun onActionShowSnackBarClick() {
+        updateDialog(
+            VRODialogState(SNACK_BAR)
         )
     }
 
@@ -104,5 +109,6 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         const val SECOND_TEXT = "Press to update back"
         const val SIMPLE_VIEW_MODEL_DIALOG = 1
         const val BOTTOM_SHEET = 2
+        const val SNACK_BAR = 3
     }
 }

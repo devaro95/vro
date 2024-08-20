@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://nexus.ods.ok-cloud.net/repository/mb-android-group/")
     }
 }
 

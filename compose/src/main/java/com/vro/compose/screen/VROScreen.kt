@@ -17,7 +17,7 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBuilder<S, E>() 
 
     internal fun configureScaffold(
         topBarState: MutableState<VROTopBarState?>,
-        bottomBarState: MutableState<VROBottomBarState?>,
+        bottomBarState: MutableState<VROBottomBarState?>
     ) {
         topBarState.value = setTopBar()
         bottomBarState.value = setBottomBar()

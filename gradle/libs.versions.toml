@@ -27,6 +27,7 @@ composeActivity = "1.9.0"
 composeRuntime = "1.6.8"
 accompanistNavigationMaterial = "0.35.0-alpha"
 lottie = "4.0.0"
+lifecycleRuntimeComposeAndroid = "2.8.4"
 
 [libraries]
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
@@ -60,6 +61,7 @@ lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmode
 lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodel" }
 junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
