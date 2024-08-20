@@ -10,6 +10,7 @@ sealed class SampleHomeEvents : VROEvent {
     data object ShowBottomSheet : SampleHomeEvents()
     data object ShowSimpleDialog : SampleHomeEvents()
     data object ShowSimpleDialogWithViewModel : SampleHomeEvents()
+    data object ShowSnackBar : SampleHomeEvents()
     data object BottomSheetDismiss : SampleHomeEvents()
     data object Detail : SampleHomeEvents()
     data object VmDialogDismiss : SampleHomeEvents()

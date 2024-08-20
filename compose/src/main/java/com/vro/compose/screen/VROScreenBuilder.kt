@@ -2,10 +2,13 @@ package com.vro.compose.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
+import com.vro.compose.utils.ShowSnackBar
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
@@ -20,6 +23,8 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
     internal lateinit var eventListener: VROEventListener<E>
 
     open val tabletDesignEnabled: Boolean = false
+
+    internal lateinit var snackBarState: SnackbarHostState
 
     @Composable
     internal fun ComposableScreenSkeleton() {
@@ -65,5 +70,20 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
 
     fun navigateBack(result: VROBackResult? = null) {
         eventListener.eventBack(result)
+    }
+
+    @Composable
+    fun VROSnackBar(
+        message: String,
+        actionLabel: String? = null,
+        cancelable: Boolean = true,
+        duration: SnackbarDuration = SnackbarDuration.Short
+    ) {
+        snackBarState.ShowSnackBar(
+            message = message,
+            actionLabel = actionLabel,
+            cancelable = cancelable,
+            duration = duration,
+        )
     }
 }

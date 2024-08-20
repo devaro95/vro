@@ -5,13 +5,14 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -36,6 +37,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     exitTransition: ExitTransition? = null,
     topBarState: MutableState<VROTopBarState?>,
     bottomBarState: MutableState<VROBottomBarState?>,
+    snackBarState: MutableState<SnackbarHostState>
 ) {
     composable(
         content.destinationRoute(),
@@ -48,7 +50,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
             topBarState = topBarState,
             bottomBarState = bottomBarState,
             navigator = navigator,
-            content = content
+            content = content,
+            snackBarState = snackBarState
         )
     }
 }
@@ -60,6 +63,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
     topBarState: MutableState<VROTopBarState?>,
     bottomBarState: MutableState<VROBottomBarState?>,
+    snackBarState: MutableState<SnackbarHostState>
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
@@ -67,7 +71,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
         topBarState = topBarState,
         bottomBarState = bottomBarState,
         navigator = navigator,
-        content = content
+        content = content,
+        snackBarState = snackBarState
     )
 }
 
@@ -79,8 +84,10 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     content: VROScreen<S, E>,
     topBarState: MutableState<VROTopBarState?>,
     bottomBarState: MutableState<VROBottomBarState?>,
+    snackBarState: MutableState<SnackbarHostState>
 ) {
     content.context = LocalContext.current
+    content.snackBarState = snackBarState.value
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(screenLifecycle) {
@@ -106,7 +113,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         }
     }
     val stepper =
-        viewModel.stepper.collectAsState(VROStepper.VROStateStep(viewModel.initialState)).value
+        viewModel.stepper.collectAsStateWithLifecycle(VROStepper.VROStateStep(viewModel.initialState)).value
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationState.collect {
             it?.destination?.let { destination ->

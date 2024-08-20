@@ -1,5 +1,6 @@
 package com.sampleapp.ui.main
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
@@ -38,27 +39,31 @@ class SampleMainActivity : VROComposableActivity() {
         navController: NavHostController,
         topBarState: MutableState<VROTopBarState?>,
         bottomBarState: MutableState<VROBottomBarState?>,
+        snackBarState: MutableState<SnackbarHostState>
     ) {
         vroComposableScreen(
             viewModel = { koinViewModel<SampleHomeViewModel>() },
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
             content = SampleHomeScreen(),
             topBarState = topBarState,
-            bottomBarState = bottomBarState
+            bottomBarState = bottomBarState,
+            snackBarState = snackBarState
         )
         vroComposableScreen(
             viewModel = { koinViewModel<SampleProfileViewModel>() },
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
             topBarState = topBarState,
-            bottomBarState = bottomBarState
+            bottomBarState = bottomBarState,
+            snackBarState = snackBarState
         )
         vroComposableScreen(
             viewModel = { koinViewModel<SampleDetailViewModel>() },
             navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
             content = SampleDetailScreen(),
             topBarState = topBarState,
-            bottomBarState = bottomBarState
+            bottomBarState = bottomBarState,
+            snackBarState = snackBarState
         )
         vroBottomSheet(
             content = SampleBottomSheet(),
