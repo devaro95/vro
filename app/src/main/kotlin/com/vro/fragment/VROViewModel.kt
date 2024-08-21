@@ -17,7 +17,7 @@ abstract class VROViewModel<S : VROState, D : VRODestination, E : VROEvent> : Vi
 
     private var viewState: S by VroStateDelegate { initialViewState }
 
-    private val observableStepper = VroStepperSharedFlow<S>().create()
+    private val observableStepper =  createStepperSharedFlow<S>()
 
     val stepper: SharedFlow<VROStepper<S>> = observableStepper
 

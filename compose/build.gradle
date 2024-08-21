@@ -59,4 +59,5 @@ dependencies {
     implementation(libs.arch.core)
     implementation(libs.coroutines.test)
     implementation(libs.coroutines.core)
+    implementation(libs.lifecycle.runtime.compose.android)
 }
