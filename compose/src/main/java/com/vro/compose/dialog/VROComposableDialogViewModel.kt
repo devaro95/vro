@@ -18,7 +18,7 @@ abstract class VROComposableDialogViewModel<S : VROState, E : VROEvent> : ViewMo
 
     private var screenState: S by VroStateDelegate { initialState }
 
-    private val observableStepper = VroStepperSharedFlow<S>().create()
+    private val observableStepper = createStepperSharedFlow<S>()
 
     internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
