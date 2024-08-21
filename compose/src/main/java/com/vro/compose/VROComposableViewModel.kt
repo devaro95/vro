@@ -47,6 +47,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     open fun onCreate(navParam: VRONavStarter?) {
+        screenState = initialState
         observableStepper.tryEmit(VROStepper.VROStateStep(initialState))
         onNavParam(navParam)
     }

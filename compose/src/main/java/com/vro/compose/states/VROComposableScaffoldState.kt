@@ -1,17 +1,16 @@
 package com.vro.compose.states
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.*
-import com.vro.constants.EMPTY_STRING
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.vro.constants.INT_ZERO
 
 data class VROTopBarState(
-    val title: String = EMPTY_STRING,
-    val titleColor: Color? = null,
+    val title: @Composable (() -> Unit)? = null,
     val actionButton: VROTopBarButton? = null,
     val navigationButton: VROTopBarButton? = null,
-    val titleSize: TextUnit = 16.sp,
     val height: Dp? = null,
     val background: Color? = null,
 ) {
