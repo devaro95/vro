@@ -5,18 +5,12 @@ import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
-import com.vro.navigation.VROBackResult
-import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigationState
+import com.vro.navigation.*
 import com.vro.navstarter.VRONavStarter
-import com.vro.state.VRODialogState
-import com.vro.state.VROState
-import com.vro.state.VROStepper
-import com.vro.state.VroNavigationSharedFlow
-import com.vro.state.VroStateDelegate
-import com.vro.state.VroStepperSharedFlow
+import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
 abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(),
@@ -26,11 +20,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     private var screenState: S by VroStateDelegate { initialState }
 
-    private val observableNavigation = VroNavigationSharedFlow<D>().create()
+    private val observableNavigation = createNavigationSharedFlow<D>()
 
-    private val observableStepper = VroStepperSharedFlow<S>().create()
+    private val observableStepper = createStepperSharedFlow<S>()
 
-    internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
+    internal val stepper: Flow<VROStepper<S>> = observableStepper
 
     internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
@@ -51,6 +45,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
     open fun onStart() = Unit
 
     open fun onNavParam(navParam: VRONavStarter?) = Unit
+
+    open fun onCreate(navParam: VRONavStarter?) {
+        observableStepper.tryEmit(VROStepper.VROStateStep(initialState))
+        onNavParam(navParam)
+    }
 
     fun checkDataState(): S = screenState
 
