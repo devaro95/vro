@@ -1,17 +1,12 @@
 package com.vro.compose.extensions
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -87,7 +82,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         val observer = createLifecycleEventObserver(
             onCreate = {
                 content.configureScaffold(topBarState, bottomBarState)
-                viewModel.onNavParam(getNavParamState(navController.currentDestination?.route.toString()))
+                viewModel.onCreate(getNavParamState(navController.currentDestination?.route.toString()))
             },
             onStart = { viewModel.startViewModel() },
             onResume = {
@@ -106,7 +101,11 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         }
     }
     val stepper =
-        viewModel.stepper.collectAsState(VROStepper.VROStateStep(viewModel.initialState)).value
+        viewModel.stepper.collectAsStateWithLifecycle(
+            initialValue = VROStepper.VROStateStep(viewModel.initialState),
+            lifecycle = screenLifecycle
+        ).value
+
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationState.collect {
             it?.destination?.let { destination ->
