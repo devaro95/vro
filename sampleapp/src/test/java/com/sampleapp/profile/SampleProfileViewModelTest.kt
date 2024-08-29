@@ -15,7 +15,7 @@ class SampleProfileViewModelTest : VROComposableViewModelTest<SampleProfileState
 
     @Test
     fun `onNavParam should update screen state`() {
-        onNavParam(SampleProfileNavStarter.Initialize(userId = textMock))
+        viewModel.onNavParam(SampleProfileNavStarter.Initialize(userId = textMock))
         getDataState().also {
             assertEquals(textMock, it.userId)
         }

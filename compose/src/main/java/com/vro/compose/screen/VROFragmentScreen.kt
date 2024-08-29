@@ -12,7 +12,7 @@ import com.vro.state.VROState
 import com.vro.state.VROStepper
 
 abstract class VROFragmentScreen<S : VROState, D : VRODestination, E : VROEvent> :
-    VROScreenBuilder<S, E>() {
+    VROScreenBase<S, E>() {
 
     @Composable
     fun CreateScreen(viewModelSeed: VROViewModel<S, D, E>) {

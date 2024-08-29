@@ -13,7 +13,7 @@ import com.vro.navigation.VROBackResult
 import com.vro.state.VRODialogState
 import com.vro.state.VROState
 
-abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
+abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
     open val skeleton: VROSkeleton? = null
 
@@ -58,6 +58,8 @@ abstract class VROScreenBuilder<S : VROState, E : VROEvent> {
 
     @Composable
     open fun OnError(error: Throwable, data: Any?) = Unit
+
+    open fun oneTimeHandler(id: Int, state: S) = Unit
 
     fun event(event: E) {
         eventListener.eventListener(event)

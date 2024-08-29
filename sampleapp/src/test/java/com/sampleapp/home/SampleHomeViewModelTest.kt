@@ -15,6 +15,7 @@ import com.sampleapp.ui.home.SampleHomeEvents.UpdateText
 import com.sampleapp.ui.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.FIRST_TEXT
+import com.sampleapp.ui.home.SampleHomeViewModel.Companion.ONE_TIME_LAUNCH
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.SIMPLE_VIEW_MODEL_DIALOG
 import com.sampleapp.ui.main.SampleDestinations.ActivityFragmentNavigation
 import com.sampleapp.ui.main.SampleDestinations.BottomSheetNavigation
@@ -32,7 +33,7 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
 
     @Test
     fun `onStart should update screen state`() {
-        onStart()
+        viewModel.onStart()
         getDataState().also {
             assertEquals(FIRST_TEXT, it.text)
         }
@@ -104,5 +105,11 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
     fun `ActivityFragment Event should navigate to ActivityFragmentNavigation`() {
         event(ActivityFragment)
         verifyNavigation(ActivityFragmentNavigation)
+    }
+
+    @Test
+    fun `OneTimeLaunch Event should launch one time`() {
+        event(SampleHomeEvents.OneTimeLaunch)
+        verifyOneTime(ONE_TIME_LAUNCH)
     }
 }
