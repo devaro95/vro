@@ -5,8 +5,7 @@ import com.vro.compose.VROComposableViewModel
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
-import com.vro.state.VROState
-import com.vro.state.VROStepper
+import com.vro.state.*
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.flow.first
@@ -108,6 +107,16 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
                     assertEquals(it::class, destination)
                 }
             } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
+        }
+    }
+
+    fun verifyOneTime(id: Int) {
+        runTest {
+            withTimeoutOrNull(5000) {
+                viewModel.oneTime.firstOrNull()?.let {
+                    assertEquals((it as VROOneTimeState.Launch).id, id)
+                }
+            } ?: throw MissingMethodInvocationException("updateDialogState not being called with this type")
         }
     }
 

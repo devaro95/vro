@@ -8,6 +8,10 @@ import com.vro.event.VROEventListener
 import com.vro.navigation.*
 import com.vro.navstarter.VRONavStarter
 import com.vro.state.*
+import com.vro.state.VROStepper.VRODialogStep
+import com.vro.state.VROStepper.VROErrorStep
+import com.vro.state.VROStepper.VROSkeletonStep
+import com.vro.state.VROStepper.VROStateStep
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +28,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     private val observableStepper = createStepperSharedFlow<S>()
 
+    private val observableOneTime = createOneTimeSharedFlow<S>()
+
     internal val stepper: Flow<VROStepper<S>> = observableStepper
+
+    internal val oneTime: Flow<VROOneTimeState<S>> = observableOneTime
 
     internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
@@ -48,7 +56,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     open fun onCreate(navParam: VRONavStarter?) {
         screenState = initialState
-        observableStepper.tryEmit(VROStepper.VROStateStep(initialState))
+        observableStepper.tryEmit(VROStateStep(initialState))
         onNavParam(navParam)
     }
 
@@ -56,11 +64,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     fun updateScreen(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
-        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
+        observableStepper.tryEmit(VROStateStep(screenState))
     }
 
     fun updateScreen() {
-        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
+        observableStepper.tryEmit(VROStateStep(screenState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
@@ -69,11 +77,19 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     fun updateDialog(dialogState: VRODialogState, clearScreen: Boolean = true) {
         if (clearScreen) updateScreen { screenState }
-        observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
+        observableStepper.tryEmit(VRODialogStep(screenState, dialogState))
     }
 
     fun updateError(error: Throwable, data: Any? = null) {
-        observableStepper.tryEmit(VROStepper.VROErrorStep(error, data))
+        observableStepper.tryEmit(VROErrorStep(error, data))
+    }
+
+    fun updateOneTime(id: Int, state: S) {
+        observableOneTime.tryEmit(VROOneTimeState.Launch(state = state, id = id))
+    }
+
+    internal fun clearOneTime() {
+        observableOneTime.tryEmit(VROOneTimeState.Clear())
     }
 
     open fun onResume() {
@@ -94,7 +110,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
     }
 
     fun showSkeleton() {
-        observableStepper.tryEmit(VROStepper.VROSkeletonStep(screenState))
+        observableStepper.tryEmit(VROSkeletonStep(screenState))
     }
 
     fun <T> executeCoroutine(

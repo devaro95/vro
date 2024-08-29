@@ -7,7 +7,7 @@ import com.vro.compose.states.VROTopBarState
 import com.vro.event.VROEvent
 import com.vro.state.VROState
 
-abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBuilder<S, E>() {
+abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
 
     lateinit var context: Context
 
