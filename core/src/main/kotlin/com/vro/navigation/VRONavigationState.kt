@@ -2,7 +2,7 @@ package com.vro.navigation
 
 import java.io.Serializable
 
-data class VRONavigationState<D: VRODestination>(
+data class VRONavigationState<D : VRODestination>(
     val destination: D? = null,
     val state: Serializable? = null,
     val anim: NavAnim? = null,
@@ -15,5 +15,4 @@ data class VRONavigationState<D: VRODestination>(
         val popEnterAnim: Int? = null,
         val popExitAnim: Int? = null,
     )
-
 }

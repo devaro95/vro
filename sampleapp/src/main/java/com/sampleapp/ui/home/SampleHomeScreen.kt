@@ -1,5 +1,6 @@
 package com.sampleapp.ui.home
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -13,6 +14,7 @@ import com.sampleapp.dialog.withviewmodel.SampleVMDialog
 import com.sampleapp.dialog.withviewmodel.SampleVMDialogViewModel
 import com.sampleapp.ui.base.SampleBaseScreen
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
+import com.sampleapp.ui.home.SampleHomeViewModel.Companion.ONE_TIME_LAUNCH
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.SIMPLE_VIEW_MODEL_DIALOG
 import com.vro.compose.extensions.VROComposableDialog
 import com.vro.compose.extensions.VroBottomSheet
@@ -97,6 +99,19 @@ class SampleHomeScreen(
             ) {
                 Text(text = "Activity Fragment")
             }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+            ) {
+                Text(text = "One Time Launch")
+            }
+        }
+    }
+
+    override fun oneTimeHandler(id: Int, state: SampleHomeState) {
+        when (id) {
+            ONE_TIME_LAUNCH -> Toast.makeText(context, "1000", Toast.LENGTH_LONG).show()
         }
     }
 
