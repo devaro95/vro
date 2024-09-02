@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
-import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
+import com.sampleapp.dialog.bottomsheet.*
 import com.sampleapp.dialog.withviewmodel.SampleVMDialog
 import com.sampleapp.dialog.withviewmodel.SampleVMDialogViewModel
 import com.sampleapp.ui.base.SampleBaseScreen
@@ -41,7 +40,6 @@ class SampleHomeScreen(
                 .padding(top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Top Button Section")
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
@@ -63,7 +61,6 @@ class SampleHomeScreen(
             ) {
                 Text(text = "Show Bottom Sheet")
             }
-            Text(text = "Bottom Button Section")
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),

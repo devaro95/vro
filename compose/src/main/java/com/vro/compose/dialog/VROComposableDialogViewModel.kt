@@ -41,7 +41,7 @@ abstract class VROComposableDialogViewModel<S : VROState, E : VROEvent> : ViewMo
         }
     }
 
-    open suspend fun onStart() = Unit
+    open fun onStart() = Unit
 
     fun checkDataState(): S = screenState
 
