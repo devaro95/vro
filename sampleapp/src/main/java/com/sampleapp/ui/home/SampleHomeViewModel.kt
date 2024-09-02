@@ -5,6 +5,7 @@ import com.sampleapp.ui.home.SampleHomeEvents.ActivityFragment
 import com.sampleapp.ui.home.SampleHomeEvents.BottomSheetDismiss
 import com.sampleapp.ui.home.SampleHomeEvents.Detail
 import com.sampleapp.ui.home.SampleHomeEvents.HideDialog
+import com.sampleapp.ui.home.SampleHomeEvents.OneTimeLaunch
 import com.sampleapp.ui.home.SampleHomeEvents.Profile
 import com.sampleapp.ui.home.SampleHomeEvents.ShowBottomSheet
 import com.sampleapp.ui.home.SampleHomeEvents.ShowNavigationBottomSheet
@@ -34,6 +35,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
             UpdateText -> onActionUpdateTextClick()
             VmDialogDismiss -> onVmDialogDismiss()
             ActivityFragment -> onActivityFragmentClick()
+            OneTimeLaunch -> onOneTimeLaunchClick()
         }
     }
 
@@ -99,10 +101,15 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         navigate(ActivityFragmentNavigation)
     }
 
+    private fun onOneTimeLaunchClick() {
+        updateOneTime(id = ONE_TIME_LAUNCH, checkDataState())
+    }
+
     companion object {
         const val FIRST_TEXT = "Press to update"
         const val SECOND_TEXT = "Press to update back"
         const val SIMPLE_VIEW_MODEL_DIALOG = 1
         const val BOTTOM_SHEET = 2
+        const val ONE_TIME_LAUNCH = 1
     }
 }
