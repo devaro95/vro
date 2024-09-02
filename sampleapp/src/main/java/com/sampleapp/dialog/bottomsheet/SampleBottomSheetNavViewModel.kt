@@ -1,11 +1,12 @@
 package com.sampleapp.dialog.bottomsheet
 
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
-import com.vro.compose.dialog.VROComposableDialogViewModel
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
+import com.vro.compose.VROComposableViewModel
 import com.vro.constants.EMPTY_STRING
 
-class SampleBottomSheetViewModel :
-    VROComposableDialogViewModel<SampleBottomSheetState, SampleBottomSheetEvents>() {
+class SampleBottomSheetNavViewModel :
+    VROComposableViewModel<SampleBottomSheetState, SampleBottomSheetDestinations, SampleBottomSheetEvents>() {
 
     override val initialState = SampleBottomSheetState.INITIAL
 
