@@ -1,5 +1,6 @@
 package com.sampleapp.di
 
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
 import com.sampleapp.dialog.withviewmodel.SampleVMDialogViewModel
 import com.sampleapp.ui.detail.SampleDetailViewModel
@@ -20,6 +21,7 @@ val presentationModule = module {
     viewModelOf(::SampleHomeViewModel)
     viewModelOf(::SampleProfileViewModel)
     viewModelOf(::SampleDetailViewModel)
+    viewModelOf(::SampleBottomSheetNavViewModel)
     viewModelOf(::SampleBottomSheetViewModel)
     viewModelOf(::SampleVMDialogViewModel)
 }
