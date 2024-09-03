@@ -1,6 +1,8 @@
 package com.vro.compose
 
 import androidx.lifecycle.ViewModel
+import com.vro.compose.states.*
+import com.vro.constants.INT_ZERO
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
 import com.vro.event.VROEvent
@@ -32,7 +34,7 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
 
     internal val stepper: Flow<VROStepper<S>> = observableStepper
 
-    internal val oneTime: Flow<VROOneTimeState<S>> = observableOneTime
+    internal val oneTime: Flow<VROSingleLaunchState<S>> = observableOneTime
 
     internal val navigationState: SharedFlow<VRONavigationState<D>?> = observableNavigation
 
@@ -85,11 +87,11 @@ abstract class VROComposableViewModel<S : VROState, D : VRODestination, E : VROE
     }
 
     fun updateOneTime(id: Int, state: S) {
-        observableOneTime.tryEmit(VROOneTimeState.Launch(state = state, id = id))
+        observableOneTime.tryEmit(VROSingleLaunchState.Launch(state = state, id = id))
     }
 
     internal fun clearOneTime() {
-        observableOneTime.tryEmit(VROOneTimeState.Clear())
+        observableOneTime.tryEmit(VROSingleLaunchState.Clear())
     }
 
     open fun onResume() {

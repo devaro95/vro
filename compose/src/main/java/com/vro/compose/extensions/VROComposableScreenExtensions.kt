@@ -84,6 +84,11 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         bottomBarState = bottomBarState,
         navController = navController,
     )
+    InitializeBarsListeners(
+        content = content,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState
+    )
     InitializeOneTimeListener(
         viewModel = viewModel,
         content = content
