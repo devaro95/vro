@@ -8,8 +8,7 @@ import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
-import com.vro.compose.states.VROBottomBarState
-import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.*
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -41,9 +40,33 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.oneTime.collectLatest { oneTime ->
-            if (oneTime is VROOneTimeState.Launch) {
+            if (oneTime is VROSingleLaunchState.Launch) {
                 content.oneTimeHandler(oneTime.id, oneTime.state)
                 viewModel.clearOneTime()
+            }
+        }
+    }
+}
+
+@Composable
+fun <S : VROState, E : VROEvent> InitializeBarsListeners(
+    content: VROScreen<S, E>,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
+) {
+    LaunchedEffect(key1 = Unit) {
+        content.topBarFlow.collectLatest { topBar ->
+            if (topBar is VROTopBarLaunchState.Launch) {
+                topBarState.value = topBar.state
+                content.clearTopBarFlow()
+            }
+        }
+    }
+    LaunchedEffect(key1 = Unit) {
+        content.bottomBarFlow.collectLatest { bottomBar ->
+            if (bottomBar is VROBottomBarLaunchState.Launch) {
+                bottomBarState.value = bottomBar.state
+                content.clearTopBarFlow()
             }
         }
     }

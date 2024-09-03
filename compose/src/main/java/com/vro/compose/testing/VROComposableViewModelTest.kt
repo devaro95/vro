@@ -114,7 +114,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
         runTest {
             withTimeoutOrNull(5000) {
                 viewModel.oneTime.firstOrNull()?.let {
-                    assertEquals((it as VROOneTimeState.Launch).id, id)
+                    assertEquals((it as VROSingleLaunchState.Launch).id, id)
                 }
             } ?: throw MissingMethodInvocationException("updateDialogState not being called with this type")
         }
