@@ -1,6 +1,7 @@
 package com.sampleapp.ui.home
 
 import com.sampleapp.ui.base.SampleBaseViewModel
+import com.sampleapp.ui.detail.SampleDetailState
 import com.sampleapp.ui.home.SampleHomeEvents.ActivityFragment
 import com.sampleapp.ui.home.SampleHomeEvents.BottomSheetDismiss
 import com.sampleapp.ui.home.SampleHomeEvents.Detail
@@ -16,7 +17,8 @@ import com.sampleapp.ui.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.ui.main.SampleDestinations
 import com.sampleapp.ui.main.SampleDestinations.ActivityFragmentNavigation
 import com.sampleapp.ui.main.SampleDestinations.BottomSheetNavigation
-import com.vro.state.VRODialogState
+import com.sampleapp.ui.main.SampleDestinations.DetailNavigation
+import com.vro.state.VRODialogData
 
 class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinations, SampleHomeEvents>() {
 
@@ -39,18 +41,12 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
-    override fun onStart() {
-        updateScreen {
-            copy(text = FIRST_TEXT)
-        }
-    }
-
     private fun onActionShowNavigationBottomSheetClick() {
         navigate(BottomSheetNavigation)
     }
 
     private fun onActionShowBottomSheetClick() {
-        updateDialog(VRODialogState(BOTTOM_SHEET))
+        updateDialog(VRODialogData(BOTTOM_SHEET))
     }
 
     private fun onActionShowSimpleDialogClick() {
@@ -59,7 +55,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     private fun onActionShowSimpleDialogWithViewModelClick() {
         updateDialog(
-            VRODialogState(SIMPLE_VIEW_MODEL_DIALOG)
+            VRODialogData(SIMPLE_VIEW_MODEL_DIALOG)
         )
     }
 
@@ -90,7 +86,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onActionDetailNavigationClick() {
-        navigate(SampleDestinations.DetailNavigation)
+        navigate(DetailNavigation(state = SampleDetailState.INITIAL.copy(text = "Detail class nav starter")))
     }
 
     private fun onVmDialogDismiss() {

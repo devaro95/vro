@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import androidx.annotation.CallSuper
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
 import com.vro.fragment.VROViewModel
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VRONavigator
-import com.vro.state.VRODialogState
+import com.vro.state.VRODialogData
 import com.vro.state.VROState
 import com.vro.state.VROStepper.VRODialogStep
+import com.vro.state.VROStepper.VROErrorStep
 import com.vro.state.VROStepper.VROStateStep
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ abstract class VROActivity<
         VM : VROViewModel<S, D, E>,
         D : VRODestination,
         E : VROEvent,
-        > : VROInjectionActivity<S, VM, D, E>() {
+        > : VROActivityInjection<S, VM, D, E>() {
 
     abstract fun createViewBinding(inflater: LayoutInflater): VB
 
@@ -45,24 +46,27 @@ abstract class VROActivity<
                 when (stepper) {
                     is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
                     is VRODialogStep -> onLoadDialog(stepper.dialogState)
+                    is VROErrorStep -> activityBinding.onError(stepper.error)
                     else -> Unit
                 }
             }
         }
 
-        viewModel.errorState.observe(this) {
-            activityBinding.onError(it)
-        }
-
-        viewModel.navigationState.observe(this) {
-            if (it.navigateBack) navigator.navigateBack(it.backResult)
-            else it.destination?.let { destination -> navigator.navigate(destination) }
+        lifecycleScope.launch {
+            viewModel.getNavigationState().collect {
+                it?.destination?.let { destination ->
+                    if (!destination.isNavigated) {
+                        navigator.navigate(destination)
+                        destination.setNavigated()
+                    }
+                } ?: navigator.navigateBack(it?.backResult)
+            }
         }
     }
 
     abstract fun VB.onError(error: Throwable)
 
-    abstract fun onLoadDialog(data: VRODialogState)
+    abstract fun onLoadDialog(data: VRODialogData)
 
     abstract fun onViewUpdate(binding: VB, data: S)
 

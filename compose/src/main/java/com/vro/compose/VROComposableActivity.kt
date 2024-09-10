@@ -61,8 +61,8 @@ abstract class VROComposableActivity : ComponentActivity() {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
-        val topBarState = remember { mutableStateOf<VROTopBarState?>(VROTopBarState()) }
-        val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(VROBottomBarState()) }
+        val topBarState = remember { mutableStateOf<VROTopBarState?>(null) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(null) }
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,

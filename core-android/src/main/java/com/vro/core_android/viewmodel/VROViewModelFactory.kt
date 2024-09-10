@@ -1,4 +1,4 @@
-package com.vro.fragment
+package com.vro.core_android.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

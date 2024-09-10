@@ -1,0 +1,59 @@
+plugins {
+    id 'maven-publish'
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+}
+
+apply from: '../gradleConfig/configuration.gradle'
+
+android {
+    compileSdkVersion compilation.compileSdkVersion
+
+    defaultConfig {
+        aarMetadata {
+            minCompileSdk = compilation.minSdkVersion
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    buildFeatures {
+        compose true
+    }
+    namespace 'com.vro'
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = jitpack.groupId
+            version = jitpack.version
+            artifactId = 'vro-core-android'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}
+
+dependencies {
+    api(project(":core"))
+    api(project(":common"))
+
+    implementation(libs.navigation.ui)
+    implementation(libs.navigation.fragment)
+    implementation(libs.compose.runtime)
+    implementation(libs.koin.android)
+    implementation(libs.junit)
+    implementation(libs.mockito.inline)
+    implementation(libs.mockito.core)
+    implementation(libs.coroutines.test)
+    implementation(libs.coroutines.core)
+    implementation(libs.arch.core)
+}

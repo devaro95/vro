@@ -4,9 +4,9 @@ import com.vro.constants.EMPTY_STRING
 import com.vro.state.VROState
 
 data class SampleDetailState(
-    val userId: String,
+    val text: String,
 ) : VROState {
     companion object {
-        val INITIAL = SampleDetailState(userId = EMPTY_STRING)
+        val INITIAL = SampleDetailState(text = EMPTY_STRING)
     }
 }

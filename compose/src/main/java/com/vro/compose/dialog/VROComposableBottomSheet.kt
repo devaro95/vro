@@ -10,6 +10,7 @@ import com.vro.compose.screen.InitializeLifecycleObserver
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
+import com.vro.state.VROStepper.VROSkeletonStep
 import com.vro.state.VROStepper.VROStateStep
 
 @Composable
@@ -42,7 +43,7 @@ internal fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEven
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
             onCreate = { viewModel.setInitialState(initialState) },
-            onStart = { viewModel.startViewModel() },
+            onStart = { viewModel.onStart() },
             onResume = { viewModel.onResume() },
         )
         screenLifecycle.addObserver(observer)
@@ -50,6 +51,9 @@ internal fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEven
             screenLifecycle.removeObserver(observer)
         }
     }
-    val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value
-    if (stepper is VROStateStep) content.ComposableContainer(stepper.state, viewModel, onDismiss)
+    when (val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value) {
+        is VROSkeletonStep -> content.ComposableSkeleton()
+        is VROStateStep -> content.ComposableContainer(stepper.state, viewModel, onDismiss)
+        else -> Unit
+    }
 }

@@ -1,7 +1,7 @@
 plugins {
     `maven-publish`
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":app"))
     implementation(project(":core"))
     implementation(project(":compose"))
+    implementation(project(":core-android"))
 
     implementation(libs.material)
     implementation(libs.material3)
