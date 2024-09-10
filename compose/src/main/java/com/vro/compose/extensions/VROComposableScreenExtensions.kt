@@ -16,6 +16,7 @@ import com.vro.compose.screen.*
 import com.vro.compose.states.VROBottomBarState
 import com.vro.compose.states.VROTopBarState
 import com.vro.constants.INT_ZERO
+import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
@@ -64,6 +65,24 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 }
 
 @Composable
+fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VROComposableFragmentScreen(
+    viewModel: VM,
+    navigator: VROFragmentNavigator<D>,
+    content: VROScreen<S, E>,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
+) {
+    VroComposableScreenContent(
+        viewModel = viewModel,
+        navController = navigator.navController,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState,
+        navigator = navigator,
+        content = content
+    )
+}
+
+@Composable
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
     navController: NavController,
@@ -85,6 +104,42 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         navController = navController,
     )
     InitializeBarsListeners(
+        content = content,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState
+    )
+    InitializeOneTimeListener(
+        viewModel = viewModel,
+        content = content
+    )
+    InitializeNavigatorListener(
+        viewModel = viewModel,
+        navigator = navigator
+    )
+    InitializeStepperListener(
+        viewModel = viewModel,
+        content = content,
+        screenLifecycle = screenLifecycle
+    )
+}
+
+@Composable
+internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
+    viewModel: VM,
+    navController: NavController,
+    navigator: VROFragmentNavigator<D>,
+    content: VROScreen<S, E>,
+    topBarState: MutableState<VROTopBarState?>,
+    bottomBarState: MutableState<VROBottomBarState?>,
+) {
+    content.context = LocalContext.current
+    content.eventListener = viewModel
+    BackHandler(true) { viewModel.onBackSystem() }
+    val screenLifecycle = LocalLifecycleOwner.current.lifecycle
+    InitializeLifecycleObserver(
+        viewModel = viewModel,
+        screenLifecycle = screenLifecycle,
+        navController = navController,
         content = content,
         topBarState = topBarState,
         bottomBarState = bottomBarState

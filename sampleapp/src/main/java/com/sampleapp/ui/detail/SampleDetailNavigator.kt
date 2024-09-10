@@ -14,7 +14,7 @@ class SampleDetailNavigator(
     override fun navigate(destination: SampleDestinations) {
         when (destination) {
             SampleDestinations.BottomSheetNavigation -> Unit
-            SampleDestinations.DetailNavigation -> Unit
+            is SampleDestinations.DetailNavigation -> Unit
             SampleDestinations.HomeNavigation -> Unit
             SampleDestinations.ProfileNavigation -> navigateToScreen(SampleProfileScreen())
             SampleDestinations.ActivityFragmentNavigation -> Unit

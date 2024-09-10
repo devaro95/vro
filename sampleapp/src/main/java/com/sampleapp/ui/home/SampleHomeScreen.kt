@@ -22,7 +22,7 @@ import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.states.VROBottomBarState
 import com.vro.compose.utils.vroVerticalScroll
 import com.vro.constants.INT_ZERO
-import com.vro.state.VRODialogState
+import com.vro.state.VRODialogData
 import org.koin.androidx.compose.koinViewModel
 
 class SampleHomeScreen(
@@ -119,7 +119,7 @@ class SampleHomeScreen(
     }
 
     @Composable
-    override fun OnDialog(data: VRODialogState) {
+    override fun OnDialog(data: VRODialogData) {
         when (data.type) {
             SIMPLE_VIEW_MODEL_DIALOG -> VROComposableDialog(
                 viewModel = { koinViewModel<SampleVMDialogViewModel>() },

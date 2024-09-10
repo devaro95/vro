@@ -1,44 +1,49 @@
 package com.vro.compose
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.CallSuper
+import android.view.*
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.navigation.fragment.findNavController
-import com.vro.compose.screen.VROFragmentScreen
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.material.*
+import com.vro.compose.components.VroTopBar
+import com.vro.compose.extensions.VROComposableFragmentScreen
+import com.vro.compose.screen.VROScreen
+import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROTopBarState
+import com.vro.core_android.fragment.VROFragmentInjection
+import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.event.VROEvent
-import com.vro.fragment.VROFragmentBuilder
-import com.vro.fragment.VROInjectionFragment
-import com.vro.fragment.VROViewModel
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
-import com.vro.navigation.VROFragmentNavigator.Companion.NAVIGATION_STATE
-import com.vro.state.VROState
+import com.vro.state.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 abstract class VROComposableFragment<
-        VM : VROViewModel<S, D, E>,
+        VM : VROComposableViewModel<S, D, E>,
         S : VROState,
         D : VRODestination,
-        SC : VROFragmentScreen<S, D, E>,
+        SC : VROScreen<S, E>,
         E : VROEvent,
-        >
-    : VROInjectionFragment<VM>(), VROFragmentBuilder<VM, S, D, E> {
+        > : VROFragmentInjection<VM>() {
 
-    override val state: S? by lazy { restoreArguments() }
+    abstract val navigator: VROFragmentNavigator<D>
 
     open val theme: VROComposableTheme? = null
 
-    @Suppress("UNCHECKED_CAST")
-    private fun restoreArguments(): S? = arguments?.getSerializable(NAVIGATION_STATE) as? S
+    private lateinit var navController: NavController
 
     @Composable
     abstract fun composableView(): SC
@@ -60,10 +65,21 @@ abstract class VROComposableFragment<
         }
     }
 
-    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeState(viewModel, this)
+        setObservers(viewModel, this)
+    }
+
+    private fun setObservers(viewModel: VM, fragment: Fragment) {
+        fragment.lifecycleScope.launch {
+            viewModel.stepper.collectLatest { stepper ->
+                when (stepper) {
+                    is VROStepper.VRODialogStep -> onLoadDialog(stepper.dialogState)
+                    is VROStepper.VROErrorStep -> onError(stepper.error)
+                    else -> Unit
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -76,19 +92,62 @@ abstract class VROComposableFragment<
             setContent {
                 theme?.also {
                     CreateTheme(it.lightColors, it.darkColors, it.typography) {
-                        composableView().CreateScreen(viewModel)
+                        Initialize(backgroundColor = MaterialTheme.colorScheme.background)
                     }
                 } ?: run {
-                    composableView().CreateScreen(viewModel)
+                    Initialize()
                 }
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onViewCreatedVro(viewModel, findNavController(), viewLifecycleOwner)
+    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @Composable
+    fun Initialize(
+        backgroundColor: Color? = null,
+    ) {
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val navController = rememberNavController(bottomSheetNavigator)
+        this.navController = navController
+        val topBarState = remember { mutableStateOf<VROTopBarState?>(null) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(null) }
+        ModalBottomSheetLayout(
+            modifier = Modifier.fillMaxSize(),
+            bottomSheetNavigator = bottomSheetNavigator,
+            sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
+        ) {
+            Scaffold(
+                containerColor = backgroundColor ?: Color.Transparent,
+                topBar = { topBarState.value?.let { VroTopBar(state = it) } },
+                bottomBar = { bottomBarState.value?.let { BottomBar(it.selectedItem) } }
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            top = innerPadding.calculateTopPadding(),
+                            bottom = if (bottomBarState.value == null) 0.dp
+                            else innerPadding.calculateBottomPadding()
+                        )
+                        .fillMaxSize()
+                ) {
+                    VROComposableFragmentScreen(
+                        viewModel = viewModel,
+                        navigator = navigator,
+                        topBarState = topBarState,
+                        bottomBarState = bottomBarState,
+                        content = composableView()
+                    )
+                }
+            }
+        }
     }
+
+    open fun onLoadDialog(data: VRODialogData) = Unit
+
+    open fun onError(error: Throwable) = Unit
+
+    @Composable
+    open fun BottomBar(selectedItem: Int) = Unit
 
     override fun onResume() {
         super.onResume()

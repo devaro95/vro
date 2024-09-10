@@ -1,48 +1,51 @@
 package com.vro.dialog
 
 import androidx.lifecycle.ViewModel
+import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
+import com.vro.event.VROEvent
+import com.vro.event.VROEventListener
+import com.vro.navigation.VROBackResult
+import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
-import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
-abstract class VRODialogViewModel<S : VROState> : ViewModel() {
+abstract class VRODialogViewModel<S : VROState, E : VROEvent> : ViewModel(), VROEventListener<E> {
 
     abstract val initialState: S
 
-    private lateinit var viewState: S
+    private var screenState: S by VroStateDelegate { initialState }
 
-    private val concurrencyManager = VROConcurrencyManager()
+    private val observableStepper = createStepperSharedFlow<S>()
 
-    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
-    val state: Flow<S> = observableState
+    private var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
 
-    private fun createInitialState() {
-        if (!this::viewState.isInitialized) {
-            viewState = initialState
-        }
+    fun checkDataState(): S = screenState
+
+    open fun onStart() = Unit
+
+    internal fun setInitialState(state: S) {
+        screenState = state
     }
 
-    open fun initialize() {
-        createInitialState()
+    fun updateScreen(changeStateFunction: S.() -> S) {
+        screenState = changeStateFunction.invoke(screenState)
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
-    fun getState() = viewState
-
-    fun updateDataState(changeStateFunction: S.() -> S) {
-        viewState = changeStateFunction.invoke(viewState)
-        observableState.tryEmit(viewState)
+    fun updateScreen() {
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
-        viewState = changeStateFunction.invoke(viewState)
+        screenState = changeStateFunction.invoke(screenState)
+    }
+
+    open fun onResume() {
+        updateState { screenState }
     }
 
     fun <T> executeCoroutine(
@@ -51,4 +54,6 @@ abstract class VRODialogViewModel<S : VROState> : ViewModel() {
     ): MainUseCaseResult<T> {
         return MainUseCaseResult(concurrencyManager, fullException, action)
     }
+
+    override fun eventBack(result: VROBackResult?) = Unit
 }

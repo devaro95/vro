@@ -4,18 +4,18 @@ import com.sampleapp.dialog.SampleSimpleDialogData
 import com.vro.compose.VROComposableViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
-import com.vro.state.VRODialogState
+import com.vro.state.VRODialogData
 import com.vro.state.VROState
 
 abstract class SampleBaseViewModel<S : VROState, D : VRODestination, E : VROEvent> : VROComposableViewModel<S, D, E>() {
 
     fun showLoading() {
-        updateDialog(VRODialogState(DIALOG_LOADING))
+        updateDialog(VRODialogData(DIALOG_LOADING))
     }
 
     fun showSimpleDialog() {
         updateDialog(
-            VRODialogState(
+            VRODialogData(
                 DIALOG_SIMPLE,
                 SampleSimpleDialogData(
                     onButtonClick = ::hideSimpleDialog

@@ -11,7 +11,7 @@ import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VROBackResult
-import com.vro.state.VRODialogState
+import com.vro.state.VRODialogData
 import com.vro.state.VROState
 import kotlinx.coroutines.flow.Flow
 
@@ -75,7 +75,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
     abstract fun ScreenPreview()
 
     @Composable
-    open fun OnDialog(data: VRODialogState) = Unit
+    open fun OnDialog(data: VRODialogData) = Unit
 
     @Composable
     open fun OnError(error: Throwable, data: Any?) = Unit

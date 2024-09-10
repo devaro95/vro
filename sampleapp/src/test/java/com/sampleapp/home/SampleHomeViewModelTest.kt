@@ -16,16 +16,17 @@ import com.sampleapp.ui.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.FIRST_TEXT
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.ONE_TIME_LAUNCH
+import com.sampleapp.ui.home.SampleHomeViewModel.Companion.SECOND_TEXT
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.SIMPLE_VIEW_MODEL_DIALOG
 import com.sampleapp.ui.main.SampleDestinations.ActivityFragmentNavigation
 import com.sampleapp.ui.main.SampleDestinations.BottomSheetNavigation
 import com.sampleapp.ui.main.SampleDestinations.DetailNavigation
 import com.sampleapp.ui.main.SampleDestinations.ProfileNavigation
-import com.vro.compose.testing.VROComposableViewModelTest
+import com.vro.core_android.testing.VROViewModelTest
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, SampleHomeViewModel, SampleHomeEvents>() {
+class SampleHomeViewModelTest : VROViewModelTest<SampleHomeState, SampleHomeViewModel, SampleHomeEvents>() {
 
     override fun onSetupInitialState() = SampleHomeState.INITIAL
 
@@ -48,7 +49,7 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
     @Test
     fun `DetailNavigation Event should navigate to DetailNavigation`() {
         event(Detail)
-        verifyNavigation(DetailNavigation)
+        verifyNavigation(DetailNavigation::class)
     }
 
     @Test
@@ -91,7 +92,7 @@ class SampleHomeViewModelTest : VROComposableViewModelTest<SampleHomeState, Samp
     fun `UpdateText Event should update screen state`() {
         event(UpdateText)
         getDataState().also {
-            assertEquals(FIRST_TEXT, it.text)
+            assertEquals(SECOND_TEXT, it.text)
         }
     }
 
