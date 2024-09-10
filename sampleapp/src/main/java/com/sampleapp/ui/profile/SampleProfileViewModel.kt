@@ -3,6 +3,7 @@ package com.sampleapp.ui.profile
 import com.sampleapp.ui.base.SampleBaseViewModel
 import com.sampleapp.ui.main.SampleDestinations
 import com.sampleapp.ui.profile.SampleProfileNavStarter.Initialize
+import com.vro.compose.states.VROTopBarState
 import com.vro.navstarter.VRONavStarter
 
 class SampleProfileViewModel : SampleBaseViewModel<SampleProfileState, SampleDestinations, SampleProfileEvents>() {

@@ -1,5 +1,6 @@
 package com.vro.compose.states
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -9,8 +10,8 @@ import com.vro.constants.INT_ZERO
 
 data class VROTopBarState(
     val title: @Composable (() -> Unit)? = null,
-    val actionButton: VROTopBarButton? = null,
-    val navigationButton: VROTopBarButton? = null,
+    val actionButton: @Composable (RowScope.() -> Unit)? = null,
+    val navigationButton: @Composable (() -> Unit)? = null,
     val height: Dp? = null,
     val background: Color? = null,
 ) {
