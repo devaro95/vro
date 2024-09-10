@@ -4,25 +4,22 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
-import com.vro.compose.extensions.getNavParamState
 import com.vro.compose.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.*
+import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
-import com.vro.navigation.VROBackResult
-import com.vro.navigation.VRODestination
+import com.vro.navigation.*
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
-import java.io.Serializable
 
 @Composable
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeNavigatorListener(
     viewModel: VM,
-    navigator: VROComposableNavigator<D>,
+    navigator: VRONavigator<D>,
 ) {
     LaunchedEffect(key1 = Unit) {
-        viewModel.navigationState.collect {
+        viewModel.getNavigationState().collect {
             it?.destination?.let { destination ->
                 if (!destination.isNavigated) {
                     navigator.navigate(destination)
@@ -39,8 +36,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
 ) {
     LaunchedEffect(key1 = Unit) {
-        viewModel.oneTime.collectLatest { oneTime ->
-            if (oneTime is VROSingleLaunchState.Launch) {
+        viewModel.getOneTimeEvents().collectLatest { oneTime ->
+            if (oneTime is VROOneTimeState.Launch) {
                 content.oneTimeHandler(oneTime.id, oneTime.state)
                 viewModel.clearOneTime()
             }
@@ -107,14 +104,12 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
         val observer = createLifecycleEventObserver(
             onCreate = {
                 content.configureScaffold(topBarState, bottomBarState)
-                viewModel.onCreate(getNavParamState(navController.currentDestination?.route.toString()))
+                viewModel.onCreate(getStarterParam(navController.currentDestination?.id.toString()))
             },
-            onStart = { viewModel.startViewModel() },
+            onStart = { viewModel.onStart() },
             onResume = {
-                val savedBackState = navController.currentBackStackEntry?.savedStateHandle
-                savedBackState?.getLiveData<Serializable>(VROComposableNavigator.NAVIGATION_BACK_STATE)?.value?.let {
-                    viewModel.onNavResult(it as VROBackResult)
-                    savedBackState.remove<Serializable>(VROComposableNavigator.NAVIGATION_BACK_STATE)
+                getResultParam(navController.currentDestination?.id.toString())?.let {
+                    viewModel.onNavResult(it)
                 }
                 viewModel.onResume()
             },

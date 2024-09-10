@@ -1,19 +1,56 @@
 package com.sampleapp.ui.samplefragment
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.sampleapp.R
+import com.sampleapp.topbar.sampleBackToolbar
+import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents.*
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.screen.VROFragmentScreen
+import com.vro.compose.screen.VROScreen
+import com.vro.compose.states.VROTopBarState
 
 class SampleComposableFragmentScreen :
-    VROFragmentScreen<SampleComposableFragmentState, SampleComposableFragmentDestinations, SampleComposableFragmentEvents>() {
+    VROScreen<SampleComposableFragmentState, SampleComposableFragmentEvents>() {
+
+    override fun setTopBar() = sampleBackToolbar(
+        title = context.getString(R.string.profile_toolbar),
+        onNavigation = { navigateBack() }
+    )
 
     @Composable
     override fun ScreenContent(state: SampleComposableFragmentState) {
-        Column {
-            Text(text = "This is a Composable Fragment Screen")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { navigateBack() }
+            ) {
+                Text(text = "Navigate Back")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(Update) }
+            ) {
+                Text(text = state.text)
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(NavigateDestination) }
+            ) {
+                Text(text = "Navigate To Composable Destination")
+            }
         }
     }
 

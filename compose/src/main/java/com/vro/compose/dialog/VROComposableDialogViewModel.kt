@@ -9,7 +9,6 @@ import com.vro.navigation.VROBackResult
 import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 abstract class VROComposableDialogViewModel<S : VROState, E : VROEvent> : ViewModel(), VROEventListener<E> {
@@ -22,23 +21,10 @@ abstract class VROComposableDialogViewModel<S : VROState, E : VROEvent> : ViewMo
 
     internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
-    internal var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
-
-    private val observableState: MutableSharedFlow<S> = MutableSharedFlow(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    val state: Flow<S> = observableState
+    private var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
 
     internal fun setInitialState(initialState: S? = null) {
         initialState?.let { screenState = it }
-    }
-
-    internal fun startViewModel() {
-        executeCoroutine {
-            onStart()
-        }
     }
 
     open fun onStart() = Unit
