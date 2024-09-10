@@ -1,4 +1,4 @@
-package com.vro.testing
+package com.vro.core_android.testing
 
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager

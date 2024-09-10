@@ -25,7 +25,7 @@ class SampleDetailScreen : SampleBaseScreen<SampleDetailState, SampleDetailEvent
                 .padding(horizontal = 16.dp)
                 .padding(top = 32.dp)
         ) {
-            Text(text = "This is the detail screen")
+            Text(text = state.text)
         }
     }
 

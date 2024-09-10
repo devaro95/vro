@@ -1,7 +1,7 @@
-package com.vro.compose.testing
+package com.vro.core_android.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.compose.VROComposableViewModel
+import com.vro.core_android.viewmodel.VROViewModelBasics
 import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.navigation.VRODestination
@@ -21,7 +21,7 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException
 import java.io.Serializable
 import kotlin.reflect.KClass
 
-abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewModel<S, *, E>, E : VROEvent> {
+abstract class VROViewModelTest<S : VROState, VM : VROViewModelBasics<S, *, E>, E : VROEvent> {
 
     lateinit var viewModel: VM
 
@@ -93,7 +93,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
     fun verifyNavigation(destination: VRODestination) {
         runTest {
             withTimeoutOrNull(5000) {
-                viewModel.navigationState.firstOrNull()?.destination?.let {
+                viewModel.getNavigationState().firstOrNull()?.destination?.let {
                     assertEquals(it, destination)
                 }
             } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
@@ -103,7 +103,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
     fun verifyNavigation(destination: KClass<*>) {
         runTest {
             withTimeoutOrNull(5000) {
-                viewModel.navigationState.firstOrNull()?.destination?.let {
+                viewModel.getNavigationState().firstOrNull()?.destination?.let {
                     assertEquals(it::class, destination)
                 }
             } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
@@ -113,8 +113,8 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
     fun verifyOneTime(id: Int) {
         runTest {
             withTimeoutOrNull(5000) {
-                viewModel.oneTime.firstOrNull()?.let {
-                    assertEquals((it as VROSingleLaunchState.Launch).id, id)
+                viewModel.getOneTimeEvents().firstOrNull()?.let {
+                    assertEquals((it as VROOneTimeState.Launch).id, id)
                 }
             } ?: throw MissingMethodInvocationException("updateDialogState not being called with this type")
         }
@@ -123,7 +123,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
     fun verifyNoNavigation(destination: KClass<*>) {
         runTest {
             withTimeoutOrNull(5000) {
-                viewModel.navigationState.first()?.destination?.let {
+                viewModel.getNavigationState().first()?.destination?.let {
                     assertNotEquals(it::class, destination)
                 }
             } ?: throw MissingMethodInvocationException("navigate not being called with this destination")
@@ -133,7 +133,7 @@ abstract class VROComposableViewModelTest<S : VROState, VM : VROComposableViewMo
     fun verifyNavigateBack(result: Serializable? = null) {
         runTest {
             withTimeoutOrNull(5000) {
-                viewModel.navigationState.firstOrNull()?.let {
+                viewModel.getNavigationState().firstOrNull()?.let {
                     assertNull(it.destination)
                     it.backResult?.let { backResult ->
                         assertEquals(backResult, result)

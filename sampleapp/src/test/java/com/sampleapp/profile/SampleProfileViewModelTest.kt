@@ -1,11 +1,11 @@
 package com.sampleapp.profile
 
 import com.sampleapp.ui.profile.*
-import com.vro.compose.testing.VROComposableViewModelTest
+import com.vro.core_android.testing.VROViewModelTest
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-class SampleProfileViewModelTest : VROComposableViewModelTest<SampleProfileState, SampleProfileViewModel, SampleProfileEvents>() {
+class SampleProfileViewModelTest : VROViewModelTest<SampleProfileState, SampleProfileViewModel, SampleProfileEvents>() {
 
     override fun onSetupInitialState() = SampleProfileState.INITIAL
 

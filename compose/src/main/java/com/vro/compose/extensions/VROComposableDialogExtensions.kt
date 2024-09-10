@@ -21,7 +21,6 @@ fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent> VROCom
     VroComposableDialogContent(
         viewModel = viewModel.invoke(),
         content = content,
-        initialState = initialState,
         onDismiss = onDismiss,
         dismissOnBackPress = dismissOnBackPress,
         dismissOnClickOutside = dismissOnClickOutside,
@@ -32,7 +31,6 @@ fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent> VROCom
 private fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent> VroComposableDialogContent(
     viewModel: VM,
     content: VROComposableDialogContent<S, E>,
-    initialState: S? = null,
     onDismiss: () -> Unit,
     dismissOnBackPress: Boolean,
     dismissOnClickOutside: Boolean,
@@ -40,8 +38,7 @@ private fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
-            onCreate = { viewModel.setInitialState(initialState) },
-            onStart = { viewModel.startViewModel() },
+            onStart = { viewModel.onStart() },
             onResume = { viewModel.onResume() }
         )
         screenLifecycle.addObserver(observer)
@@ -53,9 +50,6 @@ private fun <VM : VROComposableDialogViewModel<S, E>, S : VROState, E : VROEvent
         is VROStepper.VROSkeletonStep -> content.ComposableDialogSkeleton()
         is VROStepper.VROStateStep -> content.CreateDialog(stepper.state, viewModel, onDismiss, dismissOnBackPress, dismissOnClickOutside)
         is VROStepper.VROErrorStep -> content.OnError(stepper.error, stepper.data)
-        is VROStepper.VRODialogStep -> {
-            content.CreateDialog(stepper.state, viewModel, onDismiss, dismissOnBackPress, dismissOnClickOutside)
-            content.OnDialog(stepper.dialogState)
-        }
+        else -> Unit
     }
 }

@@ -1,4 +1,3 @@
-//file:noinspection DependencyNotationArgument
 plugins {
     id 'maven-publish'
     alias(libs.plugins.kotlin.android)
@@ -45,7 +44,9 @@ publishing {
 
 dependencies {
     api(project(":core"))
+    api(project(":core-android"))
     api(project(":common"))
+
     implementation(libs.core)
     implementation(libs.arch.core)
     implementation(libs.app.compat)
@@ -53,7 +54,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.material3)
     implementation(libs.material3.size)
-    implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
     implementation(libs.navigation.fragment)
