@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.*
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.vro.core_android.fragment.VROFragmentInjection
+import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.navigation.VRONavigator.Companion.NAVIGATION_STATE
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.*
 import com.vro.state.VROStepper.VROStateStep
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,6 +43,11 @@ abstract class VROFragment<
 
     abstract fun VB.oneTimeHandler(id: Int, state: S)
 
+    private lateinit var observer: LifecycleEventObserver
+    private lateinit var stepperFlow: Job
+    private lateinit var navigationFLow: Job
+    private lateinit var oneTimeFlow: Job
+
     private fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,7 +57,7 @@ abstract class VROFragment<
     }
 
     private fun setViewBindingObservers() {
-        lifecycleScope.launch {
+        stepperFlow = lifecycleScope.launch {
             viewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStepper.VRODialogStep -> onLoadDialog(stepper.dialogState)
@@ -59,8 +67,8 @@ abstract class VROFragment<
                 }
             }
         }
-        lifecycleScope.launch {
-            viewModel.getNavigationState().collect {
+        navigationFLow = lifecycleScope.launch {
+            viewModel.getNavigationState().collectLatest {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
@@ -69,7 +77,7 @@ abstract class VROFragment<
                 } ?: navigator.navigateBack(it?.backResult)
             }
         }
-        lifecycleScope.launch {
+        oneTimeFlow = lifecycleScope.launch {
             viewModel.getOneTimeEvents().collectLatest { oneTime ->
                 if (oneTime is VROOneTimeState.Launch) {
                     binding.oneTimeHandler(oneTime.id, oneTime.state)
@@ -86,10 +94,25 @@ abstract class VROFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeState(viewModel, this)
-        viewModel.onNavParam(getStarterParam(findNavController().currentDestination?.id.toString()))
-        lifecycleScope.launch {
-            viewModel.onStart()
-        }
+        observer = createLifecycleEventObserver(
+            onCreate = {
+                viewModel.onNavParam(getStarterParam(findNavController().currentDestination?.id.toString()))
+            },
+            onStart = {
+                viewModel.onStart()
+            },
+            onResume = {
+                viewModel.onResume()
+                setViewBindingObservers()
+            },
+            onPause = {
+                cancelFlows()
+            },
+            onDestroy = {
+                lifecycle.removeObserver(observer)
+            }
+        )
+        lifecycle.addObserver(observer)
     }
 
     override fun onCreateView(
@@ -106,12 +129,6 @@ abstract class VROFragment<
         binding.onViewStarted()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-        setViewBindingObservers()
-    }
-
     fun event(event: E) {
         viewModel.eventListener(event)
     }
@@ -121,7 +138,6 @@ abstract class VROFragment<
     }
 
     private fun initializeState(viewModel: VM, fragment: Fragment) {
-        setObservers(viewModel, fragment)
         viewModel.setInitialState(state)
     }
 
@@ -129,5 +145,11 @@ abstract class VROFragment<
         getResultParam(findNavController().currentDestination?.id.toString())?.let {
             viewModel.onNavResult(it)
         }
+    }
+
+    private fun cancelFlows() {
+        stepperFlow.cancel()
+        navigationFLow.cancel()
+        oneTimeFlow.cancel()
     }
 }
