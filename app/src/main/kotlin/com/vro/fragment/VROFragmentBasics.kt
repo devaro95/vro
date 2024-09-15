@@ -15,15 +15,5 @@ interface VROFragmentBasics<VM : VROViewModel<S, D, E>, S : VROState, D : VRODes
 
     val state: S?
 
-    fun setObservers(viewModel: VM, fragment: Fragment) {
-        fragment.lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
-                if (stepper is VROStepper.VRODialogStep<S>) {
-                    onLoadDialog(stepper.dialogState)
-                }
-            }
-        }
-    }
-
     fun onLoadDialog(data: VRODialogData)
 }

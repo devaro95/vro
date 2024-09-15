@@ -5,7 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableViewModel
-import com.vro.compose.lifecycleevent.createLifecycleEventObserver
+import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.*
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
