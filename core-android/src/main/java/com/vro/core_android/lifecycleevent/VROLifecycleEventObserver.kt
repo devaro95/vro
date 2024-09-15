@@ -1,4 +1,4 @@
-package com.vro.compose.lifecycleevent
+package com.vro.core_android.lifecycleevent
 
 import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.LifecycleEventObserver

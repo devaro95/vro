@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.findNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.VROComposableFragmentScreen
@@ -88,7 +89,7 @@ abstract class VROComposableFragment<
         savedInstanceState: Bundle?,
     ): View {
         return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner))
             setContent {
                 theme?.also {
                     CreateTheme(it.lightColors, it.darkColors, it.typography) {
@@ -107,8 +108,7 @@ abstract class VROComposableFragment<
         backgroundColor: Color? = null,
     ) {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
-        val navController = rememberNavController(bottomSheetNavigator)
-        this.navController = navController
+        this.navController = this@VROComposableFragment.findNavController()
         val topBarState = remember { mutableStateOf<VROTopBarState?>(null) }
         val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(null) }
         ModalBottomSheetLayout(

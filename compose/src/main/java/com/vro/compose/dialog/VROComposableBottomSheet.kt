@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableViewModel
-import com.vro.compose.lifecycleevent.createLifecycleEventObserver
+import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.screen.InitializeLifecycleObserver
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
