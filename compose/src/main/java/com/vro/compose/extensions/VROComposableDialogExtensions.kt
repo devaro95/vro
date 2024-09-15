@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.vro.compose.dialog.VROComposableDialogContent
 import com.vro.compose.dialog.VROComposableDialogViewModel
-import com.vro.compose.lifecycleevent.createLifecycleEventObserver
+import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.event.VROEvent
 import com.vro.state.VROState
 import com.vro.state.VROStepper

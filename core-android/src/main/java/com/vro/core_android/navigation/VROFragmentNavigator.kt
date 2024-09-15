@@ -8,11 +8,11 @@ import com.vro.navigation.VRODestination
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
 
-abstract class VROFragmentNavigator<D : VRODestination>(
-    fragment: Fragment,
-    final override val activity: ComponentActivity = fragment.requireActivity(),
-    override val navController: NavController = fragment.findNavController(),
-) : VRONavigator<D> {
+abstract class VROFragmentNavigator<D : VRODestination>(fragment: Fragment) : VRONavigator<D> {
+
+    override val activity: ComponentActivity by lazy { fragment.requireActivity() }
+
+    override val navController: NavController by lazy { fragment.findNavController() }
 
     fun navigateWithAction(action: Int, starter: VRONavStarter? = null) {
         navController.navigate(action)
