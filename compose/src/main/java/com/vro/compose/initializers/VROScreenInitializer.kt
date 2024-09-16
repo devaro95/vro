@@ -1,10 +1,11 @@
-package com.vro.compose.screen
+package com.vro.compose.initializers
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableViewModel
+import com.vro.compose.screen.VROScreen
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.*
 import com.vro.core_android.navigation.VRONavigator

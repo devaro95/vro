@@ -9,8 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.dialog.bottomsheet.*
-import com.sampleapp.dialog.withviewmodel.SampleVMDialog
-import com.sampleapp.dialog.withviewmodel.SampleVMDialogViewModel
+import com.sampleapp.dialog.withviewmodel.*
 import com.sampleapp.ui.base.SampleBaseScreen
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.ONE_TIME_LAUNCH
@@ -125,6 +124,9 @@ class SampleHomeScreen(
                 viewModel = { koinViewModel<SampleVMDialogViewModel>() },
                 content = SampleVMDialog(),
                 onDismiss = { event(SampleHomeEvents.VmDialogDismiss) },
+                listener = object : SampleVMDialogListener {
+                    override fun hideDialog() = event(SampleHomeEvents.VmDialogDismiss)
+                }
             )
 
             BOTTOM_SHEET -> VroBottomSheet(

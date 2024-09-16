@@ -1,4 +1,4 @@
-package com.vro.dialog
+package com.vro.core_android.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
@@ -9,7 +9,7 @@ import com.vro.navigation.VROBackResult
 import com.vro.state.*
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.*
 
 abstract class VRODialogViewModel<S : VROState, E : VROEvent> : ViewModel(), VROEventListener<E> {
 
@@ -19,7 +19,7 @@ abstract class VRODialogViewModel<S : VROState, E : VROEvent> : ViewModel(), VRO
 
     private val observableStepper = createStepperSharedFlow<S>()
 
-    internal val stepper: SharedFlow<VROStepper<S>> = observableStepper
+    val stepper: SharedFlow<VROStepper<S>> = observableStepper
 
     private var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
 
@@ -27,8 +27,11 @@ abstract class VRODialogViewModel<S : VROState, E : VROEvent> : ViewModel(), VRO
 
     open fun onStart() = Unit
 
-    internal fun setInitialState(state: S) {
-        screenState = state
+    fun setInitialState(initialState: S? = null) {
+        initialState?.let {
+            screenState = it
+            updateScreen { screenState }
+        }
     }
 
     fun updateScreen(changeStateFunction: S.() -> S) {

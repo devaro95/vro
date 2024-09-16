@@ -8,10 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vro.compose.dialog.VROComposableBottomSheetContent
+import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.preview.VROMultiDevicePreview
 
-class SampleBottomSheet : VROComposableBottomSheetContent<SampleBottomSheetState, SampleBottomSheetEvents>() {
+class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomSheetState, SampleBottomSheetEvents>() {
 
     @Composable
     override fun ComposableContent(state: SampleBottomSheetState, dismiss: () -> Unit) {
