@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.sampleapp.dialog.withviewmodel.SampleVMDialogEvents.TextChange
 import com.vro.compose.dialog.VROComposableDialogContent
+import com.vro.compose.preview.VROLightMultiDevicePreview
 
 class SampleVMDialog : VROComposableDialogContent<SampleVMDialogState, SampleVMDialogEvents>() {
     @Composable
@@ -31,7 +32,7 @@ class SampleVMDialog : VROComposableDialogContent<SampleVMDialogState, SampleVMD
                 Text("Simple dialog")
                 Button(
                     modifier = Modifier.padding(top = 16.dp),
-                    onClick = dismiss,
+                    onClick = { (dialogListener as? SampleVMDialogListener)?.hideDialog() },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White
                     )
@@ -55,5 +56,11 @@ class SampleVMDialog : VROComposableDialogContent<SampleVMDialogState, SampleVMD
                 }
             }
         }
+    }
+
+    @VROLightMultiDevicePreview
+    @Composable
+    override fun ComposablePreview() {
+        ComposableContent(state = SampleVMDialogState.INITIAL, dismiss = {})
     }
 }

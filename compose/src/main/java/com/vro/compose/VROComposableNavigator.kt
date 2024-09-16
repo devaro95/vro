@@ -2,6 +2,7 @@ package com.vro.compose
 
 import androidx.navigation.NavController
 import com.vro.compose.dialog.VROComposableBottomSheetContent
+import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
 import com.vro.core_android.navigation.VRONavigator
@@ -33,7 +34,17 @@ abstract class VROComposableNavigator<D : VRODestination>(
     }
 
     fun openBottomSheet(
-        bottomSheet: VROComposableBottomSheetContent<*, *>,
+        bottomSheet: VROComposableViewModelBottomSheetContent<*, *>,
+        starter: VRONavStarter? = null,
+    ) {
+        navController.navigate(bottomSheet.destinationRoute())
+        starter?.let {
+            putStarterParam(navController.currentDestination?.id.toString(), it)
+        }
+    }
+
+    fun openBottomSheet(
+        bottomSheet: VROComposableBottomSheetContent<*>,
         starter: VRONavStarter? = null,
     ) {
         navController.navigate(bottomSheet.destinationRoute())

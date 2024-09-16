@@ -33,7 +33,7 @@ abstract class VROActivity<
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createViewBinding(layoutInflater).let {
+        createViewBinding(layoutInflater).also {
             activityBinding = it
             setContentView(it.root)
         }
