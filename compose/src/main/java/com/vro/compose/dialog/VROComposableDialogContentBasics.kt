@@ -1,5 +1,6 @@
 package com.vro.compose.dialog
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,11 +54,13 @@ abstract class VROComposableDialogContentBasics<S : VROState, E : VROEvent> {
     @Composable
     open fun ComposableSkeleton() = Unit
 
+    @SuppressLint("ComposableNaming")
     @Composable
-    open fun OnDialog(data: VRODialogData) = Unit
+    open fun onDialog(data: VRODialogData) = Unit
 
+    @SuppressLint("ComposableNaming")
     @Composable
-    open fun OnError(error: Throwable, data: Any?) = Unit
+    open fun onError(error: Throwable, data: Any?) = Unit
 
     fun event(event: E) {
         eventListener.eventListener(event)
