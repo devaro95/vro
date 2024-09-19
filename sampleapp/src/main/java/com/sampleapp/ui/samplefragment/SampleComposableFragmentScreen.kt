@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
 import com.sampleapp.topbar.sampleBackToolbar
-import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents.*
+import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents.NavigateDestination
+import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents.Update
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROTopBarState
 
 class SampleComposableFragmentScreen :
     VROScreen<SampleComposableFragmentState, SampleComposableFragmentEvents>() {

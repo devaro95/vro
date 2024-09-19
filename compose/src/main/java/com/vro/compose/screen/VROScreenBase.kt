@@ -1,7 +1,7 @@
 package com.vro.compose.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -53,7 +53,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
     @Composable
     internal fun ComposableScreenContainer(state: S) {
         screenState = state
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
             if (isTablet() && tabletDesignEnabled) {
@@ -74,11 +74,13 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
     @Composable
     abstract fun ScreenPreview()
 
+    @SuppressLint("ComposableNaming")
     @Composable
-    open fun OnDialog(data: VRODialogData) = Unit
+    open fun onDialog(data: VRODialogData) = Unit
 
+    @SuppressLint("ComposableNaming")
     @Composable
-    open fun OnError(error: Throwable, data: Any?) = Unit
+    open fun onError(error: Throwable, data: Any?) = Unit
 
     open fun oneTimeHandler(id: Int, state: S) = Unit
 

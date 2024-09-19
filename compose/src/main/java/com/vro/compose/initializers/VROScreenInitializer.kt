@@ -6,8 +6,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.screen.VROScreen
-import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.compose.states.*
+import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
 import com.vro.navigation.*
@@ -76,19 +76,20 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,
 ) {
-    val stepper =
-        viewModel.stepper.collectAsStateWithLifecycle(
-            initialValue = VROStepper.VROStateStep(viewModel.initialState),
-            lifecycle = screenLifecycle
-        ).value
-    when (stepper) {
-        is VROStepper.VROStateStep -> content.ComposableScreenContainer(stepper.state)
-        is VROStepper.VROSkeletonStep -> content.ComposableScreenSkeleton()
-        is VROStepper.VROErrorStep -> content.OnError(stepper.error, stepper.data)
-        is VROStepper.VRODialogStep -> {
-            content.ComposableScreenContainer(stepper.state)
-            content.OnDialog(stepper.dialogState)
-        }
+    val stepper = viewModel.stepper.collectAsStateWithLifecycle(
+        initialValue = VROStepper.VROStateStep(viewModel.initialState),
+        lifecycle = screenLifecycle
+    ).value
+
+    content.ComposableScreenContainer(stepper.state)
+    (stepper as? VROStepper.VRODialogStep)?.let {
+        content.onDialog(it.dialogState)
+    }
+    (stepper as? VROStepper.VROErrorStep)?.let {
+        content.onError(it.error, it.data)
+    }
+    (stepper as? VROStepper.VROSkeletonStep)?.let {
+        content.ComposableScreenSkeleton()
     }
 }
 
