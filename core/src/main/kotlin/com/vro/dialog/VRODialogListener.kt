@@ -1,5 +1,5 @@
 package com.vro.dialog
 
 interface VRODialogListener {
-    fun onBackPressed()
+    fun onBackPressed() = Unit
 }
