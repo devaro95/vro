@@ -36,11 +36,6 @@ abstract class VROViewModelBasics<S : VROState, D : VRODestination, E : VROEvent
 
     var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
 
-    open fun onCreate(navParam: VRONavStarter?) {
-        observableStepper.tryEmit(VROStateStep(initialState))
-        onNavParam(navParam)
-    }
-
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     open fun onStart() = Unit

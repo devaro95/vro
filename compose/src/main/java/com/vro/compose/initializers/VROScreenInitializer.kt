@@ -77,19 +77,20 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     screenLifecycle: Lifecycle,
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
-        initialValue = VROStepper.VROStateStep(viewModel.initialState),
+        initialValue = VROStepper.VROSkeletonStep(viewModel.initialState),
         lifecycle = screenLifecycle
     ).value
 
-    content.ComposableScreenContainer(stepper.state)
-    (stepper as? VROStepper.VRODialogStep)?.let {
-        content.onDialog(it.dialogState)
-    }
-    (stepper as? VROStepper.VROErrorStep)?.let {
-        content.onError(it.error, it.data)
-    }
-    (stepper as? VROStepper.VROSkeletonStep)?.let {
+    if (stepper is VROStepper.VROSkeletonStep) {
         content.ComposableScreenSkeleton()
+    } else {
+        content.ComposableScreenContainer(stepper.state)
+        (stepper as? VROStepper.VRODialogStep)?.let {
+            content.onDialog(it.dialogState)
+        }
+        (stepper as? VROStepper.VROErrorStep)?.let {
+            content.onError(it.error, it.data)
+        }
     }
 }
 
@@ -106,7 +107,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
         val observer = createLifecycleEventObserver(
             onCreate = {
                 content.configureScaffold(topBarState, bottomBarState)
-                viewModel.onCreate(getStarterParam(navController.currentDestination?.id.toString()))
+                viewModel.onNavParam(getStarterParam(navController.currentDestination?.id.toString()))
             },
             onStart = { viewModel.onStart() },
             onResume = {
