@@ -1,4 +1,4 @@
-package com.vro.compose.screen
+package com.vro.compose.initializers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

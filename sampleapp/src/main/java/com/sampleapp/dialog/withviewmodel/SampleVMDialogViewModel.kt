@@ -1,9 +1,9 @@
 package com.sampleapp.dialog.withviewmodel
 
-import com.vro.compose.dialog.VROComposableDialogViewModel
+import com.vro.core_android.viewmodel.VRODialogViewModel
 import com.vro.navigation.VROBackResult
 
-class SampleVMDialogViewModel : VROComposableDialogViewModel<SampleVMDialogState, SampleVMDialogEvents>() {
+class SampleVMDialogViewModel : VRODialogViewModel<SampleVMDialogState, SampleVMDialogEvents>() {
 
     override val initialState: SampleVMDialogState = SampleVMDialogState.INITIAL
 

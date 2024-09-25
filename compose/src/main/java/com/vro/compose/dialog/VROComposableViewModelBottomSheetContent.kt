@@ -8,11 +8,7 @@ import com.vro.event.VROEvent
 import com.vro.event.VROEventListener
 import com.vro.state.VROState
 
-abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROComposableDialogContentBasics<S, E>() {
-
-    open val dismissOnBackPress: Boolean = true
-
-    open val dismissOnClickOutside: Boolean = true
+abstract class VROComposableViewModelBottomSheetContent<S : VROState, E : VROEvent> : VROComposableDialogContentBasics<S, E>() {
 
     @Composable
     override fun CreateDialog(
@@ -22,14 +18,6 @@ abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROCompo
         onDismiss: () -> Unit,
     ) {
         super.CreateDialog(state, eventListener, listener, onDismiss)
-        Dialog(
-            onDismissRequest = onDismiss,
-            properties = DialogProperties(
-                dismissOnBackPress = dismissOnBackPress,
-                dismissOnClickOutside = dismissOnClickOutside
-            )
-        ) {
-            ComposableContent(state, onDismiss)
-        }
+        ComposableContent(state, onDismiss)
     }
 }

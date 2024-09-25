@@ -3,6 +3,7 @@ package com.vro.dialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.vro.core_android.viewmodel.VRODialogViewModel
 import com.vro.core_android.viewmodel.VROViewModelFactory
 import com.vro.event.VROEvent
 import com.vro.state.VROStepper
