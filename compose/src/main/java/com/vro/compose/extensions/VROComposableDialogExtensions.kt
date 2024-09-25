@@ -47,7 +47,7 @@ private fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroCompo
     when (val stepper = viewModel.stepper.collectAsState(VROStepper.VROStateStep(viewModel.initialState)).value) {
         is VROStepper.VROSkeletonStep -> content.ComposableDialogSkeleton()
         is VROStepper.VROStateStep -> content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
-        is VROStepper.VROErrorStep -> content.OnError(stepper.error, stepper.data)
+        is VROStepper.VROErrorStep -> content.onError(stepper.error, stepper.data)
         else -> Unit
     }
 }

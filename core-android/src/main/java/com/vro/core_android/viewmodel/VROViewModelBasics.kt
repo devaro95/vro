@@ -66,7 +66,7 @@ abstract class VROViewModelBasics<S : VROState, D : VRODestination, E : VROEvent
     }
 
     fun updateError(error: Throwable, data: Any? = null) {
-        observableStepper.tryEmit(VROErrorStep(error, data))
+        observableStepper.tryEmit(VROErrorStep(screenState, error, data))
     }
 
     fun updateOneTime(id: Int, state: S) {

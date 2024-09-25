@@ -102,6 +102,34 @@ class SampleHomeScreen(
             ) {
                 Text(text = "One Time Launch")
             }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+            ) {
+                Text(text = "One Time Launch")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+            ) {
+                Text(text = "One Time Launch")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+            ) {
+                Text(text = "One Time Launch")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+            ) {
+                Text(text = "One Time Launch")
+            }
         }
     }
 
@@ -118,7 +146,7 @@ class SampleHomeScreen(
     }
 
     @Composable
-    override fun OnDialog(data: VRODialogData) {
+    override fun onDialog(data: VRODialogData) {
         when (data.type) {
             SIMPLE_VIEW_MODEL_DIALOG -> VROComposableDialog(
                 viewModel = { koinViewModel<SampleVMDialogViewModel>() },
@@ -136,7 +164,7 @@ class SampleHomeScreen(
                 fullExpanded = true
             )
 
-            else -> super.OnDialog(data)
+            else -> super.onDialog(data)
         }
     }
 }
