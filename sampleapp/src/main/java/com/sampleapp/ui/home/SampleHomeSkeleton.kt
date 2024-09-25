@@ -1,6 +1,7 @@
 package com.sampleapp.ui.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,17 +24,18 @@ class SampleHomeSkeleton : VROSkeleton() {
                 .padding(top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            VROTextSkeleton(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                width = 500.dp,
-                skeletonBrush = vroSkeletonBrush(
-                    color = Skeleton
-                ),
-                height = 400.dp
-            )
-            Text(text = "Top Button Section")
+            repeat(4){
+                VROTextSkeleton(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clip(CircleShape),
+                    width = 100.dp,
+                    skeletonBrush = vroSkeletonBrush(
+                        color = Skeleton
+                    ),
+                    height = 35.dp
+                )
+            }
         }
     }
 
