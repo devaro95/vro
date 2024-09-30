@@ -41,6 +41,10 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
         }
     }
 
+    override fun onStart() {
+        updateScreen()
+    }
+
     private fun onActionShowNavigationBottomSheetClick() {
         navigate(BottomSheetNavigation)
     }

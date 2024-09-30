@@ -77,7 +77,10 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     screenLifecycle: Lifecycle,
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
-        initialValue = VROStepper.VROSkeletonStep(viewModel.initialState),
+        initialValue =
+        content.skeleton?.let {
+            VROStepper.VROSkeletonStep(viewModel.initialState)
+        } ?: VROStepper.VROStateStep(viewModel.initialState),
         lifecycle = screenLifecycle
     ).value
 
@@ -109,7 +112,9 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
                 content.configureScaffold(topBarState, bottomBarState)
                 viewModel.onNavParam(getStarterParam(navController.currentDestination?.id.toString()))
             },
-            onStart = { viewModel.onStart() },
+            onStart = {
+                viewModel.onStart()
+            },
             onResume = {
                 getResultParam(navController.currentDestination?.id.toString())?.let {
                     viewModel.onNavResult(it)
