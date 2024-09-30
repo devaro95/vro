@@ -109,7 +109,14 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
                 content.configureScaffold(topBarState, bottomBarState)
                 viewModel.onNavParam(getStarterParam(navController.currentDestination?.id.toString()))
             },
-            onStart = { viewModel.onStart() },
+            onStart = {
+                content.skeleton?.let {
+                    viewModel.onStart()
+                } ?: run {
+                    viewModel.updateScreen()
+                    viewModel.onStart()
+                }
+            },
             onResume = {
                 getResultParam(navController.currentDestination?.id.toString())?.let {
                     viewModel.onNavResult(it)
