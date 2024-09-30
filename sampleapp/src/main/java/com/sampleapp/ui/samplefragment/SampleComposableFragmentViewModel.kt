@@ -13,12 +13,6 @@ class SampleComposableFragmentViewModel :
 
     override val initialState: SampleComposableFragmentState = SampleComposableFragmentState.INITIAL
 
-    override fun onNavResult(result: VROBackResult) {
-        when(result.id){
-            100 -> Unit
-        }
-    }
-
     override fun eventListener(event: SampleComposableFragmentEvents) {
         when (event) {
             Update -> onUpdateButtonText()
