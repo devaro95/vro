@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -110,6 +111,6 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, 
         viewModel = viewModel,
         navController = navController
     )
-    val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value
-    if (stepper is VROStateStep) content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
+    val stepper = viewModel.stepper.collectAsStateWithLifecycle(VROStateStep(viewModel.initialState)).value
+    content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
 }
