@@ -93,7 +93,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     bottomBarState: MutableState<VROBottomBarState?>,
 ) {
     content.context = LocalContext.current
-    content.eventListener = viewModel
+    content.events = viewModel
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
@@ -122,6 +122,9 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         content = content,
         screenLifecycle = screenLifecycle
     )
+    InitializeEventsListener(
+        viewModel = viewModel
+    )
 }
 
 @Composable
@@ -134,7 +137,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     bottomBarState: MutableState<VROBottomBarState?>,
 ) {
     content.context = LocalContext.current
-    content.eventListener = viewModel
+    content.events = viewModel
+
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
@@ -157,5 +161,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         viewModel = viewModel,
         content = content,
         screenLifecycle = screenLifecycle
+    )
+    InitializeEventsListener(
+        viewModel = viewModel
     )
 }

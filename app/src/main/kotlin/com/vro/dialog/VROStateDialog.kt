@@ -45,8 +45,4 @@ abstract class VROStateDialog<S : VRODialogState, VB : ViewBinding, VM : VRODial
     }
 
     abstract fun VB.onError(error: Throwable)
-
-    fun event(event: E) {
-        viewModel.eventListener(event)
-    }
 }

@@ -3,8 +3,7 @@ package com.vro.core_android.viewmodel
 import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
-import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
+import com.vro.event.*
 import com.vro.navigation.*
 import com.vro.navstarter.VRONavStarter
 import com.vro.state.*
@@ -13,10 +12,9 @@ import com.vro.state.VROStepper.VROErrorStep
 import com.vro.state.VROStepper.VROStateStep
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.*
 
-abstract class VROViewModelBasics<S : VROState, D : VRODestination, E : VROEvent> : ViewModel(), VROEventListener<E> {
+abstract class VROViewModelCore<S : VROState, E : VROEvent> : ViewModel(), VROEventLauncher<E> {
 
     abstract val initialState: S
 
@@ -24,23 +22,23 @@ abstract class VROViewModelBasics<S : VROState, D : VRODestination, E : VROEvent
 
     protected val observableStepper = createStepperSharedFlow<S>()
 
-    private val observableNavigation = createNavigationSharedFlow<D>()
-
     private val observableOneTime = createOneTimeSharedFlow<S>()
 
     val stepper: Flow<VROStepper<S>> = observableStepper
 
-    fun getNavigationState(): SharedFlow<VRONavigationState<D>?> = observableNavigation
-
     fun getOneTimeEvents(): Flow<VROOneTimeState<S>> = observableOneTime
 
     var concurrencyManager: VROBaseConcurrencyManager = VROConcurrencyManager()
+
+    override val eventObservable: MutableSharedFlow<E> = createEventSharedFlow()
 
     open fun onNavParam(navParam: VRONavStarter?) = Unit
 
     open fun onStart() = Unit
 
     open fun onNavResult(result: VROBackResult) = Unit
+
+    abstract fun onEvent(event: E)
 
     fun updateScreen(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
@@ -70,19 +68,6 @@ abstract class VROViewModelBasics<S : VROState, D : VRODestination, E : VROEvent
 
     fun clearOneTime() {
         observableOneTime.tryEmit(VROOneTimeState.Clear())
-    }
-
-    fun navigate(destination: D?) {
-        destination?.resetNavigated()
-        observableNavigation.tryEmit(VRONavigationState(destination))
-    }
-
-    override fun eventBack(result: VROBackResult?) {
-        navigateBack(result)
-    }
-
-    fun navigateBack(result: VROBackResult? = null) {
-        observableNavigation.tryEmit(VRONavigationState(navigateBack = true, backResult = result))
     }
 
     open fun onPause() = Unit

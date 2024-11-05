@@ -1,9 +1,9 @@
 package com.vro.core_android.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.core_android.viewmodel.VROViewModelBasics
+import com.vro.core_android.viewmodel.VROViewModelNav
 import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
+import com.vro.event.VROEventLauncher
 import com.vro.navigation.VRODestination
 import com.vro.state.*
 import junit.framework.TestCase.assertEquals
@@ -21,14 +21,14 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException
 import java.io.Serializable
 import kotlin.reflect.KClass
 
-abstract class VROViewModelTest<S : VROState, VM : VROViewModelBasics<S, *, E>, E : VROEvent> {
+abstract class VROViewModelTest<S : VROState, VM : VROViewModelNav<S, *, E>, E : VROEvent> {
 
     lateinit var viewModel: VM
 
-    private lateinit var eventLauncher: VROEventListener<E>
+    private lateinit var events: VROEventLauncher<E>
 
     fun event(event: E) {
-        eventLauncher.eventListener(event)
+        events.doEvent(event)
     }
 
     @Before
@@ -36,7 +36,7 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModelBasics<S, *, E>, 
         MockitoAnnotations.initMocks(this)
         viewModel = onSetupViewModel()
         viewModel.concurrencyManager = VROTestDefaultConcurrencyManager()
-        eventLauncher = viewModel
+        events = viewModel
     }
 
     abstract fun onSetupViewModel(): VM

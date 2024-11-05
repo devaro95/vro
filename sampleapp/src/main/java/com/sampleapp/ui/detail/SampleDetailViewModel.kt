@@ -15,7 +15,7 @@ class SampleDetailViewModel : SampleBaseViewModel<SampleDetailState, SampleDesti
         }
     }
 
-    override fun eventListener(event: SampleDetailEvents) {
+    override fun onEvent(event: SampleDetailEvents) {
         when (event) {
             Profile -> onActionProfileNavigationClick()
         }
