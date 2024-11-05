@@ -102,34 +102,6 @@ class SampleHomeScreen(
             ) {
                 Text(text = "One Time Launch")
             }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
-            ) {
-                Text(text = "One Time Launch")
-            }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
-            ) {
-                Text(text = "One Time Launch")
-            }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
-            ) {
-                Text(text = "One Time Launch")
-            }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
-            ) {
-                Text(text = "One Time Launch")
-            }
         }
     }
 
