@@ -10,7 +10,7 @@ class SampleBottomSheetNavViewModel :
 
     override val initialState = SampleBottomSheetState.INITIAL
 
-    override fun eventListener(event: SampleBottomSheetEvents) {
+    override fun onEvent(event: SampleBottomSheetEvents) {
         when (event) {
             is OnButton -> onNameChange()
         }

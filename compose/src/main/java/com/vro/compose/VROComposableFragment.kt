@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
@@ -155,10 +154,10 @@ abstract class VROComposableFragment<
     }
 
     fun event(event: E) {
-        viewModel.eventListener(event)
+        viewModel.doEvent(event)
     }
 
     fun navigateBack(result: VROBackResult?) {
-        viewModel.eventBack(result)
+        viewModel.doBack(result)
     }
 }

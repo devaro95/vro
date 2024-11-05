@@ -7,11 +7,11 @@ class SampleVMDialogViewModel : VRODialogViewModel<SampleVMDialogState, SampleVM
 
     override val initialState: SampleVMDialogState = SampleVMDialogState.INITIAL
 
-    override fun eventBack(result: VROBackResult?) {
+    override fun doBack(result: VROBackResult?) {
 
     }
 
-    override fun eventListener(event: SampleVMDialogEvents) {
+    override fun onEvent(event: SampleVMDialogEvents) {
         when (event) {
             SampleVMDialogEvents.TextChange -> onTextChange()
         }

@@ -9,7 +9,7 @@ import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.states.*
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
+import com.vro.event.VROEventLauncher
 import com.vro.navigation.VROBackResult
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
@@ -19,7 +19,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
     open val skeleton: VROSkeleton? = null
 
-    internal lateinit var eventListener: VROEventListener<E>
+    lateinit var events: VROEventLauncher<E>
 
     open val tabletDesignEnabled: Boolean = false
 
@@ -84,14 +84,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
     open fun oneTimeHandler(id: Int, state: S) = Unit
 
-    fun event(event: E) {
-        eventListener.eventListener(event)
-    }
-
-    fun navigateBack(result: VROBackResult? = null) {
-        eventListener.eventBack(result)
-    }
-
     fun updateTopBar(changeStateFunction: VROTopBarState.() -> VROTopBarState) {
         observableTopBarFlow.tryEmit(
             VROTopBarLaunchState.Launch(
@@ -114,5 +106,13 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
     internal fun updateBottomBar() {
         observableBottomBarFlow.tryEmit(VROBottomBarLaunchState.Clear())
+    }
+
+    fun event(event: E) {
+        events.doEvent(event)
+    }
+
+    fun navigateBack(result: VROBackResult? = null) {
+        events.doBack(result)
     }
 }
