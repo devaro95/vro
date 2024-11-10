@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
@@ -29,7 +30,7 @@ import com.vro.state.VROStepper.VROStateStep
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
     viewModel: @Composable () -> VM,
     content: VROComposableViewModelBottomSheetContent<S, E>,
-    navController: NavController,
+    navigator: VROComposableNavigator<D>,
     listener: VRODialogListener? = null,
     onDismiss: () -> Unit = { },
 ) {
@@ -39,7 +40,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODe
         VroComposableNavBottomSheetContent(
             viewModel = viewModel.invoke(),
             content = content,
-            navController = navController,
+            navigator = navigator,
             listener = listener,
             onDismiss = onDismiss
         )
@@ -101,7 +102,7 @@ fun <S : VROState> VroBottomSheet(
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> VroComposableNavBottomSheetContent(
     viewModel: VM,
     content: VROComposableViewModelBottomSheetContent<S, E>,
-    navController: NavController,
+    navigator: VROComposableNavigator<D>,
     listener: VRODialogListener?,
     onDismiss: () -> Unit,
 ) {
@@ -110,9 +111,13 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, 
     InitializeLifecycleObserver(
         screenLifecycle = screenLifecycle,
         viewModel = viewModel,
-        navController = navController
+        navController = navigator.navController
     )
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(VROStateStep(viewModel.initialState)).value
     content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
     InitializeEventsListener(viewModel)
+    InitializeNavigatorListener(
+        viewModel = viewModel,
+        navigator = navigator
+    )
 }

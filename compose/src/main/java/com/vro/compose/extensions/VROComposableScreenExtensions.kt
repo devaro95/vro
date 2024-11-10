@@ -38,7 +38,6 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     ) {
         VroComposableScreenContent(
             viewModel = viewModel.invoke(),
-            navController = navigator.navController,
             topBarState = topBarState,
             bottomBarState = bottomBarState,
             navigator = navigator,
@@ -57,7 +56,6 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
-        navController = navigator.navController,
         topBarState = topBarState,
         bottomBarState = bottomBarState,
         navigator = navigator,
@@ -75,7 +73,6 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
-        navController = navigator.navController,
         topBarState = topBarState,
         bottomBarState = bottomBarState,
         navigator = navigator,
@@ -86,7 +83,6 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 @Composable
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
-    navController: NavController,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
     topBarState: MutableState<VROTopBarState?>,
@@ -102,7 +98,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         screenLifecycle = screenLifecycle,
         topBarState = topBarState,
         bottomBarState = bottomBarState,
-        navController = navController,
+        navController = navigator.navController,
     )
     InitializeBarsListeners(
         content = content,
@@ -130,7 +126,6 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
 @Composable
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
-    navController: NavController,
     navigator: VROFragmentNavigator<D>,
     content: VROScreen<S, E>,
     topBarState: MutableState<VROTopBarState?>,
@@ -144,7 +139,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     InitializeLifecycleObserver(
         viewModel = viewModel,
         screenLifecycle = screenLifecycle,
-        navController = navController,
+        navController = navigator.navController,
         content = content,
         topBarState = topBarState,
         bottomBarState = bottomBarState
