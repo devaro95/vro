@@ -3,6 +3,7 @@ package com.vro.compose.extensions
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.vro.compose.dialog.VROComposableDialogContent
+import com.vro.compose.initializers.InitializeEventsListener
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.viewmodel.VRODialogViewModel
 import com.vro.dialog.VRODialogListener
@@ -14,7 +15,6 @@ import com.vro.state.VROStepper
 fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VROComposableDialog(
     viewModel: @Composable () -> VM,
     content: VROComposableDialogContent<S, E>,
-    initialState: S? = null,
     listener: VRODialogListener? = null,
     onDismiss: () -> Unit,
 ) {
@@ -50,4 +50,5 @@ private fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroCompo
         is VROStepper.VROErrorStep -> content.onError(stepper.error, stepper.data)
         else -> Unit
     }
+    InitializeEventsListener(viewModel)
 }

@@ -8,7 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sampleapp.dialog.bottomsheet.*
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
 import com.sampleapp.dialog.withviewmodel.*
 import com.sampleapp.ui.base.SampleBaseScreen
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
@@ -21,6 +22,8 @@ import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.states.VROBottomBarState
 import com.vro.compose.utils.vroVerticalScroll
 import com.vro.constants.INT_ZERO
+import com.vro.event.VROEmptyEventLauncher
+import com.vro.event.VROEventLauncher
 import com.vro.state.VRODialogData
 import org.koin.androidx.compose.koinViewModel
 
@@ -77,31 +80,36 @@ class SampleHomeScreen(
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.Profile) }
+                onClick = { event((SampleHomeEvents.Profile)) }
             ) {
                 Text(text = "Profile Navigation")
             }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.Detail) }
-            ) {
-                Text(text = "Detail Navigation")
-            }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.ActivityFragment) }
-            ) {
-                Text(text = "Activity Fragment")
-            }
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleHomeEvents.OneTimeLaunch) }
-            ) {
-                Text(text = "One Time Launch")
-            }
+            LastButtons(events)
+        }
+    }
+
+    @Composable
+    private fun LastButtons(events: VROEventLauncher<SampleHomeEvents>) {
+        OutlinedButton(
+            modifier = Modifier.padding(top = 16.dp),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+            onClick = { event(SampleHomeEvents.Detail) }
+        ) {
+            Text(text = "Detail Navigation")
+        }
+        OutlinedButton(
+            modifier = Modifier.padding(top = 16.dp),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+            onClick = { event(SampleHomeEvents.ActivityFragment) }
+        ) {
+            Text(text = "Activity Fragment")
+        }
+        OutlinedButton(
+            modifier = Modifier.padding(top = 16.dp),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+            onClick = { event(SampleHomeEvents.OneTimeLaunch) }
+        ) {
+            Text(text = "One Time Launch")
         }
     }
 
