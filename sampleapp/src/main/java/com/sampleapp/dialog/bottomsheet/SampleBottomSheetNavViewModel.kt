@@ -1,5 +1,6 @@
 package com.sampleapp.dialog.bottomsheet
 
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.Dismiss
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
 import com.vro.compose.VROComposableViewModel
@@ -13,6 +14,7 @@ class SampleBottomSheetNavViewModel :
     override fun onEvent(event: SampleBottomSheetEvents) {
         when (event) {
             is OnButton -> onNameChange()
+            is Dismiss -> onDismiss()
         }
     }
 
@@ -36,6 +38,10 @@ class SampleBottomSheetNavViewModel :
                 )
             }
         }
+    }
+
+    private fun onDismiss(){
+        doBack()
     }
 
     companion object {
