@@ -129,14 +129,6 @@ abstract class VROFragment<
         binding.onViewStarted()
     }
 
-    fun event(event: E) {
-        viewModel.eventListener(event)
-    }
-
-    fun navigateBack(result: VROBackResult?) {
-        viewModel.eventBack(result)
-    }
-
     private fun initializeState(viewModel: VM, fragment: Fragment) {
         viewModel.setInitialState(state)
     }

@@ -9,9 +9,11 @@ import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.navigation.VRONavigator
+import com.vro.core_android.viewmodel.VROViewModelCore
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -126,6 +128,17 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
         screenLifecycle.addObserver(observer)
         onDispose {
             screenLifecycle.removeObserver(observer)
+        }
+    }
+}
+
+@Composable
+fun <VM : VROViewModelCore<S, E>, S : VROState, E : VROEvent> InitializeEventsListener(
+    viewModel: VM,
+) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventObservable.collect {
+            viewModel.onEvent(it)
         }
     }
 }

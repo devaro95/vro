@@ -6,7 +6,7 @@ class SampleFragmentViewModel : VROViewModel<SampleFragmentState, SampleFragment
 
     override val initialState = SampleFragmentState.INITIAL
 
-    override fun eventListener(event: SampleFragmentEvents) {
+    override fun onEvent(event: SampleFragmentEvents) {
 
     }
 }

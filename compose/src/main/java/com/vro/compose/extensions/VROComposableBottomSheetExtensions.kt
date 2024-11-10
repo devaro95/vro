@@ -3,13 +3,13 @@ package com.vro.compose.extensions
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -70,6 +70,7 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroBottomSheet(
         containerColor = containerColor,
         content = content
     )
+    InitializeEventsListener(viewModel.invoke())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,4 +114,5 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, 
     )
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(VROStateStep(viewModel.initialState)).value
     content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
+    InitializeEventsListener(viewModel)
 }

@@ -32,6 +32,6 @@ class SampleDetailScreen : SampleBaseScreen<SampleDetailState, SampleDetailEvent
     @VROLightMultiDevicePreview
     @Composable
     override fun ScreenPreview() {
-        ScreenContent(SampleDetailState.INITIAL)
+        ScreenContent(state = SampleDetailState.INITIAL)
     }
 }

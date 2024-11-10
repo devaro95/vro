@@ -10,7 +10,7 @@ import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
+import com.vro.event.VROEventLauncher
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
 
@@ -18,20 +18,21 @@ abstract class VROComposableDialogContentBasics<S : VROState, E : VROEvent> {
 
     open val skeleton: VROSkeleton? = null
 
-    internal lateinit var eventListener: VROEventListener<E>
-
     lateinit var context: Context
 
     var dialogListener: VRODialogListener? = null
 
+    lateinit var events: VROEventLauncher<E>
+
     @Composable
     internal open fun CreateDialog(
         state: S,
-        eventListener: VROEventListener<E>,
+        events: VROEventLauncher<E>,
         listener: VRODialogListener?,
         onDismiss: () -> Unit,
     ) {
-        this.eventListener = eventListener
+
+        this.events = events
         dialogListener = listener
     }
 
@@ -63,6 +64,6 @@ abstract class VROComposableDialogContentBasics<S : VROState, E : VROEvent> {
     open fun onError(error: Throwable, data: Any?) = Unit
 
     fun event(event: E) {
-        eventListener.eventListener(event)
+        events.doEvent(event)
     }
 }

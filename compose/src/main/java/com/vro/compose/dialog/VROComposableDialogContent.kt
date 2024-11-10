@@ -5,7 +5,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
-import com.vro.event.VROEventListener
+import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
 
 abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROComposableDialogContentBasics<S, E>() {
@@ -17,11 +17,11 @@ abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROCompo
     @Composable
     override fun CreateDialog(
         state: S,
-        eventListener: VROEventListener<E>,
+        events: VROEventLauncher<E>,
         listener: VRODialogListener?,
         onDismiss: () -> Unit,
     ) {
-        super.CreateDialog(state, eventListener, listener, onDismiss)
+        super.CreateDialog(state, events, listener, onDismiss)
         Dialog(
             onDismissRequest = onDismiss,
             properties = DialogProperties(

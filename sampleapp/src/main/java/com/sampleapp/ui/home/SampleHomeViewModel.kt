@@ -24,7 +24,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     override val initialState: SampleHomeState = SampleHomeState.INITIAL
 
-    override fun eventListener(event: SampleHomeEvents) {
+    override fun onEvent(event: SampleHomeEvents) {
         when (event) {
             BottomSheetDismiss -> onActionBottomSheetDismiss()
             Detail -> onActionDetailNavigationClick()
