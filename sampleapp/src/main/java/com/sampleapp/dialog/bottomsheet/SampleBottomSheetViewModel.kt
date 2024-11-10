@@ -1,5 +1,6 @@
 package com.sampleapp.dialog.bottomsheet
 
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.Dismiss
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
 import com.vro.constants.EMPTY_STRING
 import com.vro.core_android.viewmodel.VRODialogViewModel
@@ -12,6 +13,7 @@ class SampleBottomSheetViewModel :
     override fun onEvent(event: SampleBottomSheetEvents) {
         when (event) {
             is OnButton -> onNameChange()
+            is Dismiss -> Unit
         }
     }
 
