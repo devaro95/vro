@@ -34,7 +34,7 @@ class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomS
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = dismiss
+                onClick = { event(SampleBottomSheetEvents.Dismiss) }
             ) {
                 Text(text = "Dismiss")
             }
