@@ -10,8 +10,6 @@ abstract class VROViewModelNav<S : VROState, D : VRODestination, E : VROEvent> :
 
     private val observableNavigation = createNavigationSharedFlow<D>()
 
-    private val observableOneTime = createOneTimeSharedFlow<S>()
-
     fun getNavigationState(): SharedFlow<VRONavigationState<D>?> = observableNavigation
 
     override val eventObservable: MutableSharedFlow<E> = createEventSharedFlow()
@@ -22,6 +20,6 @@ abstract class VROViewModelNav<S : VROState, D : VRODestination, E : VROEvent> :
     }
 
     override fun doBack(result: VROBackResult?) {
-        observableNavigation.tryEmit(VRONavigationState(navigateBack = true, backResult = result))
+        observableNavigation.tryEmit(VRONavigationState(backResult = result))
     }
 }

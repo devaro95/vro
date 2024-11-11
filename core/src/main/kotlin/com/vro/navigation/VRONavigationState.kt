@@ -6,7 +6,6 @@ data class VRONavigationState<D : VRODestination>(
     val destination: D? = null,
     val state: Serializable? = null,
     val anim: NavAnim? = null,
-    val navigateBack: Boolean = false,
     val backResult: VROBackResult? = null,
 ) : Serializable {
     data class NavAnim(
