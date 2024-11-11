@@ -14,11 +14,11 @@ interface VRONavigator<D : VRODestination> {
     fun navigate(destination: D)
 
     fun navigateBack(result: VROBackResult?) {
+        result?.let {
+            putResultParam(navController.previousBackStackEntry?.destination?.id.toString(), result)
+        }
         navController.popBackStack().also { hasBack ->
             if (!hasBack) finish()
-        }
-        result?.let {
-            putResultParam(navController.currentDestination?.id.toString(), result)
         }
     }
 
