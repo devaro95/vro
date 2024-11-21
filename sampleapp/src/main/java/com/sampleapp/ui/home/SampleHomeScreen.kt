@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sampleapp.R
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetViewModel
 import com.sampleapp.dialog.withviewmodel.*
+import com.sampleapp.topbar.sampleBackToolbar
 import com.sampleapp.ui.base.SampleBaseScreen
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.BOTTOM_SHEET
 import com.sampleapp.ui.home.SampleHomeViewModel.Companion.ONE_TIME_LAUNCH
@@ -19,17 +21,20 @@ import com.vro.compose.extensions.VROComposableDialog
 import com.vro.compose.extensions.VroBottomSheet
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
-import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.utils.vroVerticalScroll
 import com.vro.constants.INT_ZERO
-import com.vro.event.VROEmptyEventLauncher
-import com.vro.event.VROEventLauncher
 import com.vro.state.VRODialogData
 import org.koin.androidx.compose.koinViewModel
 
 class SampleHomeScreen(
     override val skeleton: VROSkeleton = SampleHomeSkeleton(),
 ) : SampleBaseScreen<SampleHomeState, SampleHomeEvents>() {
+
+    override fun setTopBar() = sampleBackToolbar(
+        title = context.getString(R.string.home_toolbar),
+        onNavigation = { navigateBack() }
+    )
 
     override fun setBottomBar() = VROBottomBarState(selectedItem = INT_ZERO)
 
@@ -84,12 +89,12 @@ class SampleHomeScreen(
             ) {
                 Text(text = "Profile Navigation")
             }
-            LastButtons(events)
+            LastButtons()
         }
     }
 
     @Composable
-    private fun LastButtons(events: VROEventLauncher<SampleHomeEvents>) {
+    private fun LastButtons() {
         OutlinedButton(
             modifier = Modifier.padding(top = 16.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),

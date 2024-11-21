@@ -48,34 +48,12 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 }
 
 @Composable
-fun <S : VROState, E : VROEvent> InitializeBarsListeners(
-    content: VROScreen<S, E>,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
-) {
-    LaunchedEffect(key1 = Unit) {
-        content.topBarFlow.collectLatest { topBar ->
-            if (topBar is VROTopBarLaunchState.Launch) {
-                topBarState.value = topBar.state
-                content.clearTopBarFlow()
-            }
-        }
-    }
-    LaunchedEffect(key1 = Unit) {
-        content.bottomBarFlow.collectLatest { bottomBar ->
-            if (bottomBar is VROBottomBarLaunchState.Launch) {
-                bottomBarState.value = bottomBar.state
-                content.clearTopBarFlow()
-            }
-        }
-    }
-}
-
-@Composable
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeStepperListener(
     viewModel: VM,
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue =
@@ -88,7 +66,11 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     if (stepper is VROStepper.VROSkeletonStep) {
         content.ComposableScreenSkeleton()
     } else {
-        content.ComposableScreenContainer(stepper.state)
+        content.ComposableScreenContainer(
+            stepper.state,
+            topBarState,
+            bottomBarState
+        )
         (stepper as? VROStepper.VRODialogStep)?.let {
             content.onDialog(it.dialogState)
         }
@@ -103,8 +85,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     viewModel: VM,
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
     navController: NavController,
 ) {
     DisposableEffect(screenLifecycle) {
@@ -126,6 +108,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
         )
         screenLifecycle.addObserver(observer)
         onDispose {
+            viewModel.onPause()
             screenLifecycle.removeObserver(observer)
         }
     }

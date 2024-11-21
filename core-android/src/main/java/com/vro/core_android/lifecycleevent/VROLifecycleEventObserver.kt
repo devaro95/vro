@@ -11,11 +11,11 @@ fun createLifecycleEventObserver(
     onDestroy: () -> Unit = {},
 ) = LifecycleEventObserver { _, event ->
     when (event) {
-        Event.ON_CREATE -> onCreate.invoke()
-        Event.ON_START -> onStart.invoke()
-        Event.ON_RESUME -> onResume.invoke()
-        Event.ON_PAUSE -> onPause.invoke()
-        Event.ON_DESTROY -> onDestroy.invoke()
+        Event.ON_CREATE -> onCreate()
+        Event.ON_START -> onStart()
+        Event.ON_RESUME -> onResume()
+        Event.ON_PAUSE -> onPause()
+        Event.ON_DESTROY -> onDestroy()
         else -> Unit
     }
 }
