@@ -19,10 +19,10 @@ internal fun GeneratePreview(
                 colorScheme = if (isSystemInDarkTheme()) theme.darkColors else theme.lightColors,
                 typography = theme.typography,
             ) {
-                content.invoke()
+                content()
             }
         } ?: run {
-            content.invoke()
+            content()
         }
     }
 }

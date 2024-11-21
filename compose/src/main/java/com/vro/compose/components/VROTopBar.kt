@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
 
 @Composable
 @VROLightMultiDevicePreview
