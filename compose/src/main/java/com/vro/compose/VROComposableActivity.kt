@@ -23,6 +23,8 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
+import com.vro.navigation.putStarterParam
+import com.vro.navstarter.VRONavStarter
 
 abstract class VROComposableActivity : ComponentActivity() {
 
@@ -115,10 +117,16 @@ abstract class VROComposableActivity : ComponentActivity() {
     @Composable
     open fun BottomBar(selectedItem: Int) = Unit
 
-    fun navigateToScreen(screen: VROScreen<*, *>) {
+    fun navigateToScreen(
+        screen: VROScreen<*, *>,
+        starter: VRONavStarter? = null,
+    ) {
         navController.navigate(screen.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
+        }
+        starter?.let {
+            putStarterParam(navController.currentDestination?.id.toString(), it)
         }
     }
 
