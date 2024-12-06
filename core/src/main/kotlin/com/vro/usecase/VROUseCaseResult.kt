@@ -50,7 +50,7 @@ class MainUseCaseResult<T>(
 
     override fun onFinish(finishAction: () -> Unit): Job {
         if (finished.get())
-            finishAction.invoke()
+            finishAction()
         else {
             finishListener = finishAction
         }

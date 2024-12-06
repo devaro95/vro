@@ -78,7 +78,7 @@ private fun AnimatedIcon(
             modifier = modifier
                 .size(iconSize)
                 .clickable(
-                    onClick = { onClick.invoke() },
+                    onClick = { onClick() },
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ),
@@ -91,7 +91,7 @@ private fun AnimatedIcon(
             modifier = modifier
                 .size(iconSize)
                 .clickable(
-                    onClick = { onClick.invoke() },
+                    onClick = { onClick() },
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ),

@@ -19,7 +19,7 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VROComposableDia
     onDismiss: () -> Unit,
 ) {
     VroComposableDialogContent(
-        viewModel = viewModel.invoke(),
+        viewModel = viewModel(),
         content = content,
         onDismiss = onDismiss,
         listener = listener

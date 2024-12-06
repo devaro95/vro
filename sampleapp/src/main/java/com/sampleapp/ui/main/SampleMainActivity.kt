@@ -16,8 +16,8 @@ import com.vro.compose.VROComposableActivity
 import com.vro.compose.VROComposableTheme
 import com.vro.compose.extensions.vroBottomSheet
 import com.vro.compose.extensions.vroComposableScreen
-import com.vro.compose.states.VROBottomBarState
-import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.VROTopBarBaseState
 import org.koin.androidx.compose.koinViewModel
 
 class SampleMainActivity : VROComposableActivity() {
@@ -37,8 +37,8 @@ class SampleMainActivity : VROComposableActivity() {
 
     override fun NavGraphBuilder.createComposableContent(
         navController: NavHostController,
-        topBarState: MutableState<VROTopBarState?>,
-        bottomBarState: MutableState<VROBottomBarState?>,
+        topBarState: MutableState<VROTopBarBaseState>,
+        bottomBarState: MutableState<VROBottomBarBaseState>,
     ) {
         vroComposableScreen(
             viewModel = { koinViewModel<SampleHomeViewModel>() },

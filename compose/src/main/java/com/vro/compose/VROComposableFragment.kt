@@ -20,8 +20,11 @@ import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.VROComposableFragmentScreen
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROBottomBarState
-import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
+import com.vro.compose.states.VROTopBarBaseState
+import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.event.VROEvent
@@ -108,8 +111,8 @@ abstract class VROComposableFragment<
     ) {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         this.navController = this@VROComposableFragment.findNavController()
-        val topBarState = remember { mutableStateOf<VROTopBarState?>(null) }
-        val bottomBarState = remember { mutableStateOf<VROBottomBarState?>(null) }
+        val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -117,14 +120,26 @@ abstract class VROComposableFragment<
         ) {
             Scaffold(
                 containerColor = backgroundColor ?: Color.Transparent,
-                topBar = { topBarState.value?.let { VroTopBar(state = it) } },
-                bottomBar = { bottomBarState.value?.let { BottomBar(it.selectedItem) } }
+                topBar = {
+                    (topBarState.value as? VROTopBarBaseState.VROTopBarState)?.let {
+                        if (topBarState.value.visibility) {
+                            VroTopBar(state = it)
+                        }
+                    }
+                },
+                bottomBar = {
+                    (bottomBarState.value as? VROBottomBarState)?.let {
+                        if (bottomBarState.value.visibility) {
+                            BottomBar(selectedItem = (it.selectedItem))
+                        }
+                    }
+                }
             ) { innerPadding ->
                 Column(
                     modifier = Modifier
                         .padding(
                             top = innerPadding.calculateTopPadding(),
-                            bottom = if (bottomBarState.value == null) 0.dp
+                            bottom = if (!bottomBarState.value.visibility) 0.dp
                             else innerPadding.calculateBottomPadding()
                         )
                         .fillMaxSize()
