@@ -9,7 +9,7 @@ import com.sampleapp.R
 import com.sampleapp.topbar.sampleBackToolbar
 import com.sampleapp.ui.base.SampleBaseScreen
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.states.VROBottomBarState
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.constants.INT_ONE
 
 class SampleProfileScreen : SampleBaseScreen<SampleProfileState, SampleProfileEvents>() {

@@ -7,15 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.initializers.*
 import com.vro.compose.screen.*
-import com.vro.compose.states.VROBottomBarState
-import com.vro.compose.states.VROTopBarState
+import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.VROTopBarBaseState
 import com.vro.constants.INT_ZERO
 import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.event.VROEvent
@@ -28,16 +27,17 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     content: VROScreen<S, E>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
+    val route = content.destinationRoute()
     composable(
-        content.destinationRoute(),
-        enterTransition = { enterTransition },
+        route = route,
+        enterTransition = { enterTransition ?: fadeIn(animationSpec = tween(INT_ZERO))},
         exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(INT_ZERO)) }
     ) {
         VroComposableScreenContent(
-            viewModel = viewModel.invoke(),
+            viewModel = viewModel(),
             topBarState = topBarState,
             bottomBarState = bottomBarState,
             navigator = navigator,
@@ -51,8 +51,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
@@ -68,8 +68,8 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     viewModel: VM,
     navigator: VROFragmentNavigator<D>,
     content: VROScreen<S, E>,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
@@ -85,8 +85,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
     content: VROScreen<S, E>,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
     content.context = LocalContext.current
     content.events = viewModel
@@ -100,11 +100,6 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
         bottomBarState = bottomBarState,
         navController = navigator.navController,
     )
-    InitializeBarsListeners(
-        content = content,
-        topBarState = topBarState,
-        bottomBarState = bottomBarState
-    )
     InitializeOneTimeListener(
         viewModel = viewModel,
         content = content
@@ -116,20 +111,23 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     InitializeStepperListener(
         viewModel = viewModel,
         content = content,
-        screenLifecycle = screenLifecycle
+        screenLifecycle = screenLifecycle,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState
     )
     InitializeEventsListener(
         viewModel = viewModel
     )
 }
 
+
 @Composable
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
     navigator: VROFragmentNavigator<D>,
     content: VROScreen<S, E>,
-    topBarState: MutableState<VROTopBarState?>,
-    bottomBarState: MutableState<VROBottomBarState?>,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
 ) {
     content.context = LocalContext.current
     content.events = viewModel
@@ -155,7 +153,9 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     InitializeStepperListener(
         viewModel = viewModel,
         content = content,
-        screenLifecycle = screenLifecycle
+        screenLifecycle = screenLifecycle,
+        topBarState = topBarState,
+        bottomBarState = bottomBarState
     )
     InitializeEventsListener(
         viewModel = viewModel

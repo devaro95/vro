@@ -3,17 +3,21 @@ package com.vro.compose.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.states.*
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
+import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
+import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
 import com.vro.navigation.VROBackResult
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
-import kotlinx.coroutines.flow.Flow
 
 abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
@@ -25,21 +29,13 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
 
     internal lateinit var screenState: S
 
-    private val observableTopBarFlow = createTopBarSharedFlow()
+    internal lateinit var topBarState: MutableState<VROTopBarBaseState>
 
-    internal val topBarFlow: Flow<VROTopBarLaunchState> = observableTopBarFlow
+    internal lateinit var bottomBarState: MutableState<VROBottomBarBaseState>
 
-    private val observableBottomBarFlow = createBottomBarSharedFlow()
+    open fun setTopBar(): VROTopBarBaseState = VROTopBarStartState()
 
-    internal val bottomBarFlow: Flow<VROBottomBarLaunchState> = observableBottomBarFlow
-
-    private var topBarState: VROTopBarState = VROTopBarState()
-
-    private var bottomBarState: VROBottomBarState = VROBottomBarState()
-
-    open fun setTopBar(): VROTopBarState? = null
-
-    open fun setBottomBar(): VROBottomBarState? = null
+    open fun setBottomBar(): VROBottomBarBaseState = VROBottomBarStartState()
 
     @Composable
     internal fun ComposableScreenSkeleton() {
@@ -51,7 +47,13 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
     }
 
     @Composable
-    internal fun ComposableScreenContainer(state: S) {
+    internal fun ComposableScreenContainer(
+        state: S,
+        topBarState: MutableState<VROTopBarBaseState>,
+        bottomBarState: MutableState<VROBottomBarBaseState>,
+    ) {
+        this.topBarState = topBarState
+        this.bottomBarState = bottomBarState
         screenState = state
         Box(
             modifier = Modifier.fillMaxSize()
@@ -83,30 +85,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> {
     open fun onError(error: Throwable, data: Any?) = Unit
 
     open fun oneTimeHandler(id: Int, state: S) = Unit
-
-    fun updateTopBar(changeStateFunction: VROTopBarState.() -> VROTopBarState) {
-        observableTopBarFlow.tryEmit(
-            VROTopBarLaunchState.Launch(
-                state = changeStateFunction.invoke(setTopBar() ?: topBarState)
-            )
-        )
-    }
-
-    fun updateBottomBar(changeStateFunction: VROBottomBarState.() -> VROBottomBarState) {
-        observableBottomBarFlow.tryEmit(
-            VROBottomBarLaunchState.Launch(
-                state = changeStateFunction.invoke(setBottomBar() ?: bottomBarState)
-            )
-        )
-    }
-
-    internal fun clearTopBarFlow() {
-        observableTopBarFlow.tryEmit(VROTopBarLaunchState.Clear())
-    }
-
-    internal fun updateBottomBar() {
-        observableBottomBarFlow.tryEmit(VROBottomBarLaunchState.Clear())
-    }
 
     fun event(event: E) {
         events.doEvent(event)

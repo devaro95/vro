@@ -38,7 +38,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODe
         route = content.destinationRoute(),
     ) {
         VroComposableNavBottomSheetContent(
-            viewModel = viewModel.invoke(),
+            viewModel = viewModel(),
             content = content,
             navigator = navigator,
             listener = listener,
@@ -62,7 +62,7 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroBottomSheet(
 ) {
     InitializeViewModelBottomSheet(
         modifier = modifier,
-        viewModel = viewModel.invoke(),
+        viewModel = viewModel(),
         initialState = initialState,
         listener = listener,
         shape = shape,
@@ -71,7 +71,7 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroBottomSheet(
         containerColor = containerColor,
         content = content
     )
-    InitializeEventsListener(viewModel.invoke())
+    InitializeEventsListener(viewModel())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

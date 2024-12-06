@@ -7,7 +7,7 @@ class VroStateDelegate<T>(private val initialStateCreation: () -> T) {
     private var state: T? = null
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        return state ?: initialStateCreation.invoke().apply {
+        return state ?: initialStateCreation().apply {
             state = this
         }
     }
