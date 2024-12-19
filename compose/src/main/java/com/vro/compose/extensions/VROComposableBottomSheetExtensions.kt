@@ -9,8 +9,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -24,7 +22,7 @@ import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
-import com.vro.state.VROStepper.VROStateStep
+import com.vro.state.VROStepper.*
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
@@ -113,8 +111,24 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, 
         viewModel = viewModel,
         navController = navigator.navController
     )
-    val stepper = viewModel.stepper.collectAsStateWithLifecycle(VROStateStep(viewModel.initialState)).value
-    content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
+    val stepper = viewModel.stepper.collectAsStateWithLifecycle(
+        initialValue = content.skeleton?.let {
+            VROSkeletonStep(viewModel.initialState)
+        } ?: VROStateStep(viewModel.initialState),
+        lifecycle = screenLifecycle
+    ).value
+
+    if (stepper is VROSkeletonStep) {
+        content.ComposableDialogSkeleton()
+    } else {
+        content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
+        (stepper as? VRODialogStep)?.let {
+            content.onDialog(it.dialogState)
+        }
+        (stepper as? VROErrorStep)?.let {
+            content.onError(it.error, it.data)
+        }
+    }
     InitializeEventsListener(viewModel)
     InitializeNavigatorListener(
         viewModel = viewModel,
