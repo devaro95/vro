@@ -12,7 +12,7 @@ import com.vro.navstarter.VRONavStarter
 
 abstract class VROComposableNavigator<D : VRODestination>(
     override val activity: VROComposableActivity,
-    override val navController: NavController,
+    override val navController: NavController
 ) : VRONavigator<D> {
 
     fun navigateToScreen(
