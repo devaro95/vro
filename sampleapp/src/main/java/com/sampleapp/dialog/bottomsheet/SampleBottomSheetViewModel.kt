@@ -2,8 +2,11 @@ package com.sampleapp.dialog.bottomsheet
 
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.Dismiss
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnDialog
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel.Companion.DIALOG
 import com.vro.constants.EMPTY_STRING
 import com.vro.core_android.viewmodel.VRODialogViewModel
+import com.vro.state.VRODialogData
 
 class SampleBottomSheetViewModel :
     VRODialogViewModel<SampleBottomSheetState, SampleBottomSheetEvents>() {
@@ -14,6 +17,7 @@ class SampleBottomSheetViewModel :
         when (event) {
             is OnButton -> onNameChange()
             is Dismiss -> Unit
+            OnDialog -> onDialog()
         }
     }
 
@@ -38,6 +42,11 @@ class SampleBottomSheetViewModel :
             }
         }
     }
+
+    private fun onDialog() {
+        updateDialog(VRODialogData(DIALOG))
+    }
+
 
     companion object {
         private const val FIRST_TEXT = "Press to update"

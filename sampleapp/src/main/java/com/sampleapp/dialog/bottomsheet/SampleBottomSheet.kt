@@ -8,8 +8,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sampleapp.dialog.SampleSimpleDialog
+import com.sampleapp.dialog.SampleSimpleDialogData
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel.Companion.DIALOG
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.preview.VROMultiDevicePreview
+import com.vro.state.VRODialogData
 
 class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomSheetState, SampleBottomSheetEvents>() {
 
@@ -34,10 +38,28 @@ class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomS
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                onClick = { event(SampleBottomSheetEvents.OnDialog) }
+            ) {
+                Text(text = "Show Dialog")
+            }
+            OutlinedButton(
+                modifier = Modifier.padding(top = 16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
                 onClick = { event(SampleBottomSheetEvents.Dismiss) }
             ) {
                 Text(text = "Dismiss")
             }
+        }
+    }
+
+    @Composable
+    override fun onDialog(data: VRODialogData) {
+        when (data.type) {
+            DIALOG -> SampleSimpleDialog(
+                data = SampleSimpleDialogData(
+                    onButtonClick = {}
+                )
+            )
         }
     }
 

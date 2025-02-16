@@ -2,9 +2,11 @@ package com.sampleapp.dialog.bottomsheet
 
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.Dismiss
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
+import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnDialog
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
 import com.vro.compose.VROComposableViewModel
 import com.vro.constants.EMPTY_STRING
+import com.vro.state.VRODialogData
 
 class SampleBottomSheetNavViewModel :
     VROComposableViewModel<SampleBottomSheetState, SampleBottomSheetDestinations, SampleBottomSheetEvents>() {
@@ -15,6 +17,7 @@ class SampleBottomSheetNavViewModel :
         when (event) {
             is OnButton -> onNameChange()
             is Dismiss -> onDismiss()
+            is OnDialog -> onDialog()
         }
     }
 
@@ -40,12 +43,17 @@ class SampleBottomSheetNavViewModel :
         }
     }
 
-    private fun onDismiss(){
+    private fun onDismiss() {
         doBack()
+    }
+
+    private fun onDialog() {
+        updateDialog(VRODialogData(DIALOG))
     }
 
     companion object {
         private const val FIRST_TEXT = "Press to update"
         private const val SECOND_TEXT = "Press to update back"
+        const val DIALOG = 1
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.states.rememberSheetState
@@ -16,6 +17,8 @@ import com.vro.core_android.viewmodel.VRODialogViewModel
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.state.VROState
+import com.vro.state.VROStepper
+import com.vro.state.VROStepper.VRODialogStep
 import com.vro.state.VROStepper.VROSkeletonStep
 import com.vro.state.VROStepper.VROStateStep
 import kotlinx.coroutines.launch
@@ -64,10 +67,29 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> InitializeViewMo
                 screenLifecycle.removeObserver(observer)
             }
         }
-        when (val stepper = viewModel.stepper.collectAsState(VROStateStep(viewModel.initialState)).value) {
-            is VROSkeletonStep -> content.ComposableSkeleton()
-            is VROStateStep -> content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
-            else -> Unit
+
+        val stepper = viewModel.stepper.collectAsStateWithLifecycle(
+            initialValue =
+            content.skeleton?.let {
+                VROSkeletonStep(viewModel.initialState)
+            } ?: VROStateStep(viewModel.initialState),
+            lifecycle = screenLifecycle
+        ).value
+        if (stepper is VROSkeletonStep) {
+            content.ComposableSkeleton()
+        } else {
+            content.CreateDialog(
+                state = stepper.state,
+                events = viewModel,
+                listener = listener,
+                onDismiss = onDismiss
+            )
+            (stepper as? VRODialogStep)?.let {
+                content.onDialog(it.dialogState)
+            }
+            (stepper as? VROStepper.VROErrorStep)?.let {
+                content.onError(it.error, it.data)
+            }
         }
     }
 }
