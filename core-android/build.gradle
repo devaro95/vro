@@ -47,7 +47,6 @@ dependencies {
     api(project(":common"))
 
     implementation(libs.navigation.ui)
-    implementation(libs.navigation.fragment)
     implementation(libs.compose.runtime)
     implementation(libs.koin.android)
     implementation(libs.junit)
@@ -56,4 +55,6 @@ dependencies {
     implementation(libs.coroutines.test)
     implementation(libs.coroutines.core)
     implementation(libs.arch.core)
+    api(libs.navigation.fragment)
+    api(libs.navigation.compose)
 }

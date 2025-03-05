@@ -5,14 +5,15 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+
 android {
     namespace = "com.sampleapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sampleapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
