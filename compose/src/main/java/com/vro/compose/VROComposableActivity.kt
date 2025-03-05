@@ -19,11 +19,9 @@ import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.snackbar.VROSnackbar
-import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
-import com.vro.compose.states.VROSnackBarState
-import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
@@ -134,6 +132,10 @@ abstract class VROComposableActivity : ComponentActivity() {
 
     @Composable
     open fun BottomBar(selectedItem: Int) = Unit
+
+    fun getCurrentScreen(): String {
+        return navController.currentDestination?.route ?: throw Exception("No current screen found")
+    }
 
     fun navigateToScreen(
         screen: VROScreen<*, *>,
