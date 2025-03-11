@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewbinding.ViewBinding
-import com.vro.R
+import com.vro.app.R
 import org.koin.android.scope.createScope
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.scope.Scope

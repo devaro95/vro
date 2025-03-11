@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.*
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
-import com.vro.R
+import com.vro.app.R
 
 class VROImageAdapter(
     val context: Context,
