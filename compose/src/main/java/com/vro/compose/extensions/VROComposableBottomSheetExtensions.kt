@@ -1,3 +1,6 @@
+/**
+ * Package containing extension functions for bottom sheet components.
+ */
 package com.vro.compose.extensions
 
 import androidx.compose.material3.BottomSheetDefaults
@@ -24,6 +27,23 @@ import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper.*
 
+/**
+ * Adds a bottom sheet destination to the navigation graph with ViewModel support.
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param E The event type that extends [VROEvent]
+ * @param D The navigation destination type that extends [VRODestination]
+ *
+ * @param viewModel Factory function for the ViewModel
+ * @param content The bottom sheet content composable
+ * @param navigator The navigation controller
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the sheet is dismissed
+ *
+ * @see VroComposableNavBottomSheetContent For internal implementation
+ * @see bottomSheet For base navigation implementation
+ */
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
     viewModel: @Composable () -> VM,
@@ -45,6 +65,26 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODe
     }
 }
 
+/**
+ * Composable function for a ViewModel-backed bottom sheet.
+ * Provides full configuration options for appearance and behavior.
+ *
+ * @param VM The ViewModel type that extends [VRODialogViewModel]
+ * @param S The state type that extends [VROState]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param modifier Modifier to apply to the bottom sheet
+ * @param viewModel Factory function for the ViewModel
+ * @param content The bottom sheet content composable
+ * @param initialState Optional initial state for the sheet
+ * @param onDismiss Callback when the sheet is dismissed
+ * @param fullExpanded If true, skips partially expanded state
+ * @param shape Shape of the bottom sheet
+ * @param containerColor Background color of the sheet
+ * @param listener Optional dialog listener for callbacks
+ *
+ * @see InitializeViewModelBottomSheet For initialization logic
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroBottomSheet(
@@ -72,6 +112,22 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroBottomSheet(
     InitializeEventsListener(viewModel())
 }
 
+/**
+ * Composable function for a simple bottom sheet without ViewModel dependency.
+ *
+ * @param S The state type that extends [VROState]
+ *
+ * @param modifier Modifier to apply to the bottom sheet
+ * @param content The bottom sheet content composable
+ * @param initialState The initial state for the sheet
+ * @param onDismiss Callback when the sheet is dismissed
+ * @param fullExpanded If true, skips partially expanded state
+ * @param shape Shape of the bottom sheet
+ * @param containerColor Background color of the sheet
+ * @param listener Optional dialog listener for callbacks
+ *
+ * @see InitializeBottomSheet For initialization logic
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <S : VROState> VroBottomSheet(
@@ -96,6 +152,25 @@ fun <S : VROState> VroBottomSheet(
     )
 }
 
+/**
+ * Internal implementation for navigation-based bottom sheet content.
+ * Handles lifecycle, state management, and content rendering.
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param E The event type that extends [VROEvent]
+ * @param D The navigation destination type that extends [VRODestination]
+ *
+ * @param viewModel The ViewModel instance
+ * @param content The bottom sheet content composable
+ * @param navigator The navigation controller
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the sheet is dismissed
+ *
+ * @see InitializeLifecycleObserver For lifecycle handling
+ * @see InitializeEventsListener For event handling
+ * @see InitializeNavigatorListener For navigation handling
+ */
 @Composable
 internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> VroComposableNavBottomSheetContent(
     viewModel: VM,

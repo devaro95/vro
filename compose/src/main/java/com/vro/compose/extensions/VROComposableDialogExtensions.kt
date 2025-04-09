@@ -1,3 +1,6 @@
+/**
+ * Package containing dialog-related extension functions for Compose.
+ */
 package com.vro.compose.extensions
 
 import androidx.compose.runtime.*
@@ -12,6 +15,22 @@ import com.vro.event.VROEvent
 import com.vro.state.VROState
 import com.vro.state.VROStepper
 
+/**
+ * Composable function that creates and manages a VRO-style dialog with ViewModel support.
+ * Handles lifecycle events, state management, and dialog content rendering.
+ *
+ * @param VM The ViewModel type that extends [VRODialogViewModel]
+ * @param S The state type that extends [VROState]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel Factory function for the dialog ViewModel
+ * @param content The dialog content composable
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the dialog is dismissed
+ *
+ * @see VROComposableDialogContent For dialog content requirements
+ * @see VRODialogViewModel For expected ViewModel interface
+ */
 @Composable
 fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VROComposableDialog(
     viewModel: @Composable () -> VM,
@@ -27,6 +46,22 @@ fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VROComposableDia
     )
 }
 
+/**
+ * Internal implementation for VRO dialog content.
+ * Handles lifecycle observation, state management, and content rendering.
+ *
+ * @param VM The ViewModel type that extends [VRODialogViewModel]
+ * @param S The state type that extends [VROState]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The dialog ViewModel instance
+ * @param content The dialog content composable
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the dialog is dismissed
+ *
+ * @see InitializeEventsListener For event handling
+ * @see createLifecycleEventObserver For lifecycle observation
+ */
 @Composable
 private fun <VM : VRODialogViewModel<S, E>, S : VROState, E : VROEvent> VroComposableDialogContent(
     viewModel: VM,
