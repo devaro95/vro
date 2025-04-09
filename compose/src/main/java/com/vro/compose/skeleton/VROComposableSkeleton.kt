@@ -1,3 +1,7 @@
+/**
+ * Package containing composables for skeleton loading animations.
+ * These components provide visual placeholders while content is loading.
+ */
 package com.vro.compose.skeleton
 
 import androidx.compose.animation.core.RepeatMode
@@ -23,6 +27,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vro.constants.FLOAT_ZERO
 
+/**
+ * A skeleton loading composable that mimics text content.
+ *
+ * @param modifier Optional [Modifier] to apply to the skeleton container
+ * @param width Width of the text skeleton (default: 15.dp)
+ * @param height Height of the text skeleton (default: 15.dp)
+ * @param skeletonBrush The [Brush] to use for the shimmer effect (default: [vroSkeletonBrush])
+ *
+ * @see VROButtonSkeleton For circular skeleton variants
+ * @see vroSkeletonBrush For creating custom shimmer effects
+ */
 @Composable
 fun VROTextSkeleton(
     modifier: Modifier = Modifier,
@@ -43,6 +58,18 @@ fun VROTextSkeleton(
     }
 }
 
+/**
+ * A skeleton loading composable that mimics button content with circular shape.
+ *
+ * @param modifier Optional [Modifier] to apply to the skeleton container
+ * @param width Diameter of the circular skeleton (default: 40.dp)
+ * @param height Diameter of the circular skeleton (default: 40.dp)
+ * @param skeletonBrush The [Brush] to use for the shimmer effect (default: [vroSkeletonBrush])
+ *
+ *
+ * @see VROTextSkeleton For rectangular skeleton variants
+ * @see vroSkeletonBrush For creating custom shimmer effects
+ */
 @Composable
 fun VROButtonSkeleton(
     modifier: Modifier = Modifier,
@@ -63,6 +90,16 @@ fun VROButtonSkeleton(
     }
 }
 
+/**
+ * Creates a shimmer effect [Brush] for skeleton loading animations.
+ *
+ * @param color Base color for the shimmer effect (default: theme's primary color)
+ * @param repeatMode Animation repeat mode (default: [RepeatMode.Reverse])
+ * @return A [Brush] with shimmer animation effect
+ *
+ * @see RepeatMode For available animation repeat options
+ * @see Brush.linearGradient For gradient effect details
+ */
 @Composable
 fun vroSkeletonBrush(
     color: Color = MaterialTheme.colorScheme.primary,

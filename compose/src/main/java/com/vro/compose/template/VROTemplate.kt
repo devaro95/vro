@@ -77,9 +77,26 @@ abstract class VROTemplate<
     abstract fun render(state: S): R
 
     /**
-     * Composable container that initializes the screen with lifecycle and event listeners.
+     * Composable container that initializes the screen with all necessary lifecycle and state listeners.
+     * This function serves as the main entry point for setting up the template's core functionality.
      *
-     * @param navController The [NavController] used for navigation.
+     * Initializes the following components in order:
+     * 1. Lifecycle observer (handles onStart/onResume/onPause events)
+     * 2. Navigation listener (handles navigation events from ViewModel)
+     * 3. One-time event listener (handles single-occurrence events)
+     * 4. Stepper listener (manages state changes including loading/error/dialog states)
+     * 5. Event listener (handles continuous event streams)
+     *
+     * @param navController The [NavController] used for navigation within this container.
+     *                     Will be used to create the appropriate navigator instance.
+     *
+     * @see InitializeLifecycleObserver For lifecycle event handling implementation
+     * @see InitializeNavigatorListener For navigation event handling implementation
+     * @see InitializeOneTimeListener For one-time event processing
+     * @see InitializeStepperListener For state management and UI rendering
+     * @see InitializeEventsListener For continuous event stream processing
+     *
+     * @throws ClassCastException if the local activity cannot be cast to [VROComposableActivity]
      */
     @Composable
     internal fun ComposableTemplateContainer(navController: NavController) {

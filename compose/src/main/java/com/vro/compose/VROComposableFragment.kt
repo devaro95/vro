@@ -20,11 +20,9 @@ import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.VROComposableFragmentScreen
 import com.vro.compose.screen.VROScreen
-import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
-import com.vro.compose.states.VROSnackBarState
-import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
@@ -35,6 +33,16 @@ import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+/**
+ * Abstract base class for fragments that use Jetpack Compose for their UI.
+ * Provides a structured way to handle navigation, theming, and common UI components.
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param SC The screen composable type that extends [VROScreen]
+ * @param E The event type that extends [VROEvent]
+ */
 abstract class VROComposableFragment<
         VM : VROComposableViewModel<S, D, E>,
         S : VROState,
@@ -43,15 +51,34 @@ abstract class VROComposableFragment<
         E : VROEvent,
         > : VROFragmentInjection<VM>() {
 
+    /**
+     * The navigation controller for handling navigation between destinations.
+     * Must be implemented by concrete fragments.
+     */
     abstract val navigator: VROFragmentNavigator<D>
 
+    /**
+     * Optional theme configuration for the fragment.
+     * Can be overridden to provide custom theming.
+     */
     open val theme: VROComposableTheme? = null
 
     private lateinit var navController: NavController
 
+    /**
+     * Abstract composable function that must be implemented to provide the main content.
+     * @return The root composable screen for this fragment
+     */
     @Composable
     abstract fun composableView(): SC
 
+    /**
+     * Creates a MaterialTheme with the provided color schemes and typography.
+     * @param lightColors Color scheme for light theme
+     * @param darkColors Color scheme for dark theme
+     * @param typography Typography configuration
+     * @param content The composable content to be themed
+     */
     @Composable
     private fun CreateTheme(
         lightColors: ColorScheme,
@@ -69,11 +96,20 @@ abstract class VROComposableFragment<
         }
     }
 
+    /**
+     * Called to do initial creation of the fragment.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setObservers(viewModel, this)
     }
 
+    /**
+     * Sets up observers for ViewModel events.
+     * @param viewModel The ViewModel instance
+     * @param fragment The fragment to associate observers with
+     */
     private fun setObservers(viewModel: VM, fragment: Fragment) {
         fragment.lifecycleScope.launch {
             viewModel.stepper.collectLatest { stepper ->
@@ -86,6 +122,13 @@ abstract class VROComposableFragment<
         }
     }
 
+    /**
+     * Called to create the view hierarchy associated with the fragment.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state
+     * @return Return the View for the fragment's UI
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -105,6 +148,10 @@ abstract class VROComposableFragment<
         }
     }
 
+    /**
+     * Initializes the Compose UI with common components like Scaffold, TopBar, BottomBar, and Snackbar.
+     * @param backgroundColor Optional background color for the scaffold
+     */
     @OptIn(ExperimentalMaterialNavigationApi::class)
     @Composable
     fun Initialize(
@@ -160,22 +207,45 @@ abstract class VROComposableFragment<
         }
     }
 
+    /**
+     * Called when a dialog needs to be shown.
+     * @param data The dialog configuration data
+     */
     open fun onLoadDialog(data: VRODialogData) = Unit
 
+    /**
+     * Called when an error occurs.
+     * @param error The error that occurred
+     */
     open fun onError(error: Throwable) = Unit
 
+    /**
+     * Composable function for the bottom bar. Can be overridden to provide custom bottom bar implementations.
+     * @param selectedItem The currently selected bottom bar item
+     */
     @Composable
     open fun BottomBar(selectedItem: Int) = Unit
 
+    /**
+     * Called when the fragment is visible to the user.
+     */
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
     }
 
+    /**
+     * Sends an event to the ViewModel.
+     * @param event The event to send
+     */
     fun event(event: E) {
         viewModel.doEvent(event)
     }
 
+    /**
+     * Navigates back with an optional result.
+     * @param result The result to pass back, or null if no result
+     */
     fun navigateBack(result: VROBackResult?) {
         viewModel.doBack(result)
     }

@@ -10,6 +10,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * A customized Snackbar composable with configurable colors and padding.
+ *
+ * This composable provides a styled snackbar with default white background and customizable
+ * text/action colors, following the application's design system.
+ *
+ * @param data The [SnackbarData] containing the message and action details
+ * @param backgroundColor The background color of the snackbar (default: White - 0xFFFFFFFF)
+ * @param textColor The color of the snackbar message text (required)
+ * @param actionButtonColor The color of the action button text (required)
+ *
+ * @sample com.vro.compose.snackbar.VROSnackbarPreview
+ *
+ * @see SnackbarData for base snackbar content information
+ * @see Snackbar for the underlying Material3 implementation
+ */
 @Composable
 fun VROSnackbar(
     data: SnackbarData,
