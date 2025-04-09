@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.scopedOf
 import org.koin.dsl.module
 
-val presentationModule = module {
+val axPresentationModule = module {
     viewModelOf(::SampleFragmentViewModel)
     viewModelOf(::SampleFragmentViewModel)
     viewModelOf(::SampleHomeViewModel)

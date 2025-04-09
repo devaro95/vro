@@ -47,9 +47,10 @@ dependencies {
     api(project(":core-android"))
     api(project(":common"))
 
-    implementation(libs.material3)
+    api(libs.material3)
+    api(libs.koin.compose)
     implementation(libs.navigation.dynamic.features)
-    implementation(libs.koin.compose)
+    implementation(libs.compose.activity)
     implementation(libs.accompanist.navigation.material)
     implementation(libs.ui.tooling.preview)
     implementation(libs.mockito.inline)
