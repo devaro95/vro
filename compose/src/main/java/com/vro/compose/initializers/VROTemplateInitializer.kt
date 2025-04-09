@@ -1,3 +1,7 @@
+/**
+ * Package containing initialization functions for Compose view templates.
+ * These functions handle common setup patterns for view models, navigation, and lifecycle.
+ */
 package com.vro.compose.initializers
 
 import androidx.compose.runtime.*
@@ -11,6 +15,21 @@ import com.vro.navigation.VRODestination
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Initializes and manages the stepper listener for state changes.
+ * Handles skeleton loading states, regular content states, dialogs, and errors.
+ *
+ * @param VM The ViewModel type that extends [VROTemplateViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ * @param M The mapper type that extends [VROTemplateMapper]
+ * @param R The render type that extends [VROTemplateRender]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param content The template content to render
+ * @param lifecycle The current lifecycle owner
+ */
 @Composable
 fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeStepperListener(
     viewModel: VM,
@@ -37,6 +56,19 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
     }
 }
 
+/**
+ * Initializes a one-time event listener for handling single-occurrence events.
+ *
+ * @param VM The ViewModel type that extends [VROTemplateViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ * @param M The mapper type that extends [VROTemplateMapper]
+ * @param R The render type that extends [VROTemplateRender]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param content The template content to handle events
+ */
 @Composable
 fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeOneTimeListener(
     viewModel: VM,
@@ -52,6 +84,18 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
     }
 }
 
+/**
+ * Initializes lifecycle observers for the ViewModel.
+ * Handles onStart, onResume, and onPause lifecycle events.
+ *
+ * @param VM The ViewModel type that extends [VROTemplateViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param lifecycle The current lifecycle owner
+ */
 @Composable
 fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
     viewModel: VM,
@@ -72,6 +116,17 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
     }
 }
 
+/**
+ * Initializes navigation listener for handling navigation events from the ViewModel.
+ *
+ * @param VM The ViewModel type that extends [VROTemplateViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param navigator The navigation controller
+ */
 @Composable
 fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeNavigatorListener(
     viewModel: VM,

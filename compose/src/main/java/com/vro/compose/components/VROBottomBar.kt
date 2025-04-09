@@ -1,3 +1,6 @@
+/**
+ * Package containing bottom navigation bar components.
+ */
 package com.vro.compose.components
 
 import androidx.compose.animation.Crossfade
@@ -14,6 +17,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vro.constants.EMPTY_STRING
 
+/**
+ * A customizable bottom navigation bar component.
+ *
+ * Features:
+ * - Animated icon transitions
+ * - Customizable appearance
+ * - Flexible item configuration
+ * - Selection state management
+ *
+ * @param modifier Modifier for styling the bar
+ * @param itemList List of navigation items (default: empty)
+ * @param height Height of the bar (default: 55.dp)
+ * @param background Background color (default: Black)
+ * @param selectedItem Index of the currently selected item
+ *
+ * @see VROBottomBarItem For item configuration
+ */
 @Composable
 fun VROBottomBar(
     modifier: Modifier = Modifier,
@@ -54,6 +74,19 @@ fun VROBottomBar(
     }
 }
 
+/**
+ * Configuration class for bottom navigation bar items.
+ *
+ * @property icon Resource ID for the default icon
+ * @property iconTint Color for the default icon (default: null)
+ * @property iconSelectedTint Color for the selected icon (default: null)
+ * @property iconSelected Resource ID for the selected icon (default: null)
+ * @property contentDescription Accessibility content description (default: "")
+ * @property text Optional text label (default: "")
+ * @property iconSize Size of the icons (default: 24.dp)
+ * @property onClick Callback when item is clicked (default: null)
+ *
+ */
 open class VROBottomBarItem(
     val icon: Int,
     val iconTint: Color? = null,
@@ -65,6 +98,17 @@ open class VROBottomBarItem(
     val onClick: (() -> Unit)? = null,
 )
 
+/**
+ * Internal composable that handles icon animation and selection state.
+ *
+ * @param iconRes Resource ID for the default icon
+ * @param selectedIconRes Resource ID for the selected icon
+ * @param modifier Modifier for styling
+ * @param iconSize Size of the icon (default: 25.dp)
+ * @param selected Whether the item is selected (default: false)
+ * @param iconTint Color tint for the icon (default: null)
+ * @param onClick Callback when icon is clicked
+ */
 @Composable
 private fun AnimatedIcon(
     iconRes: Int,
