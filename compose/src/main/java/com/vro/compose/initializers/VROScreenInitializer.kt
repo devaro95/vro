@@ -1,3 +1,6 @@
+/**
+ * Package containing initialization functions for screen components.
+ */
 package com.vro.compose.initializers
 
 import androidx.compose.runtime.*
@@ -13,6 +16,21 @@ import com.vro.navigation.*
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Initializes a listener for one-time events from the ViewModel.
+ * Handles single-occurrence events and delegates them to the screen.
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param content The screen content to handle events
+ *
+ * @see VROOneTimeState For event state definitions
+ * @see VROScreen.oneTimeHandler For event handling implementation
+ */
 @Composable
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeOneTimeListener(
     viewModel: VM,
@@ -28,6 +46,30 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     }
 }
 
+/**
+ * Initializes the stepper listener for state changes and UI updates.
+ * Manages the screen's state flow including:
+ * - Skeleton loading states
+ * - Regular content states
+ * - Dialog presentations
+ * - Error handling
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param content The screen content to render
+ * @param screenLifecycle The lifecycle owner for state collection
+ * @param topBarState Mutable state for top bar configuration
+ * @param bottomBarState Mutable state for bottom bar configuration
+ * @param snackbarState Mutable state for snackbar presentation
+ *
+ * @see VROStepper For state step definitions
+ * @see VROScreen.ComposableScreenSkeleton For skeleton implementation
+ * @see VROScreen.ComposableScreenContainer For content container
+ */
 @Composable
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeStepperListener(
     viewModel: VM,
@@ -39,9 +81,9 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue =
-        content.skeleton?.let {
-            VROStepper.VROSkeletonStep(viewModel.initialState)
-        } ?: VROStepper.VROStateStep(viewModel.initialState),
+            content.skeleton?.let {
+                VROStepper.VROSkeletonStep(viewModel.initialState)
+            } ?: VROStepper.VROStateStep(viewModel.initialState),
         lifecycle = screenLifecycle
     ).value
 
@@ -63,6 +105,29 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     }
 }
 
+/**
+ * Initializes lifecycle observers for the screen.
+ * Handles core lifecycle events and coordinates:
+ * - Scaffold configuration
+ * - Starter parameter processing
+ * - Navigation result handling
+ * - ViewModel lifecycle methods
+ *
+ * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param S The state type that extends [VROState]
+ * @param D The navigation destination type that extends [VRODestination]
+ * @param E The event type that extends [VROEvent]
+ *
+ * @param viewModel The ViewModel instance to observe
+ * @param content The screen content to configure
+ * @param screenLifecycle The lifecycle owner to observe
+ * @param topBarState Mutable state for top bar configuration
+ * @param bottomBarState Mutable state for bottom bar configuration
+ * @param navController The navigation controller for parameter handling
+ *
+ * @see createLifecycleEventObserver For base observer implementation
+ * @see VROScreen.configureScaffold For scaffold setup
+ */
 @Composable
 fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
     viewModel: VM,
