@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.vro.compose.VROComposableActivity
 import com.vro.compose.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.initializers.*
@@ -99,6 +100,7 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
 ) {
     content.context = LocalContext.current
     content.events = viewModel
+    content.navController = navigator.navController
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
