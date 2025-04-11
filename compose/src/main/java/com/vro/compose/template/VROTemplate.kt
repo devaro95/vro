@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableActivity
-import com.vro.compose.VROComposableNavigator
 import com.vro.compose.initializers.*
+import com.vro.compose.navigator.VROTemplateNav
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.event.VROEvent
@@ -42,30 +42,43 @@ abstract class VROTemplate<
         E : VROEvent,
         M : VROTemplateMapper,
         R : VROTemplateRender<E, S>,
-        > : KoinScopeComponent {
+        >() : KoinScopeComponent {
 
-    /** Koin scope tied to this template class. */
+    /**
+     * Koin scope tied to this template class.
+     * Lazily retrieves an existing scope by the class name or creates a new one.
+     * Used for dependency injection scoped to this specific template.
+     */
     override val scope = get().getScopeOrNull(this::class.toString()) ?: get().createScope(this::class.toString(), named(this::class.toString()))
 
-    /** Event launcher used to dispatch [VROEvent] instances. */
+    /**
+     * Event launcher used to dispatch [VROEvent] instances.
+     * This should be initialized in the screen lifecycle to handle one-time or stateful events.
+     */
     lateinit var events: VROEventLauncher<E>
 
-    /** The ViewModel associated with this screen. */
+    /**
+     * The ViewModel associated with this screen.
+     * Responsible for managing UI state and coordinating business logic.
+     */
     abstract val viewModel: VM
 
-    /** Reference to the current [VROComposableActivity]. */
-    lateinit var activity: VROComposableActivity
-
-    /** Navigation controller used for routing between destinations. */
-    lateinit var navController: NavController
-
-    /** Returns a navigator to manage navigation logic. */
-    abstract fun createNavigator(): VROComposableNavigator<D>
-
-    /** Optional skeleton view shown while loading. */
+    /**
+     * Optional UI skeleton component.
+     * Used to render loading placeholders while real content is being fetched or processed.
+     */
     open val skeleton: VROSkeleton? = null
 
-    /** Returns the mapper used to transform or map data/state. */
+    /**
+     * Navigation handler for the screen.
+     * Abstracts navigation actions and destination routing.
+     */
+    abstract val navigator: VROTemplateNav<D>
+
+    /**
+     * Returns the mapper responsible for transforming raw data or state into a renderable form.
+     * Typically used to prepare content for the UI layer.
+     */
     abstract fun mapper(): M
 
     /**
@@ -100,9 +113,8 @@ abstract class VROTemplate<
      */
     @Composable
     internal fun ComposableTemplateContainer(navController: NavController) {
-        this.activity = LocalActivity.current as VROComposableActivity
+        val activity = LocalActivity.current as VROComposableActivity
         this.events = viewModel
-        this.navController = navController
         val lifecycle = LocalLifecycleOwner.current.lifecycle
         InitializeLifecycleObserver(
             viewModel = viewModel,
@@ -110,7 +122,9 @@ abstract class VROTemplate<
         )
         InitializeNavigatorListener(
             viewModel = viewModel,
-            navigator = createNavigator()
+            activity = activity,
+            navController = navController,
+            content = this
         )
         InitializeOneTimeListener(
             viewModel = viewModel,

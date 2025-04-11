@@ -12,7 +12,6 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.template.VROTemplate
 import com.vro.compose.utils.isTablet
-import com.vro.core_android.di.vroScopeName
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
 import com.vro.navigation.VROBackResult
@@ -22,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.context.GlobalContext.get
 import org.koin.core.qualifier.named
-import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -41,10 +39,10 @@ import kotlin.reflect.KClass
 abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
 
     /**
-     * Koin scope for this screen's dependency injection.
-     * Automatically created with a unique ID based on the screen class.
+     * Koin scope tied to this screen instance.
+     * Lazily retrieves an existing scope by the screen's class name, or creates a new one if not found.
      */
-    override val scope = getKoin().createScope(UUID.randomUUID().toString(), vroScopeName(this::class))
+    override val scope = get().getScopeOrNull(this::class.toString()) ?: get().createScope(this::class.toString(), named(this::class.toString()))
 
     /**
      * Navigation controller for this screen.

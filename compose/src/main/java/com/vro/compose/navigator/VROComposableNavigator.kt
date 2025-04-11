@@ -1,6 +1,7 @@
-package com.vro.compose
+package com.vro.compose.navigator
 
 import androidx.navigation.NavController
+import com.vro.compose.VROComposableActivity
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
