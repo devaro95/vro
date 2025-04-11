@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import com.sampleapp.ui.main.SampleDestinations
 import com.sampleapp.ui.profile.SampleProfileScreen
 import com.vro.compose.VROComposableActivity
-import com.vro.compose.VROComposableNavigator
+import com.vro.compose.navigator.VROComposableNavigator
 
 class SampleDetailNavigator(
     activity: VROComposableActivity,
