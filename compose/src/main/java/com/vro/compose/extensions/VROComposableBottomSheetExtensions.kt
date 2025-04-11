@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.vro.compose.VROComposableNavigator
+import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent

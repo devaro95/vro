@@ -3,7 +3,7 @@ package com.sampleapp.dialog.bottomsheet
 import androidx.navigation.NavController
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
 import com.sampleapp.ui.main.SampleMainActivity
-import com.vro.compose.VROComposableNavigator
+import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.navigation.VRODestination
 
 class SampleBottomSheetNavigator(

@@ -13,7 +13,7 @@ import com.sampleapp.ui.main.SampleDestinations.HomeNavigation
 import com.sampleapp.ui.main.SampleDestinations.ProfileNavigation
 import com.sampleapp.ui.profile.SampleProfileScreen
 import com.vro.compose.VROComposableActivity
-import com.vro.compose.VROComposableNavigator
+import com.vro.compose.navigator.VROComposableNavigator
 
 class SampleHomeNavigator(
     override val activity: VROComposableActivity,

@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vro.compose.VROComposableActivity
-import com.vro.compose.VROComposableNavigator
+import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.initializers.*
 import com.vro.compose.screen.*
