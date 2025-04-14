@@ -5,6 +5,9 @@ import com.vro.compose.template.VROTemplate
 import com.vro.compose.template.VROTemplateMapper
 import com.vro.navigation.VRODestination
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
+import java.util.UUID
+import org.koin.core.context.GlobalContext.get
 
 /**
  * Generates a unique [Qualifier] for a Koin scope based on the class name of the given type [T].
@@ -35,4 +38,10 @@ fun <D : VRODestination> VROTemplate<*, *, D, *, *, *>.injectNavigator(): VROTem
  */
 inline fun <reified M : VROTemplateMapper> VROTemplate<*, *, *, *, *, *>.injectMapper(): M {
     return scope.get()
+}
+
+inline fun <reified T : Any> createTemplateScope(): Scope {
+    val name = T::class.simpleName ?: T::class.qualifiedName ?: "UnknownTemplate"
+    val id = "$name-${UUID.randomUUID()}"
+    return get().createScope(id, named(name))
 }

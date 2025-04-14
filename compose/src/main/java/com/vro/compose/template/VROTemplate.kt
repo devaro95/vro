@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -19,8 +20,6 @@ import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
 import org.koin.core.component.KoinScopeComponent
-import org.koin.core.context.GlobalContext.get
-import org.koin.core.qualifier.named
 
 /**
  * Abstract base class for creating reusable Jetpack Compose screens using a state-event-navigation architecture.
@@ -43,13 +42,6 @@ abstract class VROTemplate<
         M : VROTemplateMapper,
         R : VROTemplateRender<E, S>,
         >() : KoinScopeComponent {
-
-    /**
-     * Koin scope tied to this template class.
-     * Lazily retrieves an existing scope by the class name or creates a new one.
-     * Used for dependency injection scoped to this specific template.
-     */
-    override val scope = get().getScopeOrNull(this::class.toString()) ?: get().createScope(this::class.toString(), named(this::class.toString()))
 
     /**
      * Event launcher used to dispatch [VROEvent] instances.

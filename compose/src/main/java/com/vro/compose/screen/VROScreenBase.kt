@@ -154,6 +154,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
                 ScreenContent(state)
             }
         }
+        DisposableEffect(Unit) {
+            onDispose { scope.close() }
+        }
     }
 
     /**
@@ -162,8 +165,10 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      * @param templateClass The KClass of the template to add
      */
     @Composable
-    fun AddTemplate(templateClass: KClass<out VROTemplate<*, *, *, *, *, *>>) {
-        val template: VROTemplate<*, *, *, *, *, *> = scope.get(templateClass)
+    fun <T : VROTemplate<*, *, *, *, *, *>> AddTemplate(templateClass: KClass<T>) {
+        val template = remember<T>(templateClass) {
+            scope.get(templateClass)
+        }
         template.ComposableTemplateContainer(navController)
     }
 
