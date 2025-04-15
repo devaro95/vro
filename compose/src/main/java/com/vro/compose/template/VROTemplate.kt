@@ -5,7 +5,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -19,7 +18,7 @@ import com.vro.event.VROEventLauncher
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
-import org.koin.core.component.KoinScopeComponent
+import org.koin.core.scope.Scope
 
 /**
  * Abstract base class for creating reusable Jetpack Compose screens using a state-event-navigation architecture.
@@ -41,7 +40,9 @@ abstract class VROTemplate<
         E : VROEvent,
         M : VROTemplateMapper,
         R : VROTemplateRender<E, S>,
-        >() : KoinScopeComponent {
+        >() {
+
+    lateinit var scope: Scope
 
     /**
      * Event launcher used to dispatch [VROEvent] instances.
@@ -104,8 +105,9 @@ abstract class VROTemplate<
      * @throws ClassCastException if the local activity cannot be cast to [VROComposableActivity]
      */
     @Composable
-    internal fun ComposableTemplateContainer(navController: NavController) {
+    internal fun ComposableTemplateContainer(navController: NavController, scope: Scope) {
         val activity = LocalActivity.current as VROComposableActivity
+        this.scope = scope
         this.events = viewModel
         val lifecycle = LocalLifecycleOwner.current.lifecycle
         InitializeLifecycleObserver(
