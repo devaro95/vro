@@ -72,6 +72,8 @@ abstract class VROViewModelCore<S : VROState, E : VROEvent> : ViewModel(), VROEv
 
     open fun onPause() = Unit
 
+    open fun onDestroy() = Unit
+
     open fun onResume() {
         updateState { screenState }
     }
