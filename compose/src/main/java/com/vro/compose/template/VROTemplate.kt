@@ -72,7 +72,7 @@ abstract class VROTemplate<
      * Returns the mapper responsible for transforming raw data or state into a renderable form.
      * Typically used to prepare content for the UI layer.
      */
-    abstract fun mapper(): M
+    abstract val mapper: M
 
     /**
      * Defines how the screen is rendered based on the current state.
@@ -105,7 +105,7 @@ abstract class VROTemplate<
      * @throws ClassCastException if the local activity cannot be cast to [VROComposableActivity]
      */
     @Composable
-    internal fun ComposableTemplateContainer(navController: NavController, scope: Scope) {
+    fun ComposableTemplateContainer(navController: NavController, scope: Scope) {
         val activity = LocalActivity.current as VROComposableActivity
         this.scope = scope
         this.events = viewModel

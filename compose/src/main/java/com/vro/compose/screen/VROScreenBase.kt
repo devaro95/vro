@@ -3,6 +3,7 @@ package com.vro.compose.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -20,9 +21,9 @@ import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
-import org.koin.core.context.GlobalContext.get
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
+import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -156,9 +157,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
                 ScreenContent(state)
             }
         }
-        DisposableEffect(Unit) {
-            onDispose { scope.close() }
-        }
     }
 
     /**
@@ -168,7 +166,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      */
     @Composable
     fun <T : VROTemplate<*, *, *, *, *, *>> AddTemplate(templateClass: KClass<T>) {
-        val template = remember { templateClass.java.getDeclaredConstructor().newInstance() }
+        val template = remember<T>(templateClass) {
+            scope.get(templateClass)
+        }
         template.ComposableTemplateContainer(navController, scope)
     }
 
