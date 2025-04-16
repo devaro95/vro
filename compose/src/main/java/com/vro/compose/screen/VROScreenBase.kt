@@ -3,6 +3,7 @@ package com.vro.compose.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -20,9 +21,9 @@ import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
-import org.koin.core.context.GlobalContext.get
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
+import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -156,19 +157,23 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
                 ScreenContent(state)
             }
         }
-        DisposableEffect(Unit) {
-            onDispose { scope.close() }
-        }
     }
 
-    /**
-     * Adds a template component to the screen.
-     *
-     * @param templateClass The KClass of the template to add
-     */
     @Composable
-    fun <T : VROTemplate<*, *, *, *, *, *>> AddTemplate(templateClass: KClass<T>) {
-        val template = remember { templateClass.java.getDeclaredConstructor().newInstance() }
+    inline fun <reified T : VROTemplate<*, *, *, *, *, *>> AddTemplate(
+        templateClass: KClass<T>,
+    ) {
+        val qualifier = remember(templateClass) { named(templateClass.simpleName ?: "DefaultTemplate") }
+        val scopeId = rememberSaveable(templateClass) { "${templateClass.simpleName}-${UUID.randomUUID()}" }
+        val scope = remember(scopeId) { getKoin().createScope(scopeId, qualifier) }
+        DisposableEffect(scope) {
+            onDispose {
+                scope.close()
+            }
+        }
+        val template = remember(scope) {
+            scope.get<T>()
+        }
         template.ComposableTemplateContainer(navController, scope)
     }
 

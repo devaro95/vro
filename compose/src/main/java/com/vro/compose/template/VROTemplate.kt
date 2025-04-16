@@ -105,7 +105,7 @@ abstract class VROTemplate<
      * @throws ClassCastException if the local activity cannot be cast to [VROComposableActivity]
      */
     @Composable
-    internal fun ComposableTemplateContainer(navController: NavController, scope: Scope) {
+    fun ComposableTemplateContainer(navController: NavController, scope: Scope) {
         val activity = LocalActivity.current as VROComposableActivity
         this.scope = scope
         this.events = viewModel
