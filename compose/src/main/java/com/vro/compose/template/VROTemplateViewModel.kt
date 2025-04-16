@@ -22,4 +22,5 @@ import com.vro.state.VROState
  * @param D The type of navigation destination, must extend [VRODestination].
  * @param E The type of events, must extend [VROEvent].
  */
-abstract class VROTemplateViewModel<S : VROState, D : VRODestination, E : VROEvent> : VROViewModelNav<S, D, E>()
+abstract class VROTemplateViewModel<S : VROState, D : VRODestination, E : VROEvent> : VROViewModelNav<S, D, E>(){
+}
