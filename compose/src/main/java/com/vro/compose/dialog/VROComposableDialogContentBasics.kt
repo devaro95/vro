@@ -98,11 +98,7 @@ abstract class VROComposableDialogContentBasics<S : VROState, E : VROEvent> {
      */
     @Composable
     internal fun ComposableDialogSkeleton() {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            skeleton?.SkeletonContent()
-        }
+        skeleton?.SkeletonContent()
     }
 
     /**
