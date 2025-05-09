@@ -57,7 +57,7 @@ abstract class VROTemplateNavigator<D : VRODestination> : VROTemplateNav<D> {
      */
     override fun navigateBack(result: VROBackResult?) {
         result?.let {
-            putResultParam(navController.previousBackStackEntry?.destination?.id.toString(), result)
+            putResultParam(result.id, result)
         }
         navController.popBackStack().also { hasBack ->
             if (!hasBack) finish()
