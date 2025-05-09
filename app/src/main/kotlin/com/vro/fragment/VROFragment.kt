@@ -125,18 +125,12 @@ abstract class VROFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getOnNavResult()
+        viewModel.getResult()
         binding.onViewStarted()
     }
 
     private fun initializeState(viewModel: VM, fragment: Fragment) {
         viewModel.setInitialState(state)
-    }
-
-    private fun getOnNavResult() {
-        getResultParam(findNavController().currentDestination?.id.toString())?.let {
-            viewModel.onNavResult(it)
-        }
     }
 
     private fun cancelFlows() {

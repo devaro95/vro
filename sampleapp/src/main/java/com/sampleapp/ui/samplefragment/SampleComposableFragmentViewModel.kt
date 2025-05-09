@@ -6,11 +6,18 @@ import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleC
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations.DestinationNavigation
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentState
 import com.vro.compose.VROComposableViewModel
+import com.vro.navigation.resultListener
 
 class SampleComposableFragmentViewModel :
     VROComposableViewModel<SampleComposableFragmentState, SampleComposableFragmentDestinations, SampleComposableFragmentEvents>() {
 
     override val initialState: SampleComposableFragmentState = SampleComposableFragmentState.INITIAL
+
+    override fun getResult() {
+        resultListener("100") {
+            //Do Something
+        }
+    }
 
     override fun onEvent(event: SampleComposableFragmentEvents) {
         when (event) {

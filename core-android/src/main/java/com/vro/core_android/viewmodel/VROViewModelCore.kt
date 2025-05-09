@@ -36,7 +36,7 @@ abstract class VROViewModelCore<S : VROState, E : VROEvent> : ViewModel(), VROEv
 
     open fun onStart() = Unit
 
-    open fun onNavResult(result: VROBackResult) = Unit
+    open fun getResult() = Unit
 
     abstract fun onEvent(event: E)
 

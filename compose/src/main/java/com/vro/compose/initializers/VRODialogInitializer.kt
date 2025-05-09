@@ -45,9 +45,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
             onCreate = { viewModel.onStarter(getStarterParam(navController.currentDestination?.id.toString())) },
             onStart = { viewModel.onStart() },
             onResume = {
-                getResultParam(navController.currentDestination?.id.toString())?.let {
-                    viewModel.onNavResult(it)
-                }
+                viewModel.getResult()
                 viewModel.onResume()
             },
             onPause = { viewModel.onPause() }
