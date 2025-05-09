@@ -19,6 +19,10 @@ abstract class VROViewModelNav<S : VROState, D : VRODestination, E : VROEvent> :
         observableNavigation.tryEmit(VRONavigationState(destination))
     }
 
+    fun setResult(result: VROBackResult){
+        putResultParam(result.id, result)
+    }
+
     override fun doBack(result: VROBackResult?) {
         observableNavigation.tryEmit(VRONavigationState(backResult = result))
     }
