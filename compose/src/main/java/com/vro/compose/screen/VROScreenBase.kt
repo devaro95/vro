@@ -120,11 +120,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      */
     @Composable
     internal fun ComposableScreenSkeleton() {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            skeleton?.SkeletonContent()
-        }
+        skeleton?.SkeletonContent()
     }
 
     /**
