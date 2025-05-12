@@ -21,7 +21,7 @@ import com.vro.navstarter.VRONavStarter
  */
 abstract class VROComposableNavigator<D : VRODestination>(
     override val activity: VROComposableActivity,
-    override val navController: NavController
+    override val navController: NavController,
 ) : VRONavigator<D> {
 
     /**
@@ -104,9 +104,10 @@ abstract class VROComposableNavigator<D : VRODestination>(
         popScreen: VROScreen<*, *>? = null,
         inclusive: Boolean = false,
     ) {
+        activity.hideKeyboard()
         navController.navigate(destinationRoute) {
-            popScreen?.destinationRoute()?.let {
-                popUpTo(it) {
+            popScreen?.destinationRoute()?.let { route ->
+                popUpTo(route) {
                     this.inclusive = inclusive
                 }
             }
