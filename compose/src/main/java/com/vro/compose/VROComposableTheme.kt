@@ -12,7 +12,7 @@ import androidx.compose.material3.Typography
  * @property typography The typography configuration for the theme
  */
 data class VROComposableTheme(
-    val lightColors: ColorScheme,
-    val darkColors: ColorScheme,
-    val typography: Typography,
+    val lightColors: ColorScheme? = null,
+    val darkColors: ColorScheme? = null,
+    val typography: Typography? = null,
 )
