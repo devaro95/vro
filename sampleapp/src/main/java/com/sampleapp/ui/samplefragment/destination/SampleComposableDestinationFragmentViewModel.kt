@@ -20,7 +20,7 @@ class SampleComposableDestinationFragmentViewModel :
 
     override fun onEvent(event: SampleComposableDestinationFragmentEvents) {
         when (event) {
-            BackWithResult -> doBack(VROBackResult(100))
+            BackWithResult -> doBack(VROBackResult("100"))
             Update -> Unit
         }
     }
