@@ -19,8 +19,8 @@ import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
 import org.koin.core.component.KoinScopeComponent
-import org.koin.core.context.GlobalContext.get
-import org.koin.core.qualifier.named
+import org.koin.core.component.createScope
+import org.koin.core.scope.Scope
 
 /**
  * Abstract base class for creating reusable Jetpack Compose screens using a state-event-navigation architecture.
@@ -42,14 +42,13 @@ abstract class VROTemplate<
         E : VROEvent,
         M : VROTemplateMapper,
         R : VROTemplateRender<E, S>,
-        >() : KoinScopeComponent {
+        >(): KoinScopeComponent {
 
     /**
-     * Koin scope tied to this template class.
-     * Lazily retrieves an existing scope by the class name or creates a new one.
-     * Used for dependency injection scoped to this specific template.
+     * Koin scope tied to this screen instance.
+     * Lazily retrieves an existing scope by the template's class name, or creates a new one if not found.
      */
-    override val scope = get().getScopeOrNull(this::class.toString()) ?: get().createScope(this::class.toString(), named(this::class.toString()))
+    override val scope: Scope by lazy { createScope(this) }
 
     /**
      * Event launcher used to dispatch [VROEvent] instances.
@@ -79,7 +78,7 @@ abstract class VROTemplate<
      * Returns the mapper responsible for transforming raw data or state into a renderable form.
      * Typically used to prepare content for the UI layer.
      */
-    abstract fun mapper(): M
+    abstract val mapper: M
 
     /**
      * Defines how the screen is rendered based on the current state.
@@ -112,7 +111,7 @@ abstract class VROTemplate<
      * @throws ClassCastException if the local activity cannot be cast to [VROComposableActivity]
      */
     @Composable
-    internal fun ComposableTemplateContainer(navController: NavController) {
+    fun ComposableTemplateContainer(navController: NavController) {
         val activity = LocalActivity.current as VROComposableActivity
         this.events = viewModel
         val lifecycle = LocalLifecycleOwner.current.lifecycle

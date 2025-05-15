@@ -114,7 +114,7 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
         )
         lifecycle.addObserver(observer)
         onDispose {
-            viewModel.onPause()
+            viewModel.onDestroy()
             lifecycle.removeObserver(observer)
         }
     }
