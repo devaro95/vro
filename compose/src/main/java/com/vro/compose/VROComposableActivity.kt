@@ -62,14 +62,15 @@ abstract class VROComposableActivity : ComponentActivity() {
      */
     @Composable
     private fun CreateTheme(
-        lightColors: ColorScheme,
-        darkColors: ColorScheme,
-        typography: Typography,
+        lightColors: ColorScheme?,
+        darkColors: ColorScheme?,
+        typography: Typography?,
         content: @Composable () -> Unit,
     ) {
+        val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
         MaterialTheme(
-            colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors,
-            typography = typography
+            colorScheme = colorScheme ?: MaterialTheme.colorScheme,
+            typography = typography ?: MaterialTheme.typography
         ) {
             CompositionLocalProvider(content = content)
         }
