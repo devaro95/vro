@@ -42,7 +42,7 @@ abstract class VROTemplate<
         E : VROEvent,
         M : VROTemplateMapper,
         R : VROTemplateRender<E, S>,
-        >(): KoinScopeComponent {
+        >() : KoinScopeComponent {
 
     /**
      * Koin scope tied to this screen instance.
@@ -144,11 +144,7 @@ abstract class VROTemplate<
      */
     @Composable
     internal fun TemplateScreenSkeleton() {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            skeleton?.SkeletonContent()
-        }
+        skeleton?.SkeletonContent()
     }
 
     /**
