@@ -3,6 +3,7 @@ package com.vro.compose.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -19,8 +20,10 @@ import com.vro.state.VRODialogData
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinScopeComponent
-import org.koin.core.context.GlobalContext.get
+import org.koin.core.component.createScope
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
+import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -42,7 +45,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      * Koin scope tied to this screen instance.
      * Lazily retrieves an existing scope by the screen's class name, or creates a new one if not found.
      */
-    override val scope = get().getScopeOrNull(this::class.toString()) ?: get().createScope(this::class.toString(), named(this::class.toString()))
+    override val scope: Scope by lazy { createScope(this) }
 
     /**
      * Navigation controller for this screen.
@@ -162,8 +165,10 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      * @param templateClass The KClass of the template to add
      */
     @Composable
-    fun AddTemplate(templateClass: KClass<out VROTemplate<*, *, *, *, *, *>>) {
-        val template: VROTemplate<*, *, *, *, *, *> = scope.get(templateClass)
+    fun <T : VROTemplate<*, *, *, *, *, *>> AddTemplate(templateClass: KClass<T>) {
+        val template = remember<T>(templateClass) {
+            scope.get(templateClass)
+        }
         template.ComposableTemplateContainer(navController)
     }
 
