@@ -106,6 +106,10 @@ abstract class VROComposableActivity : ComponentActivity() {
         val snackbarHostState = remember { SnackbarHostState() }
         val snackbarState = remember { mutableStateOf(VROSnackBarState(snackbarHostState)) }
 
+        LaunchedEffect(navController) {
+            onInitialized()
+        }
+
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -165,6 +169,8 @@ abstract class VROComposableActivity : ComponentActivity() {
             }
         }
     }
+
+    open fun onInitialized() = Unit
 
     /**
      * Optional implementation of the bottom bar.
