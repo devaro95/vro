@@ -76,6 +76,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -96,16 +97,15 @@ abstract class VROComposableActivity : ComponentActivity() {
      */
     @OptIn(ExperimentalMaterialNavigationApi::class)
     @Composable
-    fun Initialize(backgroundColor: Color? = null) {
+    private fun Initialize(backgroundColor: Color? = null) {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         this.navController = navController
-
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
         val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
         val snackbarHostState = remember { SnackbarHostState() }
         val snackbarState = remember { mutableStateOf(VROSnackBarState(snackbarHostState)) }
-
+        OnInitialize()
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -166,6 +166,9 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    open fun OnInitialize() = Unit
+
     /**
      * Optional implementation of the bottom bar.
      * Can be overridden by subclasses to provide custom behavior or layout.
@@ -180,8 +183,9 @@ abstract class VROComposableActivity : ComponentActivity() {
      *
      * @throws Exception if no current destination is found.
      */
+    @Composable
     fun getCurrentScreen(): String {
-        return navController.currentDestination?.route
+        return rememberNavController().currentDestination?.route
             ?: throw Exception("No current screen found")
     }
 
@@ -191,11 +195,12 @@ abstract class VROComposableActivity : ComponentActivity() {
      * @param screen The destination screen.
      * @param starter Optional navigation starter params.
      */
+    @Composable
     fun navigateToScreen(
         screen: VROScreen<*, *>,
         starter: VRONavStarter? = null,
     ) {
-        navController.navigate(screen.destinationRoute()) {
+        rememberNavController().navigate(screen.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
         }
