@@ -1,6 +1,5 @@
 package com.sampleapp.ui.main
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
@@ -11,8 +10,11 @@ import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator
 import com.sampleapp.styles.SampleTheme
 import com.sampleapp.ui.detail.*
+import com.sampleapp.ui.detail.screen.SampleDetailScreen
 import com.sampleapp.ui.home.*
+import com.sampleapp.ui.home.screen.SampleHomeScreen
 import com.sampleapp.ui.profile.*
+import com.sampleapp.ui.profile.screen.SampleProfileScreen
 import com.vro.compose.VROComposableActivity
 import com.vro.compose.VROComposableTheme
 import com.vro.compose.extensions.vroBottomSheet

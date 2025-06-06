@@ -179,11 +179,9 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     bottomBarState: MutableState<VROBottomBarBaseState>,
     snackbarState: MutableState<VROSnackBarState>,
 ) {
-    content.context = LocalContext.current
+    content.screenContent.context = LocalContext.current
     content.events = viewModel
     content.navController = navigator.navController
-    content.coroutineScope = rememberCoroutineScope()
-    content.snackbarState = snackbarState
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
@@ -245,9 +243,8 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestina
     bottomBarState: MutableState<VROBottomBarBaseState>,
     snackbarState: MutableState<VROSnackBarState>,
 ) {
-    content.context = LocalContext.current
+    content.screenContent.context = LocalContext.current
     content.events = viewModel
-
     BackHandler(true) { viewModel.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
