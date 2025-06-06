@@ -7,12 +7,12 @@ plugins {
 apply from: '../gradleConfig/configuration.gradle'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility =JavaVersion.VERSION_21
+    targetCompatibility =JavaVersion.VERSION_21
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
+    kotlinOptions.jvmTarget =JavaVersion.VERSION_21.toString()
     kotlinOptions.freeCompilerArgs = ["-Xcontext-receivers"]
 }
 

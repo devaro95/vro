@@ -1,29 +1,25 @@
 package com.vro.compose.screen
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.*
+import android.content.Context
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.vro.compose.preview.VROLightMultiDevicePreview
+import com.vro.compose.handler.*
+import com.vro.compose.handler.default.*
 import com.vro.compose.skeleton.VROSkeleton
+import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
-import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
-import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.template.VROTemplate
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
-import com.vro.navigation.VROBackResult
-import com.vro.state.VRODialogData
 import com.vro.state.VROState
-import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
-import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
-import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -39,7 +35,14 @@ import kotlin.reflect.KClass
  * @param S The state type that extends [VROState]
  * @param E The event type that extends [VROEvent]
  */
-abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
+abstract class VROScreenBase<S : VROState, E : VROEvent>(
+    open val dialogHandler: VRODialogHandler<E> = VRODialogHandlerDefault(),
+    open val errorHandler: VROErrorHandler<E> = VROErrorHandlerDefault(),
+    open val oneTimeHandler: VROOneTimeHandler<S, E> = VROOneTimeHandlerDefault(),
+    open val skeleton: VROSkeleton = VROSkeletonDefault(),
+) : KoinScopeComponent {
+
+    abstract val screenContent: VROScreenContent<S, E>
 
     /**
      * Koin scope tied to this screen instance.
@@ -57,7 +60,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      * Optional skeleton loading animation implementation.
      * Set to provide custom loading placeholders.
      */
-    open val skeleton: VROSkeleton? = null
 
     /**
      * Event launcher for handling screen events.
@@ -77,50 +79,12 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
     internal lateinit var screenState: S
 
     /**
-     * Mutable state for top app bar configuration.
-     */
-    internal lateinit var topBarState: MutableState<VROTopBarBaseState>
-
-    /**
-     * Mutable state for bottom app bar configuration.
-     */
-    internal lateinit var bottomBarState: MutableState<VROBottomBarBaseState>
-
-    /**
-     * Mutable state for snackbar presentation.
-     */
-    lateinit var snackbarState: MutableState<VROSnackBarState>
-
-    /**
-     * Configures the initial state of the top app bar.
-     * Override to provide custom top bar configurations.
-     *
-     * @param currentState The current top bar state
-     * @return The desired top bar configuration state
-     */
-    open fun setTopBar(currentState: VROTopBarBaseState): VROTopBarBaseState = VROTopBarStartState()
-
-    /**
-     * Configures the initial state of the bottom app bar.
-     * Override to provide custom bottom bar configurations.
-     *
-     * @param currentState The current bottom bar state
-     * @return The desired bottom bar configuration state
-     */
-    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState = VROBottomBarStartState()
-
-    /**
-     * Coroutine scope tied to the screen's lifecycle.
-     */
-    lateinit var coroutineScope: CoroutineScope
-
-    /**
      * Composable function that renders the skeleton loading state.
      * Uses the provided [skeleton] implementation if available.
      */
     @Composable
     internal fun ComposableScreenSkeleton() {
-        skeleton?.SkeletonContent()
+        skeleton.SkeletonContent()
     }
 
     /**
@@ -139,17 +103,26 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
         bottomBarState: MutableState<VROBottomBarBaseState>,
         snackbarState: MutableState<VROSnackBarState>,
     ) {
-        this.topBarState = topBarState
-        this.bottomBarState = bottomBarState
-        this.snackbarState = snackbarState
+        val context: Context = LocalContext.current
+        this.dialogHandler.events = events
+        this.dialogHandler.context = context
+        this.errorHandler.events = events
+        this.errorHandler.context = context
+        this.screenContent.events = events
+        this.oneTimeHandler.events = events
+        this.oneTimeHandler.context = context
+        this.screenContent.topBarState = topBarState
+        this.screenContent.bottomBarState = bottomBarState
         screenState = state
+        screenContent.coroutineScope = rememberCoroutineScope()
+        screenContent.snackbarState = snackbarState
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
             if (isTablet() && tabletDesignEnabled) {
                 ScreenTabletContent(state)
             } else {
-                ScreenContent(state)
+                screenContent.Content(state)
             }
         }
     }
@@ -168,14 +141,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
     }
 
     /**
-     * Abstract composable function that must be implemented to provide the main screen content.
-     *
-     * @param state The current screen state
-     */
-    @Composable
-    abstract fun ScreenContent(state: S)
-
-    /**
      * Composable function for tablet-optimized content.
      * Override to provide tablet-specific layouts when [tabletDesignEnabled] is true.
      *
@@ -183,60 +148,4 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
      */
     @Composable
     open fun ScreenTabletContent(state: S) = Unit
-
-    /**
-     * Abstract composable function that must be implemented to provide a preview of the screen.
-     * Annotated with [VROLightMultiDevicePreview] for multi-device preview support.
-     */
-    @VROLightMultiDevicePreview
-    @Composable
-    abstract fun ScreenPreview()
-
-    /**
-     * Handles dialog presentation.
-     * Override to implement custom dialog handling.
-     *
-     * @param data The dialog configuration data
-     */
-    @SuppressLint("ComposableNaming")
-    @Composable
-    open fun onDialog(data: VRODialogData) = Unit
-
-    /**
-     * Handles error presentation.
-     * Override to implement custom error handling.
-     *
-     * @param error The error that occurred
-     * @param data Optional additional error data
-     */
-    @SuppressLint("ComposableNaming")
-    @Composable
-    open fun onError(error: Throwable, data: Any?) = Unit
-
-    /**
-     * Handles one-time events.
-     * Override to implement custom one-time event handling.
-     *
-     * @param id The event ID
-     * @param state The current screen state
-     */
-    open fun oneTimeHandler(id: Int, state: S) = Unit
-
-    /**
-     * Dispatches an event to the ViewModel.
-     *
-     * @param event The event to dispatch
-     */
-    fun event(event: E) {
-        events.doEvent(event)
-    }
-
-    /**
-     * Navigates back with an optional result.
-     *
-     * @param result Optional result to pass back to the previous screen
-     */
-    fun navigateBack(result: VROBackResult? = null) {
-        events.doBack(result)
-    }
 }
