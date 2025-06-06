@@ -9,10 +9,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableViewModel
 import com.vro.compose.screen.VROScreen
+import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.event.VROEvent
-import com.vro.navigation.*
+import com.vro.navigation.VRODestination
+import com.vro.navigation.getStarterParam
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 
@@ -39,7 +41,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
     LaunchedEffect(key1 = Unit) {
         viewModel.getOneTimeEvents().collectLatest { oneTime ->
             if (oneTime is VROOneTimeState.Launch) {
-                content.oneTimeHandler(oneTime.id, oneTime.state)
+                content.oneTimeHandler.onOneTime(oneTime.id, oneTime.state)
                 viewModel.clearOneTime()
             }
         }
@@ -81,9 +83,11 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue =
-            content.skeleton?.let {
+            if (content.skeleton::class != VROSkeletonDefault::class) {
                 VROStepper.VROSkeletonStep(viewModel.initialState)
-            } ?: VROStepper.VROStateStep(viewModel.initialState),
+            } else {
+                VROStepper.VROStateStep(viewModel.initialState)
+            },
         lifecycle = screenLifecycle
     ).value
 
@@ -97,10 +101,10 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
             snackbarState = snackbarState
         )
         (stepper as? VROStepper.VRODialogStep)?.let {
-            content.onDialog(it.dialogState)
+            content.dialogHandler.OnDialog(it.dialogState)
         }
         (stepper as? VROStepper.VROErrorStep)?.let {
-            content.onError(it.error, it.data)
+            content.errorHandler.OnError(it.error, it.data)
         }
     }
 }

@@ -1,0 +1,10 @@
+package com.sampleapp.ui.samplefragment.destination.screen
+
+import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentEvents
+import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentState
+import com.vro.compose.screen.VROScreen
+import com.vro.compose.screen.VROScreenContent
+
+class SampleComposableDestinationFragmentScreen(
+    override val screenContent: VROScreenContent<SampleComposableDestinationFragmentState, SampleComposableDestinationFragmentEvents> = SampleComposableDestinationFragmentScreenContent(),
+) : VROScreen<SampleComposableDestinationFragmentState, SampleComposableDestinationFragmentEvents>()
