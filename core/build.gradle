@@ -7,18 +7,17 @@ plugins {
 apply from: '../gradleConfig/configuration.gradle'
 
 java {
-    sourceCompatibility =JavaVersion.VERSION_21
-    targetCompatibility =JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget =JavaVersion.VERSION_21.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
     kotlinOptions.freeCompilerArgs = ["-Xcontext-receivers"]
 }
 
-dependencies{
-    implementation project(':common')
-
+dependencies {
+    api(project(":common"))
     api(libs.coroutines.core)
     api(libs.koin.annotations)
     api(libs.koin.core)
