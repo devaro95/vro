@@ -44,7 +44,6 @@ publishing {
 
 dependencies {
     api(project(":core"))
-    api(project(":common"))
 
     api(libs.navigation.dynamic.features)
     api(libs.navigation.fragment)
