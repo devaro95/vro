@@ -143,7 +143,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent> : KoinScopeComponent {
         this.bottomBarState = bottomBarState
         this.snackbarState = snackbarState
         screenState = state
-        coroutineScope = rememberCoroutineScope()
         Box(
             modifier = Modifier.fillMaxSize()
         ) {

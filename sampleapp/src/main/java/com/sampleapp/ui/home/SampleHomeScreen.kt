@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ class SampleHomeScreen(
 
     @Composable
     override fun ScreenContent(state: SampleHomeState) {
+        val coroutineScope = rememberCoroutineScope()
         Column(
             modifier = Modifier
                 .vroVerticalScroll()
@@ -89,7 +91,12 @@ class SampleHomeScreen(
             OutlinedButton(
                 modifier = Modifier.padding(top = 16.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { showSnackbar("Snackbar Example", actionLabel = "action") }
+                onClick = {
+                    showSnackbar(
+                        message = "Snackbar Example",
+                        actionLabel = "action"
+                    )
+                }
             ) {
                 Text(text = "Show Snackbar")
             }
