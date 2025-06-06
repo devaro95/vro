@@ -43,12 +43,6 @@ dependencies {
     implementation(project(":core-android"))
 
     implementation(libs.material)
-    implementation(libs.material3)
-    implementation(libs.compose.activity)
-    implementation(libs.koin.compose)
-    implementation(libs.view.binding)
     implementation(libs.lottie.compose)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.junit)
     debugImplementation(libs.ui.tooling)
 }

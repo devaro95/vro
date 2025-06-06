@@ -48,16 +48,6 @@ dependencies {
     api(project(":common"))
 
     api(libs.material3)
-    api(libs.koin.compose)
-    implementation(libs.navigation.dynamic.features)
-    implementation(libs.compose.activity)
     implementation(libs.accompanist.navigation.material)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.mockito.inline)
-    implementation(libs.mockito.core)
-    implementation(libs.junit)
-    implementation(libs.arch.core)
-    implementation(libs.coroutines.test)
-    implementation(libs.coroutines.core)
     implementation(libs.lifecycle.runtime.compose.android)
 }
