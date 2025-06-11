@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -117,7 +118,7 @@ abstract class VROComposableActivity : ComponentActivity() {
             sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
         ) {
             Scaffold(
-                contentWindowInsets = WindowInsets.systemBars,
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal),
                 containerColor = backgroundColor ?: Color.Transparent,
                 topBar = {
                     (topBarState.value as? VROTopBarBaseState.VROTopBarState)?.let {
