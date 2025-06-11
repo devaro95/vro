@@ -34,8 +34,7 @@ class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEven
         Column(
             modifier = Modifier
                 .vroVerticalScroll()
-                .fillMaxWidth()
-                .padding(top = 16.dp),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(
