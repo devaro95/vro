@@ -66,6 +66,38 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODe
 }
 
 /**
+ * Adds a bottom sheet destination to the navigation graph without ViewModel support.
+ *
+ * @param S The state type that extends [VROState]
+ *
+ * @param initialState The initial state to be used by the bottom sheet
+ * @param content The bottom sheet content composable
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the sheet is dismissed
+ *
+ * @see VroComposableBottomSheetContent For internal implementation
+ * @see bottomSheet For base navigation implementation
+ */
+@OptIn(ExperimentalMaterialNavigationApi::class)
+fun <S : VROState> NavGraphBuilder.vroBottomSheet(
+    initialState: S,
+    content: VROComposableBottomSheetContent<S>,
+    listener: VRODialogListener? = null,
+    onDismiss: () -> Unit = { },
+) {
+    bottomSheet(
+        route = content.destinationRoute(),
+    ) {
+        VroComposableBottomSheetContent(
+            content = content,
+            listener = listener,
+            onDismiss = onDismiss,
+            initialState = initialState
+        )
+    }
+}
+
+/**
  * Composable function for a ViewModel-backed bottom sheet.
  * Provides full configuration options for appearance and behavior.
  *
@@ -209,4 +241,26 @@ internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, 
         viewModel = viewModel,
         navigator = navigator
     )
+}
+
+/**
+ * Internal implementation for simple bottom sheet content without navigation or ViewModel.
+ * Responsible for rendering the dialog content and assigning the context.
+ *
+ * @param S The state type that extends [VROState]
+ *
+ * @param initialState The initial state of the bottom sheet
+ * @param content The content to be displayed in the bottom sheet
+ * @param listener Optional dialog listener for callbacks
+ * @param onDismiss Callback when the sheet is dismissed
+ */
+@Composable
+internal fun <S : VROState> VroComposableBottomSheetContent(
+    initialState: S,
+    content: VROComposableBottomSheetContent<S>,
+    listener: VRODialogListener?,
+    onDismiss: () -> Unit,
+) {
+    content.context = LocalContext.current
+        content.CreateDialog(initialState, listener, onDismiss)
 }
