@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -111,11 +112,13 @@ abstract class VROComposableActivity : ComponentActivity() {
         }
 
         ModalBottomSheetLayout(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
             sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
         ) {
             Scaffold(
+                contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal),
                 containerColor = backgroundColor ?: Color.Transparent,
                 topBar = {
                     (topBarState.value as? VROTopBarBaseState.VROTopBarState)?.let {
@@ -127,7 +130,9 @@ abstract class VROComposableActivity : ComponentActivity() {
                 bottomBar = {
                     (bottomBarState.value as? VROBottomBarState)?.let {
                         if (bottomBarState.value.visibility) {
-                            BottomBar(selectedItem = it.selectedItem)
+                            Row(modifier = Modifier.navigationBarsPadding() ) {
+                                BottomBar(selectedItem = it.selectedItem,)
+                            }
                         }
                     }
                 },
@@ -147,12 +152,8 @@ abstract class VROComposableActivity : ComponentActivity() {
             ) { innerPadding ->
                 Column(
                     modifier = Modifier
-                        .padding(
-                            top = innerPadding.calculateTopPadding(),
-                            bottom = if (!bottomBarState.value.visibility)
-                                0.dp else innerPadding.calculateBottomPadding()
-                        )
                         .fillMaxSize()
+                        .padding(innerPadding)
                 ) {
                     NavHost(
                         navController = navController,
