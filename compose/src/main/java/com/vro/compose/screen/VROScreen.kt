@@ -8,27 +8,32 @@ import com.vro.state.VROState
 
 /**
  * Abstract base class for Compose screens in the application.
- * Provides common functionality for screen management including:
- * - App bar configuration (top/bottom)
- * - Snackbar presentation
- * - State management
+ * Provides shared functionality for screen-level features such as:
+ * - App bar (top and bottom) configuration
+ * - Snackbar handling
+ * - Reactive state and event management
  *
- * @param S The state type that extends [VROState]
- * @param E The event type that extends [VROEvent]
+ * Subclasses are expected to define screen content and customize UI behavior
+ * through [screenContent] and associated handlers.
  *
- * @see VROScreenBase for the parent class implementation
+ * @param S The UI state type, extending [VROState]
+ * @param E The event type, extending [VROEvent]
+ *
+ * @see VROScreenBase for the base implementation
  */
-abstract class VROScreen<S : VROState, E : VROEvent>() : VROScreenBase<S, E>() {
+abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
 
     /**
-     * Configures the scaffold with initial top and bottom bar states.
-     * Called internally during screen initialization.
+     * Initializes the scaffold bars (top and bottom) by applying the configuration
+     * returned from [screenContent]'s `setTopBar` and `setBottomBar` methods.
      *
-     * @param topBarState Mutable state for the top app bar configuration
-     * @param bottomBarState Mutable state for the bottom app bar configuration
+     * This is invoked automatically during screen setup and should not be called directly.
      *
-     * @see setTopBar for top bar customization
-     * @see setBottomBar for bottom bar customization
+     * @param topBarState A mutable state holding the top app bar configuration
+     * @param bottomBarState A mutable state holding the bottom app bar configuration
+     *
+     * @see VROTopBarBaseState for top bar structure
+     * @see VROBottomBarBaseState for bottom bar structure
      */
     internal fun configureScaffold(
         topBarState: MutableState<VROTopBarBaseState>,
