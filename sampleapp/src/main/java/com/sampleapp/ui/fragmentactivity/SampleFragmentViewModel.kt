@@ -1,6 +1,6 @@
 package com.sampleapp.ui.fragmentactivity
 
-import com.vro.fragment.VROViewModel
+import com.vro.core_android.viewmodel.VROViewModel
 
 class SampleFragmentViewModel : VROViewModel<SampleFragmentState, SampleFragmentNavigator.SampleFragmentDestinations, SampleFragmentEvents>() {
 
