@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
-import com.vro.fragment.VROViewModel
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData
 import com.vro.state.VROState

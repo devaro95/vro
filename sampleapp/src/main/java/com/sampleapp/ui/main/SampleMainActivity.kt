@@ -22,6 +22,7 @@ import com.vro.compose.extensions.vroComposableScreen
 import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
+import com.vro.core_android.injection.injectViewModel
 import org.koin.androidx.compose.koinViewModel
 
 class SampleMainActivity : VROComposableActivity() {
@@ -46,7 +47,7 @@ class SampleMainActivity : VROComposableActivity() {
         snackbarState: MutableState<VROSnackBarState>,
     ) {
         vroComposableScreen(
-            viewModel = { koinViewModel<SampleHomeViewModel>() },
+            viewModel = { injectViewModel<SampleHomeViewModel>() },
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
             content = SampleHomeScreen(),
             topBarState = topBarState,
@@ -54,7 +55,7 @@ class SampleMainActivity : VROComposableActivity() {
             snackbarState = snackbarState
         )
         vroComposableScreen(
-            viewModel = { koinViewModel<SampleProfileViewModel>() },
+            viewModel = { injectViewModel<SampleProfileViewModel>() },
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
             topBarState = topBarState,
@@ -62,7 +63,7 @@ class SampleMainActivity : VROComposableActivity() {
             snackbarState = snackbarState
         )
         vroComposableScreen(
-            viewModel = { koinViewModel<SampleDetailViewModel>() },
+            viewModel = { injectViewModel<SampleDetailViewModel>() },
             navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
             content = SampleDetailScreen(),
             topBarState = topBarState,
@@ -71,7 +72,7 @@ class SampleMainActivity : VROComposableActivity() {
         )
         vroBottomSheet(
             content = SampleBottomSheet(),
-            viewModel = { koinViewModel<SampleBottomSheetNavViewModel>() },
+            viewModel = { injectViewModel<SampleBottomSheetNavViewModel>() },
             navigator = SampleBottomSheetNavigator(this@SampleMainActivity, navController)
         )
     }

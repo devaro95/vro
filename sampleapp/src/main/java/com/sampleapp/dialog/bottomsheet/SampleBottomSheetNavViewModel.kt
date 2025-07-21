@@ -4,12 +4,12 @@ import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.Dismiss
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnDialog
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
-import com.vro.compose.VROComposableViewModel
 import com.vro.constants.EMPTY_STRING
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.state.VRODialogData
 
 class SampleBottomSheetNavViewModel :
-    VROComposableViewModel<SampleBottomSheetState, SampleBottomSheetDestinations, SampleBottomSheetEvents>() {
+    VROViewModel<SampleBottomSheetState, SampleBottomSheetDestinations, SampleBottomSheetEvents>() {
 
     override val initialState = SampleBottomSheetState.INITIAL
 

@@ -5,8 +5,8 @@ package com.vro.compose.initializers
  */
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.vro.compose.VROComposableViewModel
 import com.vro.core_android.navigation.VRONavigator
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.core_android.viewmodel.VROViewModelCore
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
@@ -17,7 +17,7 @@ import com.vro.state.VROState
  * Listens for navigation events from the ViewModel and delegates to the navigator.
  * Handles both forward navigation and back navigation with results.
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
@@ -26,11 +26,11 @@ import com.vro.state.VROState
  * @param navigator The navigator implementation to handle navigation commands
  *
  * @see VRONavigator For navigation interface requirements
- * @see VROComposableViewModel.getNavigationState For expected ViewModel interface
+ * @see VROViewModel.getNavigationState For expected ViewModel interface
  *
  */
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeNavigatorListener(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeNavigatorListener(
     viewModel: VM,
     navigator: VRONavigator<D>,
 ) {

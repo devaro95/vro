@@ -7,11 +7,11 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.vro.compose.VROComposableViewModel
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.navigation.getStarterParam
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
  * Initializes a listener for one-time events from the ViewModel.
  * Handles single-occurrence events and delegates them to the screen.
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.collectLatest
  * @see VROScreen.oneTimeHandler For event handling implementation
  */
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeOneTimeListener(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeOneTimeListener(
     viewModel: VM,
     content: VROScreen<S, E>,
 ) {
@@ -56,7 +56,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
  * - Dialog presentations
  * - Error handling
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
@@ -73,7 +73,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
  * @see VROScreen.ComposableScreenContainer For content container
  */
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeStepperListener(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeStepperListener(
     viewModel: VM,
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,
@@ -117,7 +117,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
  * - Navigation result handling
  * - ViewModel lifecycle methods
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
@@ -133,7 +133,7 @@ fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E :
  * @see VROScreen.configureScaffold For scaffold setup
  */
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
     viewModel: VM,
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,

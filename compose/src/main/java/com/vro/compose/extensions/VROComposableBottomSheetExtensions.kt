@@ -16,11 +16,11 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.vro.compose.navigator.VROComposableNavigator
-import com.vro.compose.VROComposableViewModel
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.initializers.*
 import com.vro.core_android.viewmodel.VRODialogViewModel
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
@@ -30,7 +30,7 @@ import com.vro.state.VROStepper.*
 /**
  * Adds a bottom sheet destination to the navigation graph with ViewModel support.
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param E The event type that extends [VROEvent]
  * @param D The navigation destination type that extends [VRODestination]
@@ -45,7 +45,7 @@ import com.vro.state.VROStepper.*
  * @see bottomSheet For base navigation implementation
  */
 @OptIn(ExperimentalMaterialNavigationApi::class)
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
+fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
     viewModel: @Composable () -> VM,
     content: VROComposableViewModelBottomSheetContent<S, E>,
     navigator: VROComposableNavigator<D>,
@@ -188,7 +188,7 @@ fun <S : VROState> VroBottomSheet(
  * Internal implementation for navigation-based bottom sheet content.
  * Handles lifecycle, state management, and content rendering.
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param E The event type that extends [VROEvent]
  * @param D The navigation destination type that extends [VRODestination]
@@ -204,7 +204,7 @@ fun <S : VROState> VroBottomSheet(
  * @see InitializeNavigatorListener For navigation handling
  */
 @Composable
-internal fun <VM : VROComposableViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> VroComposableNavBottomSheetContent(
+internal fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> VroComposableNavBottomSheetContent(
     viewModel: VM,
     content: VROComposableViewModelBottomSheetContent<S, E>,
     navigator: VROComposableNavigator<D>,
