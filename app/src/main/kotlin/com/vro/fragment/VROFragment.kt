@@ -11,6 +11,7 @@ import androidx.viewbinding.ViewBinding
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.navigation.VRONavigator.Companion.NAVIGATION_STATE
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.*
@@ -25,7 +26,7 @@ abstract class VROFragment<
         VB : ViewBinding,
         D : VRODestination,
         E : VROEvent,
-        > : VROFragmentInjection<VM>(), VROFragmentBasics<VM, S, D, E> {
+        > : VROFragmentInjection<S, D, E, VM>(), VROFragmentBasics<VM, S, D, E> {
 
     private var _binding: VB? = null
 
@@ -93,7 +94,6 @@ abstract class VROFragment<
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeState(viewModel, this)
         observer = createLifecycleEventObserver(
             onCreate = {
                 viewModel.onStarter(getStarterParam(findNavController().currentDestination?.id.toString()))
@@ -127,10 +127,6 @@ abstract class VROFragment<
         super.onViewCreated(view, savedInstanceState)
         viewModel.getResult()
         binding.onViewStarted()
-    }
-
-    private fun initializeState(viewModel: VM, fragment: Fragment) {
-        viewModel.setInitialState(state)
     }
 
     private fun cancelFlows() {

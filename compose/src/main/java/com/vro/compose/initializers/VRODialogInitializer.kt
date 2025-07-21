@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
-import com.vro.compose.VROComposableViewModel
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
+import com.vro.core_android.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.VROState
@@ -20,7 +20,7 @@ import com.vro.state.VROState
  * - Handles navigation results during resume
  * - Automatically cleans up observers when disposed
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
@@ -29,13 +29,13 @@ import com.vro.state.VROState
  * @param screenLifecycle The lifecycle owner to observe
  * @param navController The NavController for parameter handling
  *
- * @see VROComposableViewModel For expected ViewModel interface
+ * @see VROViewModel For expected ViewModel interface
  * @see createLifecycleEventObserver For base observer implementation
  * @see DisposableEffect For lifecycle-aware composition
  *
  */
 @Composable
-fun <VM : VROComposableViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
     viewModel: VM,
     screenLifecycle: Lifecycle,
     navController: NavController,

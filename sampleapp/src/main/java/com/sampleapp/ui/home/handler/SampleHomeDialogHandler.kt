@@ -11,6 +11,7 @@ import com.sampleapp.ui.home.SampleHomeEvents
 import com.sampleapp.ui.home.SampleHomeViewModel
 import com.vro.compose.extensions.VROComposableDialog
 import com.vro.compose.extensions.VroBottomSheet
+import com.vro.core_android.injection.injectViewModel
 import com.vro.state.VRODialogData
 import org.koin.androidx.compose.koinViewModel
 
@@ -20,7 +21,7 @@ class SampleHomeDialogHandler : SampleBaseDialogHandler<SampleHomeEvents>() {
     override fun OnDialog(data: VRODialogData) {
         when (data.type) {
             SampleHomeViewModel.Companion.SIMPLE_VIEW_MODEL_DIALOG -> VROComposableDialog(
-                viewModel = { koinViewModel<SampleVMDialogViewModel>() },
+                viewModel = { injectViewModel<SampleVMDialogViewModel>() },
                 content = SampleVMDialog(),
                 onDismiss = { event(SampleHomeEvents.VmDialogDismiss) },
                 listener = object : SampleVMDialogListener {
@@ -29,7 +30,7 @@ class SampleHomeDialogHandler : SampleBaseDialogHandler<SampleHomeEvents>() {
             )
 
             SampleHomeViewModel.Companion.BOTTOM_SHEET -> VroBottomSheet(
-                viewModel = { koinViewModel<SampleBottomSheetViewModel>() },
+                viewModel = { injectViewModel<SampleBottomSheetViewModel>() },
                 content = SampleBottomSheet(),
                 onDismiss = { event(SampleHomeEvents.BottomSheetDismiss) },
                 fullExpanded = true

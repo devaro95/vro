@@ -14,7 +14,12 @@ import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 
-abstract class VROViewModelCore<S : VROState, E : VROEvent> : ViewModel(), VROEventLauncher<E> {
+abstract class VROViewModelCore<S : VROState, E : VROEvent> : VROEventLauncher<E> {
+
+    val id: String
+        get() {
+            return "ViewModelID: ${this.javaClass.name}"
+        }
 
     abstract val initialState: S
 
