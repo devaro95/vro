@@ -3,7 +3,6 @@ package com.vro.fragment
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.CallSuper
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
