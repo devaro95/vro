@@ -77,9 +77,14 @@ android {
 }
 
 publishing {
-    publications.withType<MavenPublication>().configureEach {
-        groupId = "com.vro"
-        artifactId = "vro-core"
-        version = "1.16.5"
+    publications {
+        withType<MavenPublication> {
+            groupId = "com.vro"
+            version = "1.16.7"
+        }
+
+        val kotlinMultiplatform by getting(MavenPublication::class) {
+            artifactId = "vro-core"
+        }
     }
 }
