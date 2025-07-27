@@ -7,10 +7,10 @@ plugins {
 apply(from = "../gradleConfig/configuration.gradle")
 
 kotlin {
+    // Targets
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
-            kotlinOptions.freeCompilerArgs += "-Xcontext-receivers"
         }
     }
     android()
@@ -18,58 +18,40 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    targets.configureEach {
-        compilations.configureEach {
-            kotlinOptions.freeCompilerArgs += "-Xcontext-receivers"
-        }
-    }
-
     sourceSets {
-        val commonMain by getting{
+        val commonMain by getting {
             dependencies {
-                api(project(":common"))
+                // Aquí pones las dependencias compartidas
                 implementation(libs.coroutines.core)
-                implementation(libs.koin.annotations)
-                implementation(libs.koin.core)
             }
         }
-        val commonTest by getting
-
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val androidMain by getting
         val jvmMain by getting
         val jvmTest by getting
 
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-
         val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
-
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
     }
 }
 
 android {
     compileSdk = 35
-    namespace = "com.vro.core"
-
+    namespace = "com.vro.common"
     defaultConfig {
         minSdk = 24
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -77,9 +59,12 @@ android {
 }
 
 publishing {
-    publications.withType<MavenPublication>().configureEach {
-        groupId = "com.vro"
-        artifactId = "vro-core"
-        version = "1.16.5"
+    publications {
+        withType<MavenPublication>().all {
+            groupId = "com.vro"
+            artifactId = "vro-common"
+            version = "1.16.3"
+        }
     }
 }
+
