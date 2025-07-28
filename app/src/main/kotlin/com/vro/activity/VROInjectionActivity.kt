@@ -14,6 +14,4 @@ abstract class VROActivityInjection<S : VROState, VM : VROViewModel<S, D, E>, D 
     val vm by lazy {
         initializeViewModel(this, viewModelSeed)
     }
-
-    val viewModel = vm.vroViewModel
 }

@@ -262,5 +262,5 @@ internal fun <S : VROState> VroComposableBottomSheetContent(
     onDismiss: () -> Unit,
 ) {
     content.context = LocalContext.current
-        content.CreateDialog(initialState, listener, onDismiss)
+    content.CreateDialog(initialState, listener, onDismiss)
 }

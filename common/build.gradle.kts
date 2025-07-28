@@ -7,41 +7,27 @@ plugins {
 apply(from = "../gradleConfig/configuration.gradle")
 
 kotlin {
-    // Targets
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
-        }
-    }
-    android()
-    iosX64()
+    androidTarget()
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                // Aquí pones las dependencias compartidas
-                implementation(libs.coroutines.core)
-            }
-        }
+        val commonMain by getting
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
         val androidMain by getting
-        val jvmMain by getting
-        val jvmTest by getting
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        }
+        val iosArm64Main by getting {
+            dependsOn(iosMain)
+        }
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
         }
     }
 }
@@ -53,17 +39,34 @@ android {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_22
+        targetCompatibility = JavaVersion.VERSION_22
     }
 }
 
 publishing {
+    tasks.withType<PublishToMavenLocal> {
+        dependsOn("assemble")
+    }
     publications {
-        withType<MavenPublication>().all {
+        withType<MavenPublication>().configureEach {
             groupId = "com.vro"
+            version = System.getenv("GITHUB_REF")?.removePrefix("refs/tags/v") ?: "1.16.13"
+        }
+
+        named<MavenPublication>("kotlinMultiplatform") {
             artifactId = "vro-common"
-            version = "1.16.3"
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/devaro95/vro")
+            credentials {
+                username = project.findProperty("github.user") as? String ?: System.getenv("GITHUB_USER") ?: ""
+                password = project.findProperty("github.token") as? String ?: System.getenv("GITHUB_TOKEN") ?: ""
+            }
         }
     }
 }

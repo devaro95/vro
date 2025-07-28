@@ -28,7 +28,7 @@ abstract class VROViewModelTest<S : VROState, VM : VROViewModelNav<S, *, E>, E :
     private lateinit var events: VROEventLauncher<E>
 
     fun event(event: E) {
-        events.doEvent(event)
+        viewModel.onEvent(event)
     }
 
     @Before

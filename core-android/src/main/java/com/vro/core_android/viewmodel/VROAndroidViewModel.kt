@@ -1,6 +1,5 @@
 package com.vro.core_android.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination

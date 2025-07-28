@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
+    kotlin("multiplatform")
     id("maven-publish")
     id("com.android.library")
 }
@@ -7,58 +7,28 @@ plugins {
 apply(from = "../gradleConfig/configuration.gradle")
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
-            kotlinOptions.freeCompilerArgs += "-Xcontext-receivers"
-        }
-    }
-    android()
-    iosX64()
+    androidTarget()
     iosArm64()
     iosSimulatorArm64()
 
-    targets.configureEach {
-        compilations.configureEach {
-            kotlinOptions.freeCompilerArgs += "-Xcontext-receivers"
-        }
-    }
-
     sourceSets {
-        val commonMain by getting{
+        val commonMain by getting {
             dependencies {
                 api(project(":common"))
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation(libs.coroutines.core)
                 implementation(libs.koin.annotations)
                 implementation(libs.koin.core)
             }
         }
-        val commonTest by getting
+        val androidMain by getting {
+            dependencies {
 
-        val jvmMain by getting
-        val jvmTest by getting
-
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+            }
         }
-
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
+        val iosMain by creating { dependsOn(commonMain) }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
     }
 }
 
@@ -71,20 +41,32 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_22
+        targetCompatibility = JavaVersion.VERSION_22
     }
 }
 
 publishing {
     publications {
-        withType<MavenPublication> {
+        withType<MavenPublication>().configureEach {
             groupId = "com.vro"
-            version = "1.16.7"
+            version = System.getenv("GITHUB_REF")?.removePrefix("refs/tags/v") ?: "1.16.13"
         }
 
-        val kotlinMultiplatform by getting(MavenPublication::class) {
+        named<MavenPublication>("kotlinMultiplatform") {
             artifactId = "vro-core"
+        }
+
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/devaro95/vro")
+            credentials {
+                username = project.findProperty("github.user") as? String ?: System.getenv("GITHUB_USER") ?: ""
+                password = project.findProperty("github.token") as? String ?: System.getenv("GITHUB_TOKEN") ?: ""
+            }
         }
     }
 }

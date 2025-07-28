@@ -5,37 +5,43 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class VROConcurrencyManager : VROBaseConcurrencyManager {
-
-    private val jobList: MutableList<Job> = mutableListOf()
+    private val mutex = Mutex()
+    private val jobList = mutableListOf<Job>()
 
     override fun launch(dispatcher: CoroutineDispatcher, fullException: Boolean, block: suspend CoroutineScope.() -> Unit): Job {
         val job = if (fullException) Job() else SupervisorJob()
         val scope = CoroutineScope(dispatcher + job)
-        synchronized(jobList) {
-            jobList.add(job)
-            job.invokeOnCompletion {
-                synchronized(jobList) {
+
+        scope.launch {
+            mutex.withLock {
+                jobList.add(job)
+            }
+
+            try {
+                block.invoke(this)
+            } finally {
+                mutex.withLock {
                     jobList.remove(job)
                 }
             }
         }
-        scope.launch { block.invoke(this) }
+
         return job
     }
 
-    override fun cancelPendingTasks() {
-        synchronized(jobList) {
-            val jobPending = mutableListOf<Job>()
-            jobPending.addAll(jobList)
-            jobPending.forEach { if (it.isActive) it.cancel() }
+    override suspend fun cancelPendingTasks() {
+        mutex.withLock {
+            jobList.toList().forEach { it.cancel() }
             jobList.clear()
         }
     }
 
-    override fun cancelTask(job: Job) {
-        synchronized(jobList) {
+    override suspend fun cancelTask(job: Job) {
+        mutex.withLock {
             if (jobList.remove(job)) {
                 job.cancel()
             }

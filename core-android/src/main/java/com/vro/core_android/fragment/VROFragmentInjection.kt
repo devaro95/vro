@@ -19,6 +19,4 @@ abstract class VROFragmentInjection<S : VROState, D : VRODestination, E : VROEve
     val vm by lazy {
         initializeViewModel(this, viewModelSeed)
     }
-
-    val viewModel = vm.vroViewModel
 }

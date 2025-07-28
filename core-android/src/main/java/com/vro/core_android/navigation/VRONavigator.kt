@@ -36,7 +36,7 @@ interface VRONavigator<D : VRODestination> {
     fun Activity.hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocusView = currentFocus ?: View(this)
-        inputMethodManager.hideSoftInputFromWindow(currentFocusView.windowToken, INT_ZERO)
+        inputMethodManager.hideSoftInputFromWindow(currentFocusView.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     companion object {

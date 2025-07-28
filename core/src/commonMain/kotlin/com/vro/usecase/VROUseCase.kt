@@ -2,6 +2,7 @@ package com.vro.usecase
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 abstract class VROUseCase<I, O> {

@@ -42,7 +42,7 @@ abstract class VROActivity<
 
     private fun setViewBindingObservers() {
         lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
+            vm.vroViewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
                     is VRODialogStep -> onLoadDialog(stepper.dialogState)
@@ -53,7 +53,7 @@ abstract class VROActivity<
         }
 
         lifecycleScope.launch {
-            viewModel.getNavigationState().collect {
+            vm.vroViewModel.getNavigationState().collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
