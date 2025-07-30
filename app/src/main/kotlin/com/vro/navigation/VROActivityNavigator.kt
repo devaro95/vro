@@ -7,6 +7,8 @@ import androidx.navigation.findNavController
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.core_android.navigation.VRONavigator.Companion.NAVIGATION_STATE
 import com.vro.state.VROState
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 abstract class VROActivityNavigator<D : VRODestination>(
     navHostId: Int,
@@ -16,6 +18,7 @@ abstract class VROActivityNavigator<D : VRODestination>(
 
     fun navigateWithAction(action: Int, state: VROState? = null) =
         navController.navigate(action, Bundle().apply {
-            putSerializable(NAVIGATION_STATE, state)
+            val jsonString = Json.encodeToString(state)
+            putSerializable(NAVIGATION_STATE, jsonString)
         })
 }

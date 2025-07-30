@@ -23,11 +23,12 @@ import com.vro.core_android.viewmodel.*
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
+import com.vro.viewmodel.VROViewModel
 
 /**
  * Adds a Compose screen to the navigation graph with optional transitions.
  *
- * @param VM The ViewModel type that extends [VROViewModel]
+ * @param VM The ViewModel type that extends [com.vro.viewmodel.VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]

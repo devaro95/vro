@@ -1,4 +1,4 @@
-package com.vro.core_android.viewmodel
+package com.vro.viewmodel
 
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult

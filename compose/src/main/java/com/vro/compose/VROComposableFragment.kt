@@ -26,7 +26,7 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -114,7 +114,7 @@ abstract class VROComposableFragment<
      */
     private fun setObservers(fragment: Fragment) {
         fragment.lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
+            vm.vroViewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStepper.VRODialogStep -> onLoadDialog(stepper.dialogState)
                     is VROStepper.VROErrorStep -> onError(stepper.error)
@@ -197,7 +197,7 @@ abstract class VROComposableFragment<
                         .fillMaxSize()
                 ) {
                     VROComposableFragmentScreen(
-                        viewModel = viewModel,
+                        viewModel = vm.vroViewModel,
                         navigator = navigator,
                         topBarState = topBarState,
                         bottomBarState = bottomBarState,
@@ -233,7 +233,7 @@ abstract class VROComposableFragment<
      */
     override fun onResume() {
         super.onResume()
-        viewModel.onResume()
+        vm.vroViewModel.onResume()
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class VROComposableFragment<
      * @param event The event to send
      */
     fun event(event: E) {
-        viewModel.doEvent(event)
+        vm.vroViewModel.doEvent(event)
     }
 
     /**
@@ -249,6 +249,6 @@ abstract class VROComposableFragment<
      * @param result The result to pass back, or null if no result
      */
     fun navigateBack(result: VROBackResult?) {
-        viewModel.doBack(result)
+        vm.vroViewModel.doBack(result)
     }
 }

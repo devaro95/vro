@@ -1,24 +1,28 @@
-package com.vro.core_android.viewmodel
+package com.vro.viewmodel
 
-import androidx.lifecycle.ViewModel
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROConcurrencyManager
-import com.vro.event.*
-import com.vro.navigation.*
+import com.vro.event.VROEvent
+import com.vro.event.VROEventLauncher
 import com.vro.navstarter.VRONavStarter
-import com.vro.state.*
-import com.vro.state.VROStepper.VRODialogStep
-import com.vro.state.VROStepper.VROErrorStep
-import com.vro.state.VROStepper.VROStateStep
+import com.vro.state.VRODialogData
+import com.vro.state.VROOneTimeState
+import com.vro.state.VROState
+import com.vro.state.VROStepper
+import com.vro.state.VroStateDelegate
+import com.vro.state.createEventSharedFlow
+import com.vro.state.createOneTimeSharedFlow
+import com.vro.state.createStepperSharedFlow
 import com.vro.usecase.MainUseCaseResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 abstract class VROViewModelCore<S : VROState, E : VROEvent> : VROEventLauncher<E> {
 
     val id: String
         get() {
-            return "ViewModelID: ${this.javaClass.name}"
+            return "ViewModelID: ${this::class.simpleName}"
         }
 
     abstract val initialState: S
@@ -47,11 +51,11 @@ abstract class VROViewModelCore<S : VROState, E : VROEvent> : VROEventLauncher<E
 
     fun updateScreen(changeStateFunction: S.() -> S) {
         screenState = changeStateFunction.invoke(screenState)
-        observableStepper.tryEmit(VROStateStep(screenState))
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
     fun updateScreen() {
-        observableStepper.tryEmit(VROStateStep(screenState))
+        observableStepper.tryEmit(VROStepper.VROStateStep(screenState))
     }
 
     fun updateState(changeStateFunction: S.() -> S) {
@@ -60,11 +64,11 @@ abstract class VROViewModelCore<S : VROState, E : VROEvent> : VROEventLauncher<E
 
     fun updateDialog(dialogState: VRODialogData, clearScreen: Boolean = true) {
         if (clearScreen) updateScreen { screenState }
-        observableStepper.tryEmit(VRODialogStep(screenState, dialogState))
+        observableStepper.tryEmit(VROStepper.VRODialogStep(screenState, dialogState))
     }
 
     fun updateError(error: Throwable, data: Any? = null) {
-        observableStepper.tryEmit(VROErrorStep(screenState, error, data))
+        observableStepper.tryEmit(VROStepper.VROErrorStep(screenState, error, data))
     }
 
     fun updateOneTime(id: Int, state: S) {

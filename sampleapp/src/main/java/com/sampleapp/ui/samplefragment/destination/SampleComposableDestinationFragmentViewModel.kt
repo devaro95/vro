@@ -3,7 +3,7 @@ package com.sampleapp.ui.samplefragment.destination
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentEvents.BackWithResult
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentEvents.Update
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentNavigator.SampleComposableDestinationFragmentDestinations
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.navigation.VROBackResult
 import com.vro.navstarter.VRONavStarter
 

@@ -19,8 +19,8 @@ import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.initializers.*
-import com.vro.core_android.viewmodel.VRODialogViewModel
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VRODialogViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
@@ -262,5 +262,5 @@ internal fun <S : VROState> VroComposableBottomSheetContent(
     onDismiss: () -> Unit,
 ) {
     content.context = LocalContext.current
-        content.CreateDialog(initialState, listener, onDismiss)
+    content.CreateDialog(initialState, listener, onDismiss)
 }
