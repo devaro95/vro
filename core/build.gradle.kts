@@ -48,33 +48,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_22
     }
 }
-
-mavenPublishing {
-    publishToMavenCentral()
-
-    signAllPublications()
-
-    pom {
-        name.set("Core Library")
-        description.set("VRO Core Module")
-        url.set("https://github.com/devaro95/vro")
-        licenses {
-            license {
-                name.set("MIT License")
-                url.set("https://opensource.org/licenses/MIT")
-            }
-        }
-        developers {
-            developer {
-                id.set("devaro95")
-                name.set("Varo")
-                email.set("alvaromcarmena95@gmail.com")
-            }
-        }
-        scm {
-            connection.set("scm:git:git://github.com/devaro95/vro.git")
-            developerConnection.set("scm:git:ssh://github.com:devaro95/vro.git")
-            url.set("https://github.com/devaro95/vro")
-        }
-    }
-}
