@@ -1,9 +1,10 @@
 package com.vro.core_android.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vro.core_android.factory.VROFactory
+import com.vro.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModelCore
 
 @Suppress("UNCHECKED_CAST")
 class VRODialogViewModelFactory(val viewModel: VROViewModelCore<*, *>) : ViewModelProvider.Factory {

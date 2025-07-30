@@ -3,7 +3,6 @@ package com.vro.fragment
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.CallSuper
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.core_android.navigation.VRONavigator.Companion.NAVIGATION_STATE
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.*
@@ -59,7 +58,7 @@ abstract class VROFragment<
 
     private fun setViewBindingObservers() {
         stepperFlow = lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
+            vm.vroViewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStepper.VRODialogStep -> onLoadDialog(stepper.dialogState)
                     is VROStepper.VROErrorStep -> binding.onError(stepper.error)
@@ -69,7 +68,7 @@ abstract class VROFragment<
             }
         }
         navigationFLow = lifecycleScope.launch {
-            viewModel.getNavigationState().collectLatest {
+            vm.vroViewModel.getNavigationState().collectLatest {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)
@@ -79,10 +78,10 @@ abstract class VROFragment<
             }
         }
         oneTimeFlow = lifecycleScope.launch {
-            viewModel.getOneTimeEvents().collectLatest { oneTime ->
+            vm.vroViewModel.getOneTimeEvents().collectLatest { oneTime ->
                 if (oneTime is VROOneTimeState.Launch) {
                     binding.oneTimeHandler(oneTime.id, oneTime.state)
-                    viewModel.clearOneTime()
+                    vm.vroViewModel.clearOneTime()
                 }
             }
         }
@@ -96,13 +95,13 @@ abstract class VROFragment<
         super.onCreate(savedInstanceState)
         observer = createLifecycleEventObserver(
             onCreate = {
-                viewModel.onStarter(getStarterParam(findNavController().currentDestination?.id.toString()))
+                vm.vroViewModel.onStarter(getStarterParam(findNavController().currentDestination?.id.toString()))
             },
             onStart = {
-                viewModel.onStart()
+                vm.vroViewModel.onStart()
             },
             onResume = {
-                viewModel.onResume()
+                vm.vroViewModel.onResume()
                 setViewBindingObservers()
             },
             onPause = {
@@ -125,7 +124,7 @@ abstract class VROFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getResult()
+        vm.vroViewModel.getResult()
         binding.onViewStarted()
     }
 

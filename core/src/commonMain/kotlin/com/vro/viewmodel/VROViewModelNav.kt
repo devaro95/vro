@@ -1,8 +1,13 @@
-package com.vro.core_android.viewmodel
+package com.vro.viewmodel
 
 import com.vro.event.VROEvent
-import com.vro.navigation.*
-import com.vro.state.*
+import com.vro.navigation.VROBackResult
+import com.vro.navigation.VRODestination
+import com.vro.navigation.VRONavigationState
+import com.vro.navigation.putResultParam
+import com.vro.state.VROState
+import com.vro.state.createEventSharedFlow
+import com.vro.state.createNavigationSharedFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 

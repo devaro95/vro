@@ -1,13 +1,13 @@
 package com.vro.usecase
 
+import com.vro.atomic.AtomicBoolean
 import com.vro.coroutine.VROBaseConcurrencyManager
 import com.vro.coroutine.VROResult
-import com.vro.coroutine.VROSyncDelegate
 import com.vro.coroutine.onFailure
 import com.vro.coroutine.onSuccess
+import com.vro.delegate.VROSyncDelegate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import java.util.concurrent.atomic.AtomicBoolean
 
 class MainUseCaseResult<T>(
     concurrencyManager: VROBaseConcurrencyManager,
@@ -22,7 +22,7 @@ class MainUseCaseResult<T>(
 
     private var finishListener: (() -> Unit)? = null
 
-    private var finished: AtomicBoolean = AtomicBoolean(false)
+    private var finished = AtomicBoolean(false)
 
     override val job: Job = concurrencyManager.launch(fullException = fullException) {
         try {
