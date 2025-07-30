@@ -1,5 +1,4 @@
 plugins {
-    id 'maven-publish'
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
@@ -28,23 +27,8 @@ android {
     namespace 'com.vro.coreandroid'
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = jitpack.groupId
-            version = jitpack.version
-            artifactId = 'vro-core-android'
-
-            afterEvaluate {
-                from components.release
-            }
-        }
-    }
-}
-
 dependencies {
-    api(project(":core"))
-
+    api(libs.vro.core)
     api(libs.navigation.dynamic.features)
     api(libs.navigation.fragment)
     api(libs.navigation.compose)

@@ -1,7 +1,7 @@
 package com.vro.activity
 
 import androidx.appcompat.app.AppCompatActivity
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.core_android.viewmodel.initializeViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination

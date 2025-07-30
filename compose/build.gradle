@@ -1,5 +1,4 @@
 plugins {
-    id 'maven-publish'
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
@@ -28,22 +27,7 @@ android {
     namespace 'com.vro.compose'
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = jitpack.groupId
-            version = jitpack.version
-            artifactId = 'vro-compose'
-
-            afterEvaluate {
-                from components.release
-            }
-        }
-    }
-}
-
 dependencies {
-    api(project(":core"))
     api(project(":core-android"))
 
     api(libs.material3)

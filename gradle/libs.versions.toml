@@ -1,5 +1,7 @@
 [versions]
 
+vroCommonVersion = "1.0.2"
+vroCoreVersion = "1.0.3"
 androidGradlePlugin = "8.3.2"
 jetbrains = "2.0.0"
 kotlin = "2.1.0"
@@ -32,6 +34,8 @@ lifecycleRuntimeComposeAndroid = "2.9.1"
 koinAnnotations = "1.1.0"
 
 [libraries]
+vro-common = { group = "io.github.devaro95.vro", name = "vro-common", version.ref = "vroCommonVersion" }
+vro-core = { group = "io.github.devaro95.vro", name = "vro-core", version.ref = "vroCoreVersion" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 arch-core = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCore" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion" }

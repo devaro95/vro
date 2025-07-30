@@ -9,7 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vro.compose.dialog.VROComposableDialogContent
 import com.vro.compose.initializers.InitializeEventsListener
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
-import com.vro.core_android.viewmodel.VRODialogViewModel
+import com.vro.viewmodel.VRODialogViewModel
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.state.VROState

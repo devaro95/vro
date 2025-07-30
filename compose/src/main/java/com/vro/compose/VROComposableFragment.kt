@@ -26,7 +26,7 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination

@@ -1,7 +1,7 @@
 package com.vro.core_android.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.vro.core_android.viewmodel.VROViewModelNav
+import com.vro.viewmodel.VROViewModelNav
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
 import com.vro.navigation.VRODestination
