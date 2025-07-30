@@ -6,8 +6,8 @@ package com.vro.compose.initializers
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.vro.core_android.navigation.VRONavigator
-import com.vro.core_android.viewmodel.VROViewModel
-import com.vro.core_android.viewmodel.VROViewModelCore
+import com.vro.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModelCore
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState

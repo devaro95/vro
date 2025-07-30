@@ -23,7 +23,6 @@ import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.core_android.injection.injectViewModel
-import org.koin.androidx.compose.koinViewModel
 
 class SampleMainActivity : VROComposableActivity() {
 

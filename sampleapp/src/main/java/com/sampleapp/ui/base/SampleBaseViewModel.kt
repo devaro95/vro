@@ -1,7 +1,7 @@
 package com.sampleapp.ui.base
 
 import com.sampleapp.dialog.SampleSimpleDialogData
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData

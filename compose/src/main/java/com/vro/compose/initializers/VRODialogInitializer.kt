@@ -5,7 +5,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.*
 import com.vro.state.VROState

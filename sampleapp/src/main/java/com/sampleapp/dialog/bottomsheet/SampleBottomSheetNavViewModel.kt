@@ -5,7 +5,7 @@ import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnButton
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetEvents.OnDialog
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator.SampleBottomSheetDestinations
 import com.vro.constants.EMPTY_STRING
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.state.VRODialogData
 
 class SampleBottomSheetNavViewModel :

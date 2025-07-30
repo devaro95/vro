@@ -5,7 +5,7 @@ import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents.Update
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations.DestinationNavigation
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentState
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.navigation.resultListener
 
 class SampleComposableFragmentViewModel :

@@ -2,7 +2,7 @@ package com.vro.core_android.factory
 
 import androidx.lifecycle.*
 import com.vro.core_android.viewmodel.VROAndroidViewModel
-import com.vro.core_android.viewmodel.VROViewModel
+import com.vro.viewmodel.VROViewModel
 
 abstract class VROFactory<VM : VROViewModel<*, *, *>> : AbstractSavedStateViewModelFactory() {
 

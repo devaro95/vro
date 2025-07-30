@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
+import com.vro.viewmodel.VRODialogViewModel
+import com.vro.viewmodel.VROViewModel
 
 fun <S : VROState, D : VRODestination, E : VROEvent> initializeViewModel(
     activity: AppCompatActivity,
