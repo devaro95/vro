@@ -96,7 +96,6 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
      * @param onDismiss Callback when the snackbar is dismissed
      *
      * @throws IllegalStateException if called before snackbarState is initialized
-     * @sample com.vro.compose.screen.SnackbarSample
      */
     fun showSnackbar(
         message: String,
@@ -151,7 +150,6 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
      *
      * @param changeStateFunction Lambda that transforms the current top bar state
      *
-     * @sample com.vro.compose.screen.TopBarUpdateSample
      */
     @Composable
     fun UpdateTopBar(changeStateFunction: VROTopBarState.() -> VROTopBarState) {
@@ -170,7 +168,6 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
      *
      * @param changeStateFunction Lambda that transforms the current bottom bar state
      *
-     * @sample com.vro.compose.screen.BottomBarUpdateSample
      */
     @Composable
     fun UpdateBottomBar(changeStateFunction: VROBottomBarState.() -> VROBottomBarState) {

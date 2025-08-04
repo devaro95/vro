@@ -1,18 +1,17 @@
 plugins {
-    id 'maven-publish'
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
 }
 
-apply from: '../gradleConfig/configuration.gradle'
+apply (from= "../gradleConfig/configuration.gradle")
 
 android {
-    compileSdkVersion compilation.compileSdkVersion
+    compileSdk = 35
 
     defaultConfig {
         aarMetadata {
-            minCompileSdk = compilation.minSdkVersion
+            minCompileSdk = 24
         }
     }
     compileOptions {
@@ -23,23 +22,9 @@ android {
         jvmTarget = JavaVersion.VERSION_21.toString()
     }
     buildFeatures {
-        compose true
+        compose = true
     }
-    namespace 'com.vro.app'
-}
-
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = jitpack.groupId
-            version = jitpack.version
-            artifactId = 'vro'
-
-            afterEvaluate {
-                from components.release
-            }
-        }
-    }
+    namespace = "com.vro.app"
 }
 
 dependencies {

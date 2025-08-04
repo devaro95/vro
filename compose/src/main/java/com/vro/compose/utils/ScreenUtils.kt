@@ -10,8 +10,6 @@ import androidx.compose.ui.platform.LocalConfiguration
  * @return true if the device screen width is 600dp or greater (tablet size),
  *         false otherwise (phone size)
  *
- * @see LocalConfiguration.current.screenWidthDp
- *
  * @SuppressLint("NewApi") Configuration APIs are safely accessed through Compose
  */
 @SuppressLint("NewApi")

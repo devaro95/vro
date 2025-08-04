@@ -10,7 +10,7 @@ import com.vro.state.VROState
  * Abstract base ViewModel class for screens built using [VROTemplate].
  *
  * This ViewModel follows a state-event-navigation pattern and is responsible for managing:
- * - The current UI [state]
+ * - The current UI [VROState]
  * - Navigation to [VRODestination] targets
  * - Handling UI and business [VROEvent]s
  * - Optional [VROBackResult] when navigating back
