@@ -6,9 +6,9 @@ import com.vro.event.VROEvent
 /**
  * Abstract handler for error-related logic within a Composable screen.
  *
- * This class extends [VROBaseHandler] to inherit access to [Context] and event dispatching.
+ * This class extends [VROBaseHandler]
  * Subclasses should implement [OnError] to render or handle error-related UI based on the
- * received [Throwable] and optional [data].
+ * received [Throwable] and optional data.
  *
  * This allows flexible error presentation (e.g., snackbars, dialogs) tailored to the UI context.
  *

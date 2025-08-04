@@ -7,7 +7,7 @@ import com.vro.state.VROState
  * Abstract handler for one-time events or actions that should be triggered only once
  * during a screen lifecycle or state transition.
  *
- * This class extends [VROBaseHandler] to inherit access to [Context] and event dispatching.
+ * This class extends [VROBaseHandler]
  * Subclasses should implement [onOneTime] to react to single-occurrence events such as
  * navigation, toasts, or transient actions.
  *
