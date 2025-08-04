@@ -1,6 +1,6 @@
 package com.vro.state
 
-sealed class VROStepper<S>(
+open class VROStepper<S>(
     open val state:S
 ) {
     data class VROStateStep<S>(

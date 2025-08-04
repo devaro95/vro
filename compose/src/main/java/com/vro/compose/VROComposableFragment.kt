@@ -109,7 +109,6 @@ abstract class VROComposableFragment<
 
     /**
      * Sets up observers for ViewModel events.
-     * @param viewModel The ViewModel instance
      * @param fragment The fragment to associate observers with
      */
     private fun setObservers(fragment: Fragment) {

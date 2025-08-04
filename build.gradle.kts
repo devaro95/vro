@@ -4,4 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.jetbrains.jvm) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.vanniktech) apply false
+    alias(libs.plugins.nmcp) apply false
 }
