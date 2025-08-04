@@ -41,7 +41,8 @@ import com.vro.state.VROState
  * @see VROComposableDialogContentBasics For basic dialog functionality
  * @see Dialog For the underlying Compose dialog implementation
  */
-abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROComposableDialogContentBasics<S, E>() {
+abstract class VROComposableDialogContent<S : VROState, E : VROEvent> :
+    VROComposableDialogContentBasics<S, E>() {
 
     /**
      * Controls whether the dialog can be dismissed by pressing the back button.
@@ -92,7 +93,9 @@ abstract class VROComposableDialogContent<S : VROState, E : VROEvent> : VROCompo
             onDismissRequest = onDismiss,
             properties = DialogProperties(
                 dismissOnBackPress = dismissOnBackPress,
-                dismissOnClickOutside = dismissOnClickOutside
+                dismissOnClickOutside = dismissOnClickOutside,
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
             )
         ) {
             ComposableContent(state, onDismiss)
