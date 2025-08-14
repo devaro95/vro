@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    alias(libs.plugins.android.library)
     alias(libs.plugins.vanniktech)
     alias(libs.plugins.nmcp)
     signing
@@ -12,9 +11,7 @@ version = property("VERSION_NAME") as String
 apply(from = "../gradleConfig/configuration.gradle")
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
-    }
+    jvm()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -29,29 +26,13 @@ kotlin {
                 implementation(libs.koin.core)
             }
         }
-        val iosMain by creating {
-            dependsOn(commonMain)
-        }
+        val iosMain by creating { dependsOn(commonMain) }
         val iosX64Main by getting { dependsOn(iosMain) }
         val iosArm64Main by getting { dependsOn(iosMain) }
         val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
     }
 
     jvmToolchain(21)
-}
-
-android {
-    compileSdk = 36
-    namespace = "com.vro.core"
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 }
 
 mavenPublishing {
