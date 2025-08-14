@@ -10,26 +10,27 @@ import com.sampleapp.ui.profile.SampleProfileViewModel
 import com.sampleapp.ui.samplefragment.*
 import com.sampleapp.ui.samplefragment.destination.*
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.scopedOf
 import org.koin.dsl.module
 
 val axPresentationModule = module {
-    viewModelOf(::SampleFragmentViewModel)
-    viewModelOf(::SampleFragmentViewModel)
-    viewModelOf(::SampleHomeViewModel)
-    viewModelOf(::SampleProfileViewModel)
-    viewModelOf(::SampleDetailViewModel)
-    viewModelOf(::SampleBottomSheetNavViewModel)
-    viewModelOf(::SampleBottomSheetViewModel)
-    viewModelOf(::SampleVMDialogViewModel)
+    factoryOf(::SampleFragmentViewModel)
+    factoryOf(::SampleFragmentViewModel)
+    factoryOf(::SampleHomeViewModel)
+    factoryOf(::SampleProfileViewModel)
+    factoryOf(::SampleDetailViewModel)
+    factoryOf(::SampleBottomSheetNavViewModel)
+    factoryOf(::SampleBottomSheetViewModel)
+    factoryOf(::SampleVMDialogViewModel)
 
     scope<SampleComposableFragment> {
         scopedOf(::SampleComposableFragmentNavigator)
-        viewModelOf(::SampleComposableFragmentViewModel)
+        factoryOf(::SampleComposableFragmentViewModel)
     }
 
     scope<SampleComposableDestinationFragment> {
         scopedOf(::SampleComposableDestinationFragmentNavigator)
-        viewModelOf(::SampleComposableDestinationFragmentViewModel)
+        factoryOf(::SampleComposableDestinationFragmentViewModel)
     }
 }

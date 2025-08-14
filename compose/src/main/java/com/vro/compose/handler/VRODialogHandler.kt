@@ -7,7 +7,7 @@ import com.vro.state.VRODialogData
 /**
  * Abstract handler for dialog-related logic within a Composable screen.
  *
- * This class extends [VROBaseHandler] to inherit access to [Context] and event dispatching.
+ * This class extends [VROBaseHandler].
  * Subclasses should implement [OnDialog] to render dialog UI based on the provided [VRODialogData].
  *
  * @param E The event type that extends [VROEvent]
