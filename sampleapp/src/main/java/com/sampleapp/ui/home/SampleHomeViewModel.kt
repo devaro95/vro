@@ -90,7 +90,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
     }
 
     private fun onActionDetailNavigationClick() {
-        navigate(DetailNavigation(state = SampleDetailState.INITIAL.copy(text = "Detail class nav starter")))
+        navigate(DetailNavigation(state = SampleDetailState.INITIAL.copy(text = "¡This text comes from Home Screen!")))
     }
 
     private fun onVmDialogDismiss() {
@@ -107,7 +107,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     companion object {
         const val FIRST_TEXT = "Press to update"
-        const val SECOND_TEXT = "Press to update back"
+        const val SECOND_TEXT = "Press again"
         const val SIMPLE_VIEW_MODEL_DIALOG = 1
         const val BOTTOM_SHEET = 2
         const val ONE_TIME_LAUNCH = 1

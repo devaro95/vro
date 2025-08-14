@@ -1,10 +1,16 @@
 package com.sampleapp.ui.main
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.sampleapp.bottombar.SampleBottombar
+import com.sampleapp.bottombar.SampleBottomBar
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator
@@ -32,11 +38,14 @@ class SampleMainActivity : VROComposableActivity() {
 
     @Composable
     override fun BottomBar(selectedItem: Int) {
-        SampleBottombar(
-            onHomeClick = { navigateToScreen(SampleHomeScreen()) },
-            onProfileClick = { navigateToScreen(SampleProfileScreen()) },
-            selectedItem = selectedItem
-        )
+        Column {
+            HorizontalDivider(Modifier.background(Color.Gray), thickness = 1.dp)
+            SampleBottomBar(
+                onHomeClick = { navigateToScreen(SampleHomeScreen()) },
+                onProfileClick = { navigateToScreen(SampleProfileScreen()) },
+                selectedItem = selectedItem
+            )
+        }
     }
 
     override fun NavGraphBuilder.createComposableContent(

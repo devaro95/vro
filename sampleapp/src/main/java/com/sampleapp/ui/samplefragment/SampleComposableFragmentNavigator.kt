@@ -16,13 +16,12 @@ class SampleComposableFragmentNavigator(
     override fun navigate(destination: SampleComposableFragmentDestinations) {
         when (destination) {
             is DestinationNavigation -> navigateWithAction(
-                action = R.id.action_sampleComposableFragment_to_sampleComposableDestinationFragment,
-                starter = SampleComposableDestinationStarter.Initial(destination.state)
+                action = R.id.action_sampleComposableFragment_to_sampleComposableDestinationFragment
             )
         }
     }
 
     sealed class SampleComposableFragmentDestinations : VRODestination() {
-        data class DestinationNavigation(val state: SampleComposableDestinationFragmentState) : SampleComposableFragmentDestinations()
+        data object DestinationNavigation : SampleComposableFragmentDestinations()
     }
 }

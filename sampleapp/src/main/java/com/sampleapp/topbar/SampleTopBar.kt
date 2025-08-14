@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -16,21 +17,13 @@ import com.sampleapp.R
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarButton
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
 
-fun sampleHomeToolbar(context: Context, onAction: () -> Unit) = VROTopBarState(
+fun sampleHomeToolbar(context: Context) = VROTopBarState(
     title = {
         Text(
             text = context.getString(R.string.home_toolbar),
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center
-        )
-    },
-    actionButton = {
-        SetTopBarButton(
-            VROTopBarButton(
-                iconVector = Icons.Default.Person,
-                iconSize = 26.dp,
-                onClick = onAction
-            )
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
         )
     }
 )

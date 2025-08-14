@@ -9,7 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sampleapp.components.SampleButton
 import com.sampleapp.dialog.withviewmodel.SampleVMDialogEvents.TextChange
 import com.vro.compose.dialog.VROComposableDialogContent
 import com.vro.compose.preview.VROLightMultiDevicePreview
@@ -29,31 +31,20 @@ class SampleVMDialog : VROComposableDialogContent<SampleVMDialogState, SampleVMD
                     .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Simple dialog")
-                Button(
+                Text(
+                    text = "VRO ViewModel Dialog",
+                    fontWeight = FontWeight.Bold
+                )
+                SampleButton(
+                    modifier = Modifier.padding(top = 50.dp),
+                    text = state.buttonText,
+                    onClick = { event(TextChange) }
+                )
+                SampleButton(
                     modifier = Modifier.padding(top = 16.dp),
-                    onClick = { (dialogListener as? SampleVMDialogListener)?.hideDialog() },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(
-                        text = "Hide dialog",
-                        color = Color.White
-                    )
-                }
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = { event(TextChange) },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(
-                        text = state.buttonText,
-                        color = Color.White
-                    )
-                }
+                    text = "Hide Dialog",
+                    onClick = { (dialogListener as? SampleVMDialogListener)?.hideDialog() }
+                )
             }
         }
     }

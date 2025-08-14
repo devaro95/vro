@@ -1,5 +1,6 @@
 package com.sampleapp.dialog.withviewmodel
 
+import com.sampleapp.ui.home.SampleHomeViewModel
 import com.vro.viewmodel.VRODialogViewModel
 import com.vro.navigation.VROBackResult
 
@@ -18,10 +19,21 @@ class SampleVMDialogViewModel : VRODialogViewModel<SampleVMDialogState, SampleVM
     }
 
     private fun onTextChange() {
-        updateScreen {
-            copy(
-                buttonText = "New Text"
-            )
+        checkDataState().also {
+            updateScreen {
+                copy(
+                    buttonText = when (it.buttonText) {
+                        FIRST_TEXT -> SECOND_TEXT
+                        SECOND_TEXT -> FIRST_TEXT
+                        else -> FIRST_TEXT
+                    }
+                )
+            }
         }
+    }
+
+    companion object {
+        const val FIRST_TEXT = "Press to update"
+        const val SECOND_TEXT = "Press again"
     }
 }

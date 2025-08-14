@@ -109,10 +109,10 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
     ) {
         coroutineScope.launch {
             snackbarState.value = VROSnackBarState(
-                snackbarState.value.hostState,
-                textColor,
-                backgroundColor,
-                actionColor
+                hostState = snackbarState.value.hostState,
+                textColor = textColor,
+                backgroundColor = backgroundColor,
+                actionColor = actionColor
             )
             val snackResult = snackbarState.value.hostState.showSnackbar(
                 message = message,
