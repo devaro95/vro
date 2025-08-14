@@ -74,5 +74,6 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 jetbrains-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
+android-library-kmm = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidLibrary" }
 vanniktech = { id = "com.vanniktech.maven.publish", version.ref = "vaniktechVersion" }
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcpVersion" }

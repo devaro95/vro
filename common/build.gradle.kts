@@ -12,9 +12,8 @@ version = property("VERSION_NAME") as String
 apply(from = "../gradleConfig/configuration.gradle")
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
-    }
+    androidTarget()
+    jvm()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
