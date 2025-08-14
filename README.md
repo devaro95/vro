@@ -1,6 +1,7 @@
 ![alt text](https://github.com/devaro95/vro/blob/master/header.jpg)
 
-[![](https://jitpack.io/v/devaro95/vro.svg)](https://jitpack.io/#devaro95/vro)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.devaro95.vro/vro-core?color=blue&style=flat-square&logo=apachemaven)](https://search.maven.org/search?q=g:io.github.devaro95.vro)
+
 > [!NOTE]
 VRO is based on [EMA](https://github.com/carmabs/ema), an Android MVI architecture, developed by [carmabs](https://github.com/carmabs).
 # 👨‍💻 Welcome to VRO 
