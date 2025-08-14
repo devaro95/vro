@@ -21,9 +21,9 @@ kotlin {
             dependencies {
                 api(project(":common"))
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+                api(libs.koin.annotations)
+                api(libs.koin.core)
                 implementation(libs.coroutines.core)
-                implementation(libs.koin.annotations)
-                implementation(libs.koin.core)
             }
         }
         val iosMain by creating { dependsOn(commonMain) }
