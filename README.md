@@ -14,26 +14,28 @@ Implement the VRO dependency directly to your project using Jitpack repository.
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 ```
 Add VRO compose dependency to your presentation project module (Android Jetpack Compose Project):
 ```gradle
+//Using libs.version file:
+vro-compose = { group = "com.github.devaro95.vro", name = "vro-compose", version.ref = "vroVersion" }
+
+//Using old mode:
 dependencies {
     implementation("com.github.devaro95:vro-compose:{$VROVersion}")
 }
 ```
 Add VRO core dependency to your core project module:
 ```gradle
+//Using libs.version file:
+vro-core = { group = "com.github.devaro95.vro", name = "vro-core", version.ref = "vroVersion" }
+
+//Using old mode:
 dependencies {
     implementation("com.github.devaro95:vro-core:{$VROVersion}")
-}
-```
-Add VRO common dependency if you want common extensions and constants:
-```gradle
-dependencies {
-    implementation("com.github.devaro95:vro-common:{$VROVersion}")
 }
 ```
 # 📚  Learn More
