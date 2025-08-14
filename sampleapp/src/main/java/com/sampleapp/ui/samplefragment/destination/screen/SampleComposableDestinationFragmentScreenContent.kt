@@ -1,14 +1,12 @@
 package com.sampleapp.ui.samplefragment.destination.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.sampleapp.R
+import com.sampleapp.components.SampleButton
 import com.sampleapp.topbar.sampleBackToolbar
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentEvents
 import com.sampleapp.ui.samplefragment.destination.SampleComposableDestinationFragmentState
@@ -20,7 +18,7 @@ class SampleComposableDestinationFragmentScreenContent :
     VROScreenContent<SampleComposableDestinationFragmentState, SampleComposableDestinationFragmentEvents>() {
 
     override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
-        title = context.getString(R.string.profile_toolbar),
+        title = context.getString(R.string.destination_fragment_toolbar),
         onNavigation = { navigateBack() }
     )
 
@@ -30,18 +28,16 @@ class SampleComposableDestinationFragmentScreenContent :
             modifier = Modifier.Companion.fillMaxSize(),
             horizontalAlignment = Alignment.Companion.CenterHorizontally
         ) {
-            Text(
-                modifier = Modifier.Companion.padding(top = 16.dp),
+            SampleButton(
+                modifier=Modifier.padding(top = 32.dp),
                 text = state.text,
-                fontSize = 24.sp
+                onClick = { event(SampleComposableDestinationFragmentEvents.Update) }
             )
-            OutlinedButton(
-                modifier = Modifier.Companion.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { event(SampleComposableDestinationFragmentEvents.BackWithResult) }
-            ) {
-                Text(text = "Navigate Back with result")
-            }
+            SampleButton(
+                modifier=Modifier.padding(top = 16.dp),
+                text = "Navigate Back Management",
+                onClick = { navigateBack() }
+            )
         }
     }
 

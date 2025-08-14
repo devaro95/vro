@@ -2,12 +2,13 @@ package com.sampleapp.bottombar
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.sampleapp.R
 import com.vro.compose.components.VROBottomBar
 import com.vro.compose.components.VROBottomBarItem
 
 @Composable
-fun SampleBottombar(
+fun SampleBottomBar(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
     selectedItem: Int,
@@ -24,5 +25,6 @@ fun SampleBottombar(
             onClick = onProfileClick,
             iconSelectedTint = MaterialTheme.colorScheme.secondary
         )
-    )
+    ),
+    background = Color(0xFFFFFFFF)
 )

@@ -27,10 +27,12 @@ kotlin {
         val iosArm64Main by getting { dependsOn(iosMain) }
         val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
     }
+
+    jvmToolchain(21)
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     namespace = "com.vro.common"
     defaultConfig {
         minSdk = 24

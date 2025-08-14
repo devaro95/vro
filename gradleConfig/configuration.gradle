@@ -6,9 +6,9 @@ ext {
 
     compilation = [
             applicationId    : 'all.pillreminder.medicationtracker.medsalarm',
-            compileSdkVersion: 35,
+            compileSdkVersion: 36,
             minSdkVersion    : 24,
-            targetSdkVersion : 35
+            targetSdkVersion : 36
     ]
 
     jitpack = [

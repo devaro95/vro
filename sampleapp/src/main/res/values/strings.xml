@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">sampleapp</string>
-    <string name="home_toolbar">Home</string>
-    <string name="profile_toolbar">Profile</string>
-    <string name="detail_toolbar">Detail</string>
+    <string name="app_name">vro-sample</string>
+    <string name="home_toolbar">VRO Sample</string>
+    <string name="profile_toolbar">VRO Profile</string>
+    <string name="destination_fragment_toolbar">VRO Destination Fragment</string>
+    <string name="composable_fragment">VRO Composable Fragment</string>
+    <string name="detail_toolbar">VRO Detail</string>
 </resources>

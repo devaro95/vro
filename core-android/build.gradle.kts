@@ -12,7 +12,7 @@ version = property("VERSION_NAME") as String
 apply(from = "../gradleConfig/configuration.gradle")
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         aarMetadata {
