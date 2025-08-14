@@ -13,12 +13,6 @@ class SampleComposableFragmentViewModel :
 
     override val initialState: SampleComposableFragmentState = SampleComposableFragmentState.INITIAL
 
-    override fun getResult() {
-        resultListener("100") {
-            //Do Something
-        }
-    }
-
     override fun onEvent(event: SampleComposableFragmentEvents) {
         when (event) {
             Update -> onUpdateButtonText()
@@ -41,7 +35,7 @@ class SampleComposableFragmentViewModel :
     }
 
     private fun onNavigateDestination() {
-        navigate(DestinationNavigation(SampleComposableDestinationFragmentState.INITIAL.copy(text = "Probando probando")))
+        navigate(DestinationNavigation)
     }
 
     companion object {

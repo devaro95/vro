@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.sampleapp.components.SampleButton
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.dialog.VRODialogListener
 
@@ -39,22 +41,18 @@ fun SampleSimpleDialog(
             Column(
                 Modifier
                     .background(Color.White)
-                    .padding(32.dp),
+                    .padding(50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Simple dialog")
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = data.onButtonClick,
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(
-                        text = "Hide dialog",
-                        color = Color.White
-                    )
-                }
+                Text(
+                    "VROSimple dialog",
+                    fontWeight = FontWeight.Bold
+                )
+                SampleButton(
+                    modifier = Modifier.padding(top = 50.dp),
+                    text = "Hide Dialog",
+                    onClick = data.onButtonClick
+                )
             }
         }
     }

@@ -12,16 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
+import com.sampleapp.components.SampleButton
 import com.sampleapp.topbar.sampleBackToolbar
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentEvents
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentState
 import com.vro.compose.screen.VROScreenContent
 import com.vro.compose.states.VROTopBarBaseState
 
-class SampleComposableFragmentScreenContent: VROScreenContent<SampleComposableFragmentState, SampleComposableFragmentEvents>() {
+class SampleComposableFragmentScreenContent :
+    VROScreenContent<SampleComposableFragmentState, SampleComposableFragmentEvents>() {
 
     override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
-        title = context.getString(R.string.profile_toolbar),
+        title = context.getString(R.string.composable_fragment),
         onNavigation = { navigateBack() }
     )
 
@@ -33,27 +35,21 @@ class SampleComposableFragmentScreenContent: VROScreenContent<SampleComposableFr
                 .padding(vertical = 32.dp),
             horizontalAlignment = Alignment.Companion.CenterHorizontally
         ) {
-            OutlinedButton(
+            SampleButton(
                 modifier = Modifier.Companion.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
-                onClick = { navigateBack() }
-            ) {
-                Text(text = "Navigate Back")
-            }
-            OutlinedButton(
-                modifier = Modifier.Companion.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                text = state.text,
                 onClick = { event(SampleComposableFragmentEvents.Update) }
-            ) {
-                Text(text = state.text)
-            }
-            OutlinedButton(
+            )
+            SampleButton(
                 modifier = Modifier.Companion.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                text = "Navigate Back Management",
+                onClick = { navigateBack() }
+            )
+            SampleButton(
+                modifier = Modifier.Companion.padding(top = 16.dp),
+                text = "Composable Navigation Management",
                 onClick = { event(SampleComposableFragmentEvents.NavigateDestination) }
-            ) {
-                Text(text = "Navigate To Composable Destination")
-            }
+            )
         }
     }
 
