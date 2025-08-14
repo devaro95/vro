@@ -4,7 +4,6 @@
  */
 package com.vro.compose.initializers
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,7 +12,6 @@ import com.vro.compose.VROComposableActivity
 import com.vro.compose.navigator.VROTemplateNavigator
 import com.vro.compose.template.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
-import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.*
@@ -122,10 +120,6 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
 
 /**
  * Initializes the navigation system for a template-based screen using a [VROTemplateNavigator].
- *
- * This function sets up a listener that observes navigation events emitted by the [ViewModel]
- * and delegates navigation actions to the associated [VROTemplateNav] implementation.
- * It ensures that navigation actions (forward or back) are executed only once per event.
  *
  * Typically used inside a `@Composable` function during screen setup.
  *

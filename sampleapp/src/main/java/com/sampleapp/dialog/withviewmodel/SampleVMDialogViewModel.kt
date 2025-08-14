@@ -1,6 +1,6 @@
 package com.sampleapp.dialog.withviewmodel
 
-import com.vro.core_android.viewmodel.VRODialogViewModel
+import com.vro.viewmodel.VRODialogViewModel
 import com.vro.navigation.VROBackResult
 
 class SampleVMDialogViewModel : VRODialogViewModel<SampleVMDialogState, SampleVMDialogEvents>() {

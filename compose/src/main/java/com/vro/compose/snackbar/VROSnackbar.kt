@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
  * @param textColor The color of the snackbar message text (required)
  * @param actionButtonColor The color of the action button text (required)
  *
- * @sample com.vro.compose.snackbar.VROSnackbarPreview
- *
  * @see SnackbarData for base snackbar content information
  * @see Snackbar for the underlying Material3 implementation
  */

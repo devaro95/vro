@@ -1,6 +1,6 @@
 package com.vro.compose.template
 
-import com.vro.core_android.viewmodel.VROViewModelNav
+import com.vro.viewmodel.VROViewModelNav
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -10,7 +10,7 @@ import com.vro.state.VROState
  * Abstract base ViewModel class for screens built using [VROTemplate].
  *
  * This ViewModel follows a state-event-navigation pattern and is responsible for managing:
- * - The current UI [state]
+ * - The current UI [VROState]
  * - Navigation to [VRODestination] targets
  * - Handling UI and business [VROEvent]s
  * - Optional [VROBackResult] when navigating back

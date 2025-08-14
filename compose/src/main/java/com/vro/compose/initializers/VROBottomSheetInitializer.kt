@@ -16,7 +16,7 @@ import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.states.rememberSheetState
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
-import com.vro.core_android.viewmodel.VRODialogViewModel
+import com.vro.viewmodel.VRODialogViewModel
 import com.vro.dialog.VRODialogListener
 import com.vro.event.VROEvent
 import com.vro.state.VROState

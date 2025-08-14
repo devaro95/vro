@@ -26,6 +26,7 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
+import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
@@ -37,19 +38,19 @@ import kotlinx.coroutines.launch
  * Abstract base class for fragments that use Jetpack Compose for their UI.
  * Provides a structured way to handle navigation, theming, and common UI components.
  *
- * @param VM The ViewModel type that extends [VROComposableViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param SC The screen composable type that extends [VROScreen]
  * @param E The event type that extends [VROEvent]
  */
 abstract class VROComposableFragment<
-        VM : VROComposableViewModel<S, D, E>,
+        VM : VROViewModel<S, D, E>,
         S : VROState,
         D : VRODestination,
         SC : VROScreen<S, E>,
         E : VROEvent,
-        > : VROFragmentInjection<VM>() {
+        > : VROFragmentInjection<S, D, E, VM>() {
 
     /**
      * The navigation controller for handling navigation between destinations.
@@ -103,17 +104,16 @@ abstract class VROComposableFragment<
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setObservers(viewModel, this)
+        setObservers(this)
     }
 
     /**
      * Sets up observers for ViewModel events.
-     * @param viewModel The ViewModel instance
      * @param fragment The fragment to associate observers with
      */
-    private fun setObservers(viewModel: VM, fragment: Fragment) {
+    private fun setObservers(fragment: Fragment) {
         fragment.lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
+            vm.vroViewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStepper.VRODialogStep -> onLoadDialog(stepper.dialogState)
                     is VROStepper.VROErrorStep -> onError(stepper.error)
@@ -196,7 +196,7 @@ abstract class VROComposableFragment<
                         .fillMaxSize()
                 ) {
                     VROComposableFragmentScreen(
-                        viewModel = viewModel,
+                        viewModel = vm.vroViewModel,
                         navigator = navigator,
                         topBarState = topBarState,
                         bottomBarState = bottomBarState,
@@ -232,7 +232,7 @@ abstract class VROComposableFragment<
      */
     override fun onResume() {
         super.onResume()
-        viewModel.onResume()
+        vm.vroViewModel.onResume()
     }
 
     /**
@@ -240,7 +240,7 @@ abstract class VROComposableFragment<
      * @param event The event to send
      */
     fun event(event: E) {
-        viewModel.doEvent(event)
+        vm.vroViewModel.doEvent(event)
     }
 
     /**
@@ -248,6 +248,6 @@ abstract class VROComposableFragment<
      * @param result The result to pass back, or null if no result
      */
     fun navigateBack(result: VROBackResult?) {
-        viewModel.doBack(result)
+        vm.vroViewModel.doBack(result)
     }
 }

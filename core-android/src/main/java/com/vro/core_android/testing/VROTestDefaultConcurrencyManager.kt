@@ -14,11 +14,11 @@ class VROTestDefaultConcurrencyManager : VROBaseConcurrencyManager {
         return defaultConcurrencyManager.launch(Dispatchers.Unconfined, fullException, block)
     }
 
-    override fun cancelPendingTasks() {
+    override suspend fun cancelPendingTasks() {
         defaultConcurrencyManager.cancelPendingTasks()
     }
 
-    override fun cancelTask(job: Job) {
+    override suspend fun cancelTask(job: Job) {
         defaultConcurrencyManager.cancelTask(job)
     }
 }

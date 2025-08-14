@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.event.VROEvent
-import com.vro.fragment.VROViewModel
+import com.vro.viewmodel.VROViewModel
 import com.vro.navigation.VRODestination
 import com.vro.state.VRODialogData
 import com.vro.state.VROState
@@ -42,7 +42,7 @@ abstract class VROActivity<
 
     private fun setViewBindingObservers() {
         lifecycleScope.launch {
-            viewModel.stepper.collectLatest { stepper ->
+            vm.vroViewModel.stepper.collectLatest { stepper ->
                 when (stepper) {
                     is VROStateStep -> onViewUpdate(activityBinding, stepper.state)
                     is VRODialogStep -> onLoadDialog(stepper.dialogState)
@@ -53,7 +53,7 @@ abstract class VROActivity<
         }
 
         lifecycleScope.launch {
-            viewModel.getNavigationState().collect {
+            vm.vroViewModel.getNavigationState().collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
                         navigator.navigate(destination)

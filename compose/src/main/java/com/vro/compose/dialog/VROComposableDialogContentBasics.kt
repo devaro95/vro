@@ -2,10 +2,7 @@ package com.vro.compose.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.dialog.VRODialogListener
