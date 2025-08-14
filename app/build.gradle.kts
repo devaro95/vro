@@ -7,7 +7,7 @@ plugins {
 apply (from= "../gradleConfig/configuration.gradle")
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         aarMetadata {

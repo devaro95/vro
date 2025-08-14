@@ -41,7 +41,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     namespace = "com.vro.core"
 
     defaultConfig {

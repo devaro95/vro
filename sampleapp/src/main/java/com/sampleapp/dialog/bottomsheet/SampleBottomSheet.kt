@@ -1,13 +1,14 @@
 package com.sampleapp.dialog.bottomsheet
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sampleapp.components.SampleButton
 import com.sampleapp.dialog.SampleSimpleDialog
 import com.sampleapp.dialog.SampleSimpleDialogData
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel.Companion.DIALOG
@@ -15,7 +16,8 @@ import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.preview.VROMultiDevicePreview
 import com.vro.state.VRODialogData
 
-class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomSheetState, SampleBottomSheetEvents>() {
+class SampleBottomSheet :
+    VROComposableViewModelBottomSheetContent<SampleBottomSheetState, SampleBottomSheetEvents>() {
 
     @Composable
     override fun ComposableContent(state: SampleBottomSheetState, dismiss: () -> Unit) {
@@ -25,30 +27,25 @@ class SampleBottomSheet : VROComposableViewModelBottomSheetContent<SampleBottomS
         ) {
             Text(
                 modifier = Modifier.padding(top = 32.dp),
-                text = "This is a sample BottomSheet",
-                color = Color.Black
+                text = "VRO BottomSheet",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             )
-            OutlinedButton(
-                modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+            SampleButton(
+                modifier = Modifier.padding(top = 32.dp),
+                text = state.buttonText,
                 onClick = { event(SampleBottomSheetEvents.OnButton) }
-            ) {
-                Text(text = state.buttonText)
-            }
-            OutlinedButton(
+            )
+            SampleButton(
                 modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                text = "Dialog Management",
                 onClick = { event(SampleBottomSheetEvents.OnDialog) }
-            ) {
-                Text(text = "Show Dialog")
-            }
-            OutlinedButton(
+            )
+            SampleButton(
                 modifier = Modifier.padding(top = 16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+                text = "Hide dialog",
                 onClick = { event(SampleBottomSheetEvents.Dismiss) }
-            ) {
-                Text(text = "Dismiss")
-            }
+            )
         }
     }
 
