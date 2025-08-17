@@ -12,6 +12,7 @@ import com.sampleapp.ui.home.SampleHomeEvents.ShowBottomSheet
 import com.sampleapp.ui.home.SampleHomeEvents.ShowNavigationBottomSheet
 import com.sampleapp.ui.home.SampleHomeEvents.ShowSimpleDialog
 import com.sampleapp.ui.home.SampleHomeEvents.ShowSimpleDialogWithViewModel
+import com.sampleapp.ui.home.SampleHomeEvents.Template
 import com.sampleapp.ui.home.SampleHomeEvents.UpdateText
 import com.sampleapp.ui.home.SampleHomeEvents.VmDialogDismiss
 import com.sampleapp.ui.main.SampleDestinations
@@ -38,6 +39,7 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
             VmDialogDismiss -> onVmDialogDismiss()
             ActivityFragment -> onActivityFragmentClick()
             OneTimeLaunch -> onOneTimeLaunchClick()
+            Template -> templateClick()
         }
     }
 
@@ -103,6 +105,10 @@ class SampleHomeViewModel : SampleBaseViewModel<SampleHomeState, SampleDestinati
 
     private fun onOneTimeLaunchClick() {
         updateOneTime(id = ONE_TIME_LAUNCH, checkDataState())
+    }
+
+    private fun templateClick(){
+        navigate(SampleDestinations.TemplateNavigation)
     }
 
     companion object {

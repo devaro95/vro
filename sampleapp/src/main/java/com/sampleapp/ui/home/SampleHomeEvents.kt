@@ -15,4 +15,5 @@ sealed class SampleHomeEvents : VROEvent {
     data object VmDialogDismiss : SampleHomeEvents()
     data object ActivityFragment : SampleHomeEvents()
     data object OneTimeLaunch : SampleHomeEvents()
+    data object Template : SampleHomeEvents()
 }

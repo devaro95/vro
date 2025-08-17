@@ -15,6 +15,9 @@ import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavViewModel
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheetNavigator
 import com.sampleapp.styles.SampleTheme
+import com.sampleapp.ui.container.SampleContainerNavigator
+import com.sampleapp.ui.container.SampleContainerViewModel
+import com.sampleapp.ui.container.screen.SampleContainerScreen
 import com.sampleapp.ui.detail.*
 import com.sampleapp.ui.detail.screen.SampleDetailScreen
 import com.sampleapp.ui.home.*
@@ -66,6 +69,14 @@ class SampleMainActivity : VROComposableActivity() {
             viewModel = { injectViewModel<SampleProfileViewModel>() },
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
             content = SampleProfileScreen(),
+            topBarState = topBarState,
+            bottomBarState = bottomBarState,
+            snackbarState = snackbarState
+        )
+        vroComposableScreen(
+            viewModel = { injectViewModel<SampleContainerViewModel>() },
+            navigator = SampleContainerNavigator(this@SampleMainActivity, navController),
+            content = SampleContainerScreen(),
             topBarState = topBarState,
             bottomBarState = bottomBarState,
             snackbarState = snackbarState
