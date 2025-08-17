@@ -79,6 +79,10 @@ class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEven
                         text = "One Time Management",
                         onClick = { event(SampleHomeEvents.OneTimeLaunch) }
                     ),
+                    CardListItem(
+                        text = "Template Management",
+                        onClick = { event(SampleHomeEvents.Template) }
+                    ),
                 )
             )
         }

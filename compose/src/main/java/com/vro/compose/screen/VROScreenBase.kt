@@ -42,7 +42,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     open val skeleton: VROSkeleton = VROSkeletonDefault(),
 ) : KoinScopeComponent {
 
-    abstract val screenContent: VROScreenContent<S, E>
+    abstract val screenContent: VROScreenContent<S, E>?
+
+    open val screenTemplate: VROTemplate<*, *, *, *, *, *>? = null
 
     /**
      * Koin scope tied to this screen instance.
@@ -108,36 +110,25 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
         this.dialogHandler.context = context
         this.errorHandler.events = events
         this.errorHandler.context = context
-        this.screenContent.events = events
+        this.screenContent?.events = events
         this.oneTimeHandler.events = events
         this.oneTimeHandler.context = context
-        this.screenContent.topBarState = topBarState
-        this.screenContent.bottomBarState = bottomBarState
+        this.screenContent?.topBarState = topBarState
+        this.screenContent?.bottomBarState = bottomBarState
         screenState = state
-        screenContent.coroutineScope = rememberCoroutineScope()
-        screenContent.snackbarState = snackbarState
+        screenContent?.coroutineScope = rememberCoroutineScope()
+        screenContent?.snackbarState = snackbarState
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
             if (isTablet() && tabletDesignEnabled) {
                 ScreenTabletContent(state)
             } else {
-                screenContent.Content(state)
+                screenContent?.Content(state) ?: screenTemplate?.ComposableTemplateContainer(
+                    navController
+                )
             }
         }
-    }
-
-    /**
-     * Adds a template component to the screen.
-     *
-     * @param templateClass The KClass of the template to add
-     */
-    @Composable
-    fun <T : VROTemplate<*, *, *, *, *, *>> AddTemplate(templateClass: KClass<T>) {
-        val template = remember<T>(templateClass) {
-            scope.get(templateClass)
-        }
-        template.ComposableTemplateContainer(navController)
     }
 
     /**
