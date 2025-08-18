@@ -9,4 +9,5 @@ sealed class SampleDestinations : VRODestination() {
     data class DetailNavigation(val state: SampleDetailState) : SampleDestinations()
     data object BottomSheetNavigation : SampleDestinations()
     data object ActivityFragmentNavigation : SampleDestinations()
+    data object TemplateNavigation : SampleDestinations()
 }

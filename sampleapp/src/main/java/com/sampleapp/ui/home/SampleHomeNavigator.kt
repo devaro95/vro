@@ -2,6 +2,7 @@ package com.sampleapp.ui.home
 
 import androidx.navigation.NavController
 import com.sampleapp.dialog.bottomsheet.SampleBottomSheet
+import com.sampleapp.ui.container.screen.SampleContainerScreen
 import com.sampleapp.ui.detail.screen.SampleDetailScreen
 import com.sampleapp.ui.detail.SampleDetailStarter
 import com.sampleapp.ui.fragmentactivity.SampleFragmentActivity
@@ -12,6 +13,7 @@ import com.sampleapp.ui.main.SampleDestinations.BottomSheetNavigation
 import com.sampleapp.ui.main.SampleDestinations.DetailNavigation
 import com.sampleapp.ui.main.SampleDestinations.HomeNavigation
 import com.sampleapp.ui.main.SampleDestinations.ProfileNavigation
+import com.sampleapp.ui.main.SampleDestinations.TemplateNavigation
 import com.sampleapp.ui.profile.screen.SampleProfileScreen
 import com.vro.compose.VROComposableActivity
 import com.vro.compose.navigator.VROComposableNavigator
@@ -27,6 +29,7 @@ class SampleHomeNavigator(
             ProfileNavigation -> navigateToScreen(SampleProfileScreen())
             BottomSheetNavigation -> openBottomSheet(SampleBottomSheet())
             ActivityFragmentNavigation -> startActivity(SampleFragmentActivity.createIntent(activity.baseContext))
+            TemplateNavigation -> navigateToScreen(SampleContainerScreen())
             is DetailNavigation -> navigateToScreen(
                 screen = SampleDetailScreen(),
                 starter = SampleDetailStarter.Initial(state = destination.state)
