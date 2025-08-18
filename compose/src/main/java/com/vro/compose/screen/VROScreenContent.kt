@@ -6,6 +6,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +18,7 @@ import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
+import com.vro.compose.template.VROTemplate
 import com.vro.constants.EMPTY_STRING
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
@@ -24,8 +26,12 @@ import com.vro.navigation.VROBackResult
 import com.vro.state.VROState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.component.createScope
+import org.koin.core.scope.Scope
+import kotlin.reflect.KClass
 
-abstract class VROScreenContent<S : VROState, E : VROEvent> {
+abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent {
 
     /**
      * The Android context for the screen. Must be initialized before use.
@@ -33,6 +39,8 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
     lateinit var context: Context
 
     lateinit var events: VROEventLauncher<E>
+
+    override val scope: Scope by lazy { createScope(this) }
 
     /**
      * Mutable state for top app bar configuration.
@@ -60,7 +68,8 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
      * @param currentState The current bottom bar state
      * @return The desired bottom bar configuration state
      */
-    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState = VROBottomBarStartState()
+    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState =
+        VROBottomBarStartState()
 
     @Composable
     abstract fun Content(state: S)
@@ -154,7 +163,8 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
     @Composable
     fun UpdateTopBar(changeStateFunction: VROTopBarState.() -> VROTopBarState) {
         val navController = rememberNavController()
-        val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
+        val currentDestination =
+            navController.currentBackStackEntryAsState().value?.destination?.route
         LaunchedEffect(currentDestination) {
             (topBarState.value as? VROTopBarState)?.let {
                 topBarState.value = changeStateFunction.invoke(it)
@@ -172,7 +182,8 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> {
     @Composable
     fun UpdateBottomBar(changeStateFunction: VROBottomBarState.() -> VROBottomBarState) {
         val navController = rememberNavController()
-        val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
+        val currentDestination =
+            navController.currentBackStackEntryAsState().value?.destination?.route
         LaunchedEffect(currentDestination) {
             (bottomBarState.value as? VROBottomBarState)?.let {
                 bottomBarState.value = changeStateFunction.invoke(it)
