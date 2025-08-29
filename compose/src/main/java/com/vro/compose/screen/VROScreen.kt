@@ -39,7 +39,7 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
         topBarState: MutableState<VROTopBarBaseState>,
         bottomBarState: MutableState<VROBottomBarBaseState>,
     ) {
-        topBarState.value = screenContent?.setTopBar(topBarState.value) ?: topBarState.value
-        bottomBarState.value = screenContent?.setBottomBar(bottomBarState.value) ?: bottomBarState.value
+        topBarState.value = setTopBar(topBarState.value)
+        bottomBarState.value = setBottomBar(bottomBarState.value)
     }
 }
