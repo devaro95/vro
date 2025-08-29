@@ -12,6 +12,8 @@ import com.vro.compose.handler.default.*
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
+import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
+import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.template.VROTemplate
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
@@ -79,6 +81,25 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
      * Current screen state managed internally.
      */
     internal lateinit var screenState: S
+
+    /**
+     * Configures the initial state of the top app bar.
+     * Override to provide custom top bar configurations.
+     *
+     * @param currentState The current top bar state
+     * @return The desired top bar configuration state
+     */
+    open fun setTopBar(currentState: VROTopBarBaseState): VROTopBarBaseState = VROTopBarStartState()
+
+    /**
+     * Configures the initial state of the bottom app bar.
+     * Override to provide custom bottom bar configurations.
+     *
+     * @param currentState The current bottom bar state
+     * @return The desired bottom bar configuration state
+     */
+    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState =
+        VROBottomBarStartState()
 
     /**
      * Composable function that renders the skeleton loading state.

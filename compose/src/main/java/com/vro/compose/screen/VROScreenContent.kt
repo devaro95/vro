@@ -18,7 +18,6 @@ import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
-import com.vro.compose.template.VROTemplate
 import com.vro.constants.EMPTY_STRING
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
