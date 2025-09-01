@@ -21,21 +21,21 @@ allprojects {
 Add VRO compose dependency to your presentation project module (Android Jetpack Compose Project):
 ```gradle
 //Using libs.version file:
-vro-compose = { group = "com.github.devaro95.vro", name = "vro-compose", version.ref = "vroVersion" }
+vro-compose = { group = "io.github.devaro95.vro", name = "vro-compose", version.ref = "vroVersion" }
 
 //Using old mode:
 dependencies {
-    implementation("com.github.devaro95:vro-compose:{$VROVersion}")
+    implementation("io.github.devaro95:vro-compose:{$VROVersion}")
 }
 ```
 Add VRO core dependency to your core project module:
 ```gradle
 //Using libs.version file:
-vro-core = { group = "com.github.devaro95.vro", name = "vro-core", version.ref = "vroVersion" }
+vro-core = { group = "io.github.devaro95.vro", name = "vro-core", version.ref = "vroVersion" }
 
 //Using old mode:
 dependencies {
-    implementation("com.github.devaro95:vro-core:{$VROVersion}")
+    implementation("io.github.devaro95:vro-core:{$VROVersion}")
 }
 ```
 # 📚  Learn More
