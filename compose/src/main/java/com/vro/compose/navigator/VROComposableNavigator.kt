@@ -6,6 +6,7 @@ import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
+import com.vro.compose.template.VROTemplate
 import com.vro.core_android.navigation.VRONavigator
 import com.vro.navigation.VRODestination
 import com.vro.navigation.putStarterParam
@@ -40,6 +41,28 @@ abstract class VROComposableNavigator<D : VRODestination>(
     ) {
         navigateToRoute(
             destinationRoute = screen.destinationRoute(),
+            starter = starter,
+            popScreen = popScreen,
+            inclusive = inclusive
+        )
+    }
+
+    /**
+     * Navigates to a specified screen.
+     *
+     * @param screen The screen to navigate to
+     * @param starter Optional navigation starter parameters
+     * @param popScreen Optional screen to pop from back stack
+     * @param inclusive Whether to include the popScreen in the pop operation
+     */
+    fun navigateToTemplate(
+        template: VROTemplate<*, *, *, *>,
+        starter: VRONavStarter? = null,
+        popScreen: VROScreen<*, *>? = null,
+        inclusive: Boolean = false,
+    ) {
+        navigateToRoute(
+            destinationRoute = template.destinationRoute(),
             starter = starter,
             popScreen = popScreen,
             inclusive = inclusive

@@ -190,7 +190,7 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     snackbarState: MutableState<VROSnackBarState>,
 ) {
     val vm = viewModel.vroViewModel
-    content.screenContent?.context = LocalContext.current
+    content.screenContent.context = LocalContext.current
     content.events = vm
     content.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
@@ -255,7 +255,7 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     snackbarState: MutableState<VROSnackBarState>,
 ) {
     val vm = viewModel.vroViewModel
-    content.screenContent?.context = LocalContext.current
+    content.screenContent.context = LocalContext.current
     content.events = vm
     BackHandler(true) { vm.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle

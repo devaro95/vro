@@ -32,10 +32,7 @@ open class VROBaseHandler<E : VROEvent> {
     lateinit var context: Context
 
     /**
-     * Triggers the given [VROEvent] through the [events] launcher.
-     *
-     * This function delegates to [VROEventLauncher.doEvent] and can be used
-     * by subclasses to emit UI or navigation events.
+     * Dispatches an event to the ViewModel.
      *
      * @param event The event to dispatch
      */

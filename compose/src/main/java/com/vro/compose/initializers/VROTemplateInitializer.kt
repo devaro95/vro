@@ -10,11 +10,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.vro.compose.VROComposableActivity
 import com.vro.compose.navigator.VROTemplateNavigator
+import com.vro.compose.screen.VROScreen
+import com.vro.compose.skeleton.VROSkeletonDefault
+import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.VROSnackBarState
+import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.template.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
+import com.vro.navigation.getStarterParam
 import com.vro.state.*
+import com.vro.viewmodel.VROViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -33,27 +40,37 @@ import kotlinx.coroutines.flow.collectLatest
  * @param lifecycle The current lifecycle owner
  */
 @Composable
-fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeStepperListener(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeStepperListener(
     viewModel: VM,
-    content: VROTemplate<VM, S, D, E, M, R>,
-    lifecycle: Lifecycle,
+    content: VROTemplate<S, E, M, R>,
+    screenLifecycle: Lifecycle,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
+    snackbarState: MutableState<VROSnackBarState>,
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
-        initialValue =
-            content.skeleton?.let {
-                VROStepper.VROSkeletonStep(viewModel.initialState)
-            } ?: VROStepper.VROStateStep(viewModel.initialState),
-        lifecycle = lifecycle
+        initialValue = if (content.skeleton::class != VROSkeletonDefault::class) {
+            VROStepper.VROSkeletonStep(viewModel.initialState)
+        } else {
+            VROStepper.VROStateStep(viewModel.initialState)
+        },
+        lifecycle = screenLifecycle
     ).value
+
     if (stepper is VROStepper.VROSkeletonStep) {
-        content.TemplateScreenSkeleton()
+        content.skeleton.SkeletonContent()
     } else {
-        content.TemplateContent(stepper.state)
+        content.ComposableScreenContainer(
+            state = stepper.state,
+            topBarState = topBarState,
+            bottomBarState = bottomBarState,
+            snackbarState = snackbarState
+        )
         (stepper as? VROStepper.VRODialogStep)?.let {
-            content.onDialog(it.dialogState)
+            content.dialogHandler.OnDialog(it.dialogState)
         }
         (stepper as? VROStepper.VROErrorStep)?.let {
-            content.onError(it.error, it.data)
+            content.errorHandler.OnError(it.error, it.data)
         }
     }
 }
@@ -72,14 +89,14 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
  * @param content The template content to handle events
  */
 @Composable
-fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeOneTimeListener(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeOneTimeListener(
     viewModel: VM,
-    content: VROTemplate<VM, S, D, E, M, R>,
+    content: VROTemplate<S, E, M, R>,
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.getOneTimeEvents().collectLatest { oneTime ->
             if (oneTime is VROOneTimeState.Launch) {
-                content.oneTimeHandler(oneTime.id, oneTime.state)
+                content.oneTimeHandler.onOneTime(oneTime.id, oneTime.state)
                 viewModel.clearOneTime()
             }
         }
@@ -87,73 +104,56 @@ fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : V
 }
 
 /**
- * Initializes lifecycle observers for the ViewModel.
- * Handles onStart, onResume, and onPause lifecycle events.
+ * Initializes lifecycle observers for the screen.
+ * Handles core lifecycle events and coordinates:
+ * - Scaffold configuration
+ * - Starter parameter processing
+ * - Navigation result handling
+ * - ViewModel lifecycle methods
  *
- * @param VM The ViewModel type that extends [VROTemplateViewModel]
+ * @param VM The ViewModel type that extends [VROViewModel]
  * @param S The state type that extends [VROState]
  * @param D The navigation destination type that extends [VRODestination]
  * @param E The event type that extends [VROEvent]
  *
  * @param viewModel The ViewModel instance to observe
- * @param lifecycle The current lifecycle owner
+ * @param content The screen content to configure
+ * @param screenLifecycle The lifecycle owner to observe
+ * @param topBarState Mutable state for top bar configuration
+ * @param bottomBarState Mutable state for bottom bar configuration
+ * @param navController The navigation controller for parameter handling
+ *
+ * @see createLifecycleEventObserver For base observer implementation
+ * @see VROScreen.configureScaffold For scaffold setup
  */
 @Composable
-fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeLifecycleObserver(
+fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeLifecycleObserver(
     viewModel: VM,
-    lifecycle: Lifecycle,
+    content: VROTemplate<S, E, M, R>,
+    screenLifecycle: Lifecycle,
+    topBarState: MutableState<VROTopBarBaseState>,
+    bottomBarState: MutableState<VROBottomBarBaseState>,
+    navController: NavController,
 ) {
-    DisposableEffect(lifecycle) {
+    DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
-            onCreate = {},
-            onStart = { viewModel.onStart() },
-            onResume = { viewModel.onResume() },
+            onCreate = {
+                content.configureScaffold(topBarState, bottomBarState)
+                viewModel.onStarter(getStarterParam(navController.currentDestination?.id.toString()))
+            },
+            onStart = {
+                viewModel.onStart()
+            },
+            onResume = {
+                viewModel.getResult()
+                viewModel.onResume()
+            },
             onPause = { viewModel.onPause() }
         )
-        lifecycle.addObserver(observer)
+        screenLifecycle.addObserver(observer)
         onDispose {
-            viewModel.onDestroy()
-            lifecycle.removeObserver(observer)
-        }
-    }
-}
-
-/**
- * Initializes the navigation system for a template-based screen using a [VROTemplateNavigator].
- *
- * Typically used inside a `@Composable` function during screen setup.
- *
- * @param VM The ViewModel type, extending [VROTemplateViewModel], which emits navigation events.
- * @param S The state type, extending [VROState], managed by the ViewModel.
- * @param D The destination type, extending [VRODestination], representing navigation targets.
- * @param E The event type, extending [VROEvent], representing UI events.
- * @param M The mapper type, used to map state/data (unused in this function, but part of the template).
- * @param R The renderer type, responsible for rendering UI with state and events.
- *
- * @param viewModel The ViewModel instance from which to observe navigation state.
- * @param activity The [VROComposableActivity] hosting the screen, needed for context-bound navigation.
- * @param navController The Jetpack Compose [NavController] handling navigation actions.
- * @param content The screen template implementing [VROTemplate], containing the navigator.
- */
-@Composable
-fun <VM : VROTemplateViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> InitializeNavigatorListener(
-    viewModel: VM,
-    activity: VROComposableActivity,
-    navController: NavController,
-    content: VROTemplate<VM, S, D, E, M, R>,
-) {
-    content.navigator.initialize(
-        activity = activity,
-        navController = navController
-    )
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getNavigationState().collect {
-            it?.destination?.let { destination ->
-                if (!destination.isNavigated) {
-                    content.navigator.navigate(destination)
-                    destination.setNavigated()
-                }
-            } ?: content.navigator.navigateBack(it?.backResult)
+            viewModel.onPause()
+            screenLifecycle.removeObserver(observer)
         }
     }
 }
