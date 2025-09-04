@@ -145,7 +145,7 @@ abstract class VROComposableDialogContentBasics<S : VROState, E : VROEvent> {
     open fun onError(error: Throwable, data: Any?) = Unit
 
     /**
-     * Convenience method for sending events from the dialog.
+     * Dispatches an event to the ViewModel.
      *
      * @param event The event to dispatch
      */

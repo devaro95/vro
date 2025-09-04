@@ -82,17 +82,16 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     snackbarState: MutableState<VROSnackBarState>,
 ) {
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
-        initialValue =
-            if (content.skeleton::class != VROSkeletonDefault::class) {
-                VROStepper.VROSkeletonStep(viewModel.initialState)
-            } else {
-                VROStepper.VROStateStep(viewModel.initialState)
-            },
+        initialValue = if (content.skeleton::class != VROSkeletonDefault::class) {
+            VROStepper.VROSkeletonStep(viewModel.initialState)
+        } else {
+            VROStepper.VROStateStep(viewModel.initialState)
+        },
         lifecycle = screenLifecycle
     ).value
 
     if (stepper is VROStepper.VROSkeletonStep) {
-        content.ComposableScreenSkeleton()
+        content.skeleton.SkeletonContent()
     } else {
         content.ComposableScreenContainer(
             state = stepper.state,
