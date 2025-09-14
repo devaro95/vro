@@ -26,8 +26,8 @@ fun getResultParam(route: String): VROBackResult? {
     return result
 }
 
-fun resultListener(id: String, listener: (data: @Serializable Any?) -> Unit) {
+fun resultListener(id: String, listener: (result: @Serializable VROBackResult) -> Unit) {
     getResultParam(id)?.let {
-       listener.invoke(it.data)
+       listener.invoke(it)
     }
 }
