@@ -27,9 +27,9 @@ interface VROTemplateRender<E : VROEvent, S : VROState> : KoinComponent {
     val events: VROEventLauncher<E>
 
     /**
-     * Triggers a UI or business event.
+     * Dispatches an event to the ViewModel.
      *
-     * @param event The event to be sent to the ViewModel.
+     * @param event The event to dispatch
      */
     fun event(event: E) {
         events.doEvent(event)

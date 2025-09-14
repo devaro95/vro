@@ -236,8 +236,9 @@ abstract class VROComposableFragment<
     }
 
     /**
-     * Sends an event to the ViewModel.
-     * @param event The event to send
+     * Dispatches an event to the ViewModel.
+     *
+     * @param event The event to dispatch
      */
     fun event(event: E) {
         vm.vroViewModel.doEvent(event)

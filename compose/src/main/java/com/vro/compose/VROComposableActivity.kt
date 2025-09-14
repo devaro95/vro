@@ -18,11 +18,13 @@ import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
+import com.vro.compose.screen.VROScreenBase
 import com.vro.compose.snackbar.VROSnackbar
 import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
+import com.vro.compose.template.VROTemplate
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
 
@@ -48,7 +50,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     /**
      * Defines the first screen to be shown when the app starts.
      */
-    abstract val startScreen: VROScreen<*, *>
+    abstract val startScreen: VROScreenBase<*, *>
 
     private lateinit var navController: NavController
 
@@ -129,8 +131,8 @@ abstract class VROComposableActivity : ComponentActivity() {
                 bottomBar = {
                     (bottomBarState.value as? VROBottomBarState)?.let {
                         if (bottomBarState.value.visibility) {
-                            Row(modifier = Modifier.navigationBarsPadding() ) {
-                                BottomBar(selectedItem = it.selectedItem,)
+                            Row(modifier = Modifier.navigationBarsPadding()) {
+                                BottomBar(selectedItem = it.selectedItem)
                             }
                         }
                     }
@@ -202,6 +204,25 @@ abstract class VROComposableActivity : ComponentActivity() {
         starter: VRONavStarter? = null,
     ) {
         navController.navigate(screen.destinationRoute()) {
+            popUpTo(navController.graph.id) { inclusive = true }
+            launchSingleTop = true
+        }
+        starter?.let {
+            putStarterParam(navController.currentDestination?.id.toString(), it)
+        }
+    }
+
+    /**
+     * Navigates to the given [template], optionally attaching a [starter] object.
+     *
+     * @param screen The destination screen.
+     * @param starter Optional navigation starter params.
+     */
+    fun navigateToTemplate(
+        template: VROTemplate<*, *, *, *>,
+        starter: VRONavStarter? = null,
+    ) {
+        navController.navigate(template.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
         }

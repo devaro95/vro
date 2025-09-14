@@ -1,14 +1,10 @@
 package com.vro.compose.di
 
-import com.vro.compose.navigator.VROTemplateNav
-import com.vro.compose.template.VROTemplate
-import com.vro.compose.template.VROTemplateMapper
-import com.vro.compose.template.VROTemplateViewModel
-import com.vro.navigation.VRODestination
+import com.vro.compose.template.*
+import org.koin.core.context.GlobalContext.get
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import java.util.UUID
-import org.koin.core.context.GlobalContext.get
 
 /**
  * Generates a unique named for a Koin scope based on the runtime class name of the given type [T].
@@ -26,19 +22,6 @@ import org.koin.core.context.GlobalContext.get
 inline fun <reified T : Any> vroScopeName() = named(T::class.toString())
 
 /**
- * Lazily retrieves a scoped navigator instance for the current [VROTemplate] from its Koin scope.
- *
- * This function is intended to be used with property delegation:
- * `override val navigator: VROTemplateNav<DestinationType> by injectNavigator()`
- *
- * @return A lazy delegate that provides a [VROTemplateNav] of type [D], resolved from the template's scope.
- * @throws org.koin.core.error.NoBeanDefFoundException if the navigator is not defined in the scope.
- */
-fun <D : VRODestination> VROTemplate<*, *, D, *, *, *>.injectNavigator(): Lazy<VROTemplateNav<D>> {
-    return lazy { scope.get<VROTemplateNav<D>>() }
-}
-
-/**
  * Lazily retrieves a scoped mapper instance for the current [VROTemplate] from its Koin scope.
  *
  * This function is intended to be used with property delegation:
@@ -46,7 +29,7 @@ fun <D : VRODestination> VROTemplate<*, *, D, *, *, *>.injectNavigator(): Lazy<V
  *
  * @return A lazy delegate that provides a mapper of type [M], resolved from the template's scope.
  */
-inline fun <reified M : VROTemplateMapper> VROTemplate<*, *, *, *, *, *>.injectMapper(): Lazy<M> {
+inline fun <reified M : VROTemplateMapper> VROTemplateContent<*, *, *, *>.injectMapper(): Lazy<M> {
     return lazy { scope.get() }
 }
 
@@ -58,7 +41,7 @@ inline fun <reified M : VROTemplateMapper> VROTemplate<*, *, *, *, *, *>.injectM
  *
  * @return A lazy delegate that provides a ViewModel of type [VM], resolved from the template's scope.
  */
-inline fun <reified VM : VROTemplateViewModel<*, *, *>> VROTemplate<*, *, *, *, *, *>.injectViewModel(): Lazy<VM> {
+inline fun <reified VM : VROTemplateViewModel<*, *, *>> VROTemplate<*, *, *, *>.injectViewModel(): Lazy<VM> {
     return lazy { scope.get<VM>() }
 }
 
