@@ -1,10 +1,11 @@
 package com.sampleapp.ui.template
 
-import com.vro.compose.template.VROTemplateViewModel
 import com.vro.constants.EMPTY_STRING
+import com.vro.viewmodel.VROViewModel
+import org.koin.core.annotation.Single
 
 class SampleTemplateViewModel :
-    VROTemplateViewModel<SampleTemplateState, SampleTemplateDestinations, SampleTemplateEvents>() {
+    VROViewModel<SampleTemplateState, SampleTemplateDestinations, SampleTemplateEvents>() {
 
     override val initialState: SampleTemplateState = SampleTemplateState.INITIAL
 
