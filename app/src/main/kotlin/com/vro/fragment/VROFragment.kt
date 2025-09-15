@@ -133,4 +133,12 @@ abstract class VROFragment<
         navigationFLow.cancel()
         oneTimeFlow.cancel()
     }
+
+    fun event(event: E) {
+        vm.vroViewModel.onEvent(event)
+    }
+
+    fun navigateBack(result: VROBackResult?) {
+        vm.vroViewModel.doBack(result)
+    }
 }
