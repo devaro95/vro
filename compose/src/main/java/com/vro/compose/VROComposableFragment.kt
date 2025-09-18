@@ -24,6 +24,7 @@ import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
+import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.viewmodel.VROViewModel
@@ -62,7 +63,7 @@ abstract class VROComposableFragment<
      * Optional theme configuration for the fragment.
      * Can be overridden to provide custom theming.
      */
-    open val theme: VROComposableTheme? = null
+    open val theme: VROComposableMaterialTheme? = null
 
     private lateinit var navController: NavController
 

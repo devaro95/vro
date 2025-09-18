@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.sampleapp.styles.Skeleton
+import com.sampleapp.styles.colors.Skeleton
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.skeleton.*
 import com.vro.compose.utils.vroVerticalScroll
