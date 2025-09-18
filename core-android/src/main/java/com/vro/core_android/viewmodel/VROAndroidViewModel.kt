@@ -10,3 +10,8 @@ open class VROAndroidViewModel<S : VROState, D : VRODestination, E : VROEvent>(
     val vroViewModel: VROViewModel<S, D, E>
 ) : ViewModel()
 
+open class VROAndroidDialogViewModel<S : VROState, D : VRODestination, E : VROEvent>(
+    val vroViewModel: VROViewModel<S, D, E>
+) : ViewModel()
+
+
