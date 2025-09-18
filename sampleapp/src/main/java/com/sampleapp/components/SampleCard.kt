@@ -18,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sampleapp.styles.theme.SampleAppTheme
+import com.sampleapp.ui.main.SampleMainActivity
+import com.sampleapp.ui.main.SampleMainActivity.Companion.LocalActivityColors
 
 @Composable
 fun SampleCard(
@@ -41,6 +44,7 @@ fun SampleCard(
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = text,
+                color = SampleAppTheme.colors.primary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
