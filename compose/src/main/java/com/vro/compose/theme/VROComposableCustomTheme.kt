@@ -13,5 +13,5 @@ import androidx.compose.material3.Typography
 open class VROComposableCustomTheme(
     open val lightColors: VROColorScheme,
     open val darkColors: VROColorScheme? = null,
-    open val typography: Typography? = null,
+    open val typography: VROTypographyScheme? = null,
 )

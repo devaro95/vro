@@ -1,4 +1,4 @@
-package com.sampleapp.styles
+package com.sampleapp.styles.typography
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.sampleapp.R
 
-val SampleTypography = Typography(
+val SampleMaterialTypography = Typography(
     bodySmall = TextStyle(
         color = Color.Black,
         fontSize = 14.sp,
