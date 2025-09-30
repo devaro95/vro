@@ -7,6 +7,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,18 +56,24 @@ fun VROBottomBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 itemList.forEachIndexed { index, item ->
-                    AnimatedIcon(
-                        iconRes = item.icon,
+                    Column(
                         modifier = Modifier.weight(1f),
-                        selected = iconSelected == index,
-                        selectedIconRes = item.iconSelected ?: item.icon,
-                        iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
-                            if (iconSelected == index) iconSelectedTint
-                            else item.iconTint
-                        } ?: item.iconTint,
-                        iconSize = item.iconSize
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        item.onClick?.invoke()
+                        AnimatedIcon(
+                            iconRes = item.icon,
+                            selected = iconSelected == index,
+                            selectedIconRes = item.iconSelected ?: item.icon,
+                            iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
+                                if (iconSelected == index) iconSelectedTint
+                                else item.iconTint
+                            } ?: item.iconTint,
+                            iconSize = item.iconSize
+                        ) {
+                            item.onClick?.invoke()
+                        }
+                        item.text.invoke()
                     }
                 }
             }
@@ -93,7 +100,7 @@ open class VROBottomBarItem(
     val iconSelectedTint: Color? = null,
     val iconSelected: Int? = null,
     val contentDescription: String = EMPTY_STRING,
-    val text: String = EMPTY_STRING,
+    val text: @Composable () -> Unit = { },
     val iconSize: Dp = 24.dp,
     val onClick: (() -> Unit)? = null,
 )
