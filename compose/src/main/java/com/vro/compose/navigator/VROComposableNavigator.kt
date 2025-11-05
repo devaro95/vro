@@ -38,12 +38,14 @@ abstract class VROComposableNavigator<D : VRODestination>(
         starter: VRONavStarter? = null,
         popScreen: VROScreen<*, *>? = null,
         inclusive: Boolean = false,
+        singleTop: Boolean = false
     ) {
         navigateToRoute(
             destinationRoute = screen.destinationRoute(),
             starter = starter,
             popScreen = popScreen,
-            inclusive = inclusive
+            inclusive = inclusive,
+            singleTop = singleTop
         )
     }
 
@@ -60,12 +62,14 @@ abstract class VROComposableNavigator<D : VRODestination>(
         starter: VRONavStarter? = null,
         popTemplate: VROTemplate<*, *, *, *>? = null,
         inclusive: Boolean = false,
+        singleTop: Boolean = false
     ) {
         navigateToRoute(
             destinationRoute = template.destinationRoute(),
             starter = starter,
             popTemplate = popTemplate,
-            inclusive = inclusive
+            inclusive = inclusive,
+            singleTop = singleTop
         )
     }
 
@@ -126,6 +130,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
         starter: VRONavStarter? = null,
         popScreen: VROScreen<*, *>? = null,
         inclusive: Boolean = false,
+        singleTop: Boolean = false
     ) {
         activity.hideKeyboard()
         navController.navigate(destinationRoute) {
@@ -133,6 +138,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
                 popUpTo(route) {
                     this.inclusive = inclusive
                 }
+                launchSingleTop = singleTop
             }
         }
         starter?.let {
@@ -153,6 +159,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
         starter: VRONavStarter? = null,
         popTemplate: VROTemplate<*, *, *, *>? = null,
         inclusive: Boolean = false,
+        singleTop: Boolean = false
     ) {
         activity.hideKeyboard()
         navController.navigate(destinationRoute) {
@@ -161,6 +168,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
                     this.inclusive = inclusive
                 }
             }
+            launchSingleTop = singleTop
         }
         starter?.let {
             putStarterParam(navController.currentDestination?.id.toString(), it)
