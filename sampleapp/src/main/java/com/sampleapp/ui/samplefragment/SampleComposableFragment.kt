@@ -1,7 +1,7 @@
 package com.sampleapp.ui.samplefragment
 
 import androidx.compose.runtime.Composable
-import com.sampleapp.styles.theme.SampleTheme
+import com.sampleapp.styles.theme.SampleMaterialTheme
 import com.sampleapp.ui.samplefragment.SampleComposableFragmentNavigator.SampleComposableFragmentDestinations
 import com.sampleapp.ui.samplefragment.screen.SampleComposableFragmentScreen
 import com.vro.compose.VROComposableFragment
@@ -19,7 +19,7 @@ class SampleComposableFragment :
 
     override val viewModelSeed: SampleComposableFragmentViewModel by inject()
 
-    override val theme: VROComposableMaterialTheme = SampleTheme
+    override val theme: VROComposableMaterialTheme = SampleMaterialTheme
 
     @Composable
     override fun composableView() = SampleComposableFragmentScreen()

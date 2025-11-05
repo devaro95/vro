@@ -36,9 +36,9 @@ fun SampleCard(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = text,
                 color = SampleAppTheme.colors.primary,
-                fontWeight = FontWeight.Bold,
+                style = SampleAppTheme.typography.bold,
+                textAlign = TextAlign.Center,
                 fontSize = 18.sp,
-                textAlign = TextAlign.Center
             )
         }
     }
