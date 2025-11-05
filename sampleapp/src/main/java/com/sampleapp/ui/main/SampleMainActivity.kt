@@ -12,6 +12,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.sampleapp.bottombar.SampleBottomBar
 import com.sampleapp.dialog.bottomsheet.*
+import com.sampleapp.styles.typography.SampleTypographyScheme
 import com.sampleapp.styles.colors.SampleColorScheme
 import com.sampleapp.styles.theme.*
 import com.sampleapp.ui.detail.SampleDetailNavigator
@@ -34,7 +35,7 @@ open class SampleMainActivity : VROComposableActivity() {
 
     override val startScreen = SampleHomeScreen()
 
-    override val materialTheme: VROComposableMaterialTheme = SampleTheme
+    override val materialTheme: VROComposableMaterialTheme = SampleMaterialTheme
 
     override val customTheme: SampleComposableCustomTheme = SampleCustomTheme
 
@@ -42,13 +43,18 @@ open class SampleMainActivity : VROComposableActivity() {
         val LocalActivityColors = staticCompositionLocalOf<SampleColorScheme> {
             error("No AppColors provided")
         }
+        val LocalActivityTypography = staticCompositionLocalOf<SampleTypographyScheme> {
+            error("No AppColors provided")
+        }
     }
 
     @Composable
     override fun getProvidedValues(): List<ProvidedValue<*>> {
         val colors = (if (isSystemInDarkTheme()) customTheme.darkColors else customTheme.lightColors) ?: customTheme.lightColors
+        val typography = customTheme.typography
         return listOf(
-            LocalActivityColors provides colors
+            LocalActivityColors provides colors,
+            LocalActivityTypography provides typography
         )
     }
 
