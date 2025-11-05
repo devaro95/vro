@@ -50,21 +50,21 @@ abstract class VROComposableNavigator<D : VRODestination>(
     /**
      * Navigates to a specified screen.
      *
-     * @param screen The screen to navigate to
+     * @param template The template to navigate to
      * @param starter Optional navigation starter parameters
-     * @param popScreen Optional screen to pop from back stack
+     * @param popTemplate Optional template to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
      */
     fun navigateToTemplate(
         template: VROTemplate<*, *, *, *>,
         starter: VRONavStarter? = null,
-        popScreen: VROScreen<*, *>? = null,
+        popTemplate: VROTemplate<*, *, *, *>? = null,
         inclusive: Boolean = false,
     ) {
         navigateToRoute(
             destinationRoute = template.destinationRoute(),
             starter = starter,
-            popScreen = popScreen,
+            popTemplate = popTemplate,
             inclusive = inclusive
         )
     }
@@ -130,6 +130,33 @@ abstract class VROComposableNavigator<D : VRODestination>(
         activity.hideKeyboard()
         navController.navigate(destinationRoute) {
             popScreen?.destinationRoute()?.let { route ->
+                popUpTo(route) {
+                    this.inclusive = inclusive
+                }
+            }
+        }
+        starter?.let {
+            putStarterParam(navController.currentDestination?.id.toString(), it)
+        }
+    }
+
+    /**
+     * Internal navigation method that handles the actual navigation logic.
+     *
+     * @param destinationRoute The route to navigate to
+     * @param starter Optional navigation starter parameters
+     * @param popTemplate Optional template to pop from back stack
+     * @param inclusive Whether to include the popScreen in the pop operation
+     */
+    private fun navigateToRoute(
+        destinationRoute: String,
+        starter: VRONavStarter? = null,
+        popTemplate: VROTemplate<*, *, *, *>? = null,
+        inclusive: Boolean = false,
+    ) {
+        activity.hideKeyboard()
+        navController.navigate(destinationRoute) {
+            popTemplate?.destinationRoute()?.let { route ->
                 popUpTo(route) {
                     this.inclusive = inclusive
                 }
