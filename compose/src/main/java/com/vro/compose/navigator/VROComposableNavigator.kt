@@ -138,8 +138,8 @@ abstract class VROComposableNavigator<D : VRODestination>(
                 popUpTo(route) {
                     this.inclusive = inclusive
                 }
-                launchSingleTop = singleTop
             }
+            launchSingleTop = singleTop
         }
         starter?.let {
             putStarterParam(navController.currentDestination?.id.toString(), it)
