@@ -32,6 +32,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
      * @param starter Optional navigation starter parameters
      * @param popScreen Optional screen to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
+     * @param singleTop Whether to avoid multiple copies of the same destination
      */
     fun navigateToScreen(
         screen: VROScreen<*, *>,
@@ -56,6 +57,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
      * @param starter Optional navigation starter parameters
      * @param popTemplate Optional template to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
+     * @param singleTop Whether to avoid multiple copies of the same destination
      */
     fun navigateToTemplate(
         template: VROTemplate<*, *, *, *>,
@@ -124,6 +126,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
      * @param starter Optional navigation starter parameters
      * @param popScreen Optional screen to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
+     * @param singleTop Whether to avoid multiple copies of the same destination
      */
     private fun navigateToRoute(
         destinationRoute: String,
@@ -153,6 +156,7 @@ abstract class VROComposableNavigator<D : VRODestination>(
      * @param starter Optional navigation starter parameters
      * @param popTemplate Optional template to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
+     * @param singleTop Whether to avoid multiple copies of the same destination
      */
     private fun navigateToRoute(
         destinationRoute: String,

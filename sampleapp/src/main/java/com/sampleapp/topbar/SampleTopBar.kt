@@ -8,12 +8,14 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sampleapp.R
+import com.sampleapp.styles.theme.SampleAppTheme
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarButton
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
 
@@ -25,7 +27,8 @@ fun sampleHomeToolbar(context: Context) = VROTopBarState(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )
-    }
+    },
+    background = Color(0xFFF8F8F6)
 )
 
 fun sampleBackToolbar(title: String, onNavigation: () -> Unit) = VROTopBarState(
@@ -44,7 +47,8 @@ fun sampleBackToolbar(title: String, onNavigation: () -> Unit) = VROTopBarState(
                 onClick = onNavigation
             )
         )
-    }
+    },
+    background = Color(0xFFF8F8F6)
 )
 
 @Composable
