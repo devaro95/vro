@@ -61,7 +61,7 @@ open class SampleMainActivity : VROComposableActivity() {
     @Composable
     override fun BottomBar(selectedItem: Int) {
         Column {
-            HorizontalDivider(Modifier.background(Color.Gray), thickness = 1.dp)
+            HorizontalDivider(Modifier.background(Color(0xFFE9E9E7)), thickness = 1.dp)
             SampleBottomBar(
                 onHomeClick = { navigateToScreen(SampleHomeScreen()) },
                 onProfileClick = { navigateToScreen(SampleProfileScreen()) },
