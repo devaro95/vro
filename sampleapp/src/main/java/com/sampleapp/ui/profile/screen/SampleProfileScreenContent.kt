@@ -23,7 +23,7 @@ import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.constants.INT_ONE
 
-class SampleProfileScreenContent: VROScreenContent<SampleProfileState, SampleProfileEvents>() {
+class SampleProfileScreenContent : VROScreenContent<SampleProfileState, SampleProfileEvents>() {
 
     override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
@@ -44,18 +44,16 @@ class SampleProfileScreenContent: VROScreenContent<SampleProfileState, SamplePro
         ) {
             val sharedScope = LocalSharedTransitionScope.current
             val animatedScope = LocalAnimatedVisibilityScope.current
-            if (sharedScope != null && animatedScope != null) {
-                with(sharedScope) {
-                    Image(
-                        painter = painterResource(R.drawable.header),
-                        modifier = Modifier
-                            .sharedElement(
-                                rememberSharedContentState("this is the key"),
-                                animatedVisibilityScope = animatedScope
-                            ),
-                        contentDescription = null
-                    )
-                }
+            with(sharedScope) {
+                Image(
+                    painter = painterResource(R.drawable.header),
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState("this is the key"),
+                            animatedVisibilityScope = animatedScope
+                        ),
+                    contentDescription = null
+                )
             }
 
             Text(text = "This is the user profile")

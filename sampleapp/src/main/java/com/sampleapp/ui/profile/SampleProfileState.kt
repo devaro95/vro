@@ -5,8 +5,12 @@ import com.vro.state.VROState
 
 data class SampleProfileState(
     val userId: String,
+    val topBarTitle: String?
 ) : VROState {
     companion object {
-        val INITIAL = SampleProfileState(userId = EMPTY_STRING)
+        val INITIAL = SampleProfileState(
+            userId = EMPTY_STRING,
+            topBarTitle = null
+        )
     }
 }

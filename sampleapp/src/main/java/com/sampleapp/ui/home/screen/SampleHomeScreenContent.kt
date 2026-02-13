@@ -100,20 +100,18 @@ class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEven
                     ),
                 )
             )
-            if (sharedScope != null && animatedScope != null) {
-                with(sharedScope) {
-                    Image(
-                        painter = painterResource(R.drawable.header),
-                        modifier = Modifier
-                            .sharedElement(
-                                rememberSharedContentState("this is the key"),
-                                animatedVisibilityScope = animatedScope
-                            )
-                            .size(40.dp)
-                            .clickable(onClick = { event(SampleHomeEvents.Profile) }),
-                        contentDescription = null
-                    )
-                }
+            with(sharedScope) {
+                Image(
+                    painter = painterResource(R.drawable.header),
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState("this is the key"),
+                            animatedVisibilityScope = animatedScope
+                        )
+                        .size(40.dp)
+                        .clickable(onClick = { event(SampleHomeEvents.Profile) }),
+                    contentDescription = null
+                )
             }
         }
     }

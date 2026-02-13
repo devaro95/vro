@@ -7,6 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.preview.VROLightMultiDevicePreview
 import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
@@ -34,16 +36,6 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
     lateinit var events: VROEventLauncher<E>
 
     override val scope: Scope by lazy { createScope(this) }
-
-    /**
-     * Mutable state for top app bar configuration.
-     */
-    internal lateinit var topBarState: MutableState<VROTopBarBaseState>
-
-    /**
-     * Mutable state for bottom app bar configuration.
-     */
-    internal lateinit var bottomBarState: MutableState<VROBottomBarBaseState>
 
     /**
      * Configures the initial state of the top app bar.
@@ -154,9 +146,13 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
         val navController = rememberNavController()
         val currentDestination =
             navController.currentBackStackEntryAsState().value?.destination?.route
-        LaunchedEffect(currentDestination) {
-            (topBarState.value as? VROTopBarState)?.let {
-                topBarState.value = changeStateFunction.invoke(it)
+        val topBarState = LocalTopBarState.current
+        LaunchedEffect(currentDestination, changeStateFunction) {
+            val currentState = topBarState.value as? VROTopBarState
+            if (currentState != null) {
+                topBarState.value = changeStateFunction(currentState)
+            } else {
+                topBarState.value = VROTopBarStartState()
             }
         }
     }
@@ -173,9 +169,13 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
         val navController = rememberNavController()
         val currentDestination =
             navController.currentBackStackEntryAsState().value?.destination?.route
-        LaunchedEffect(currentDestination) {
-            (bottomBarState.value as? VROBottomBarState)?.let {
-                bottomBarState.value = changeStateFunction.invoke(it)
+        val bottomBarState = LocalBottomBarState.current
+        LaunchedEffect(currentDestination, changeStateFunction) {
+            val currentState = bottomBarState.value as? VROBottomBarState
+            if (currentState != null) {
+                bottomBarState.value = changeStateFunction(currentState)
+            } else {
+                bottomBarState.value = VROBottomBarStartState()
             }
         }
     }
