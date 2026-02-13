@@ -3,19 +3,14 @@ package com.vro.compose.screen
 import android.content.Context
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vro.compose.preview.VROLightMultiDevicePreview
-import com.vro.compose.states.VROBottomBarBaseState
+import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
-import com.vro.compose.states.VROSnackBarState
-import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarState
 import com.vro.constants.EMPTY_STRING
@@ -28,7 +23,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
 import org.koin.core.scope.Scope
-import kotlin.reflect.KClass
 
 abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent {
 
@@ -87,11 +81,6 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
     lateinit var coroutineScope: CoroutineScope
 
     /**
-     * Mutable state for snackbar presentation.
-     */
-    lateinit var snackbarState: MutableState<VROSnackBarState>
-
-    /**
      * Shows a snackbar with customizable appearance and behavior.
      *
      * @param message The text message to display
@@ -106,6 +95,7 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
      * @throws IllegalStateException if called before snackbarState is initialized
      */
     fun showSnackbar(
+        state: MutableState<VROSnackBarState>,
         message: String,
         actionLabel: String = EMPTY_STRING,
         duration: SnackbarDuration = SnackbarDuration.Short,
@@ -116,13 +106,13 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
         onDismiss: () -> Unit = {},
     ) {
         coroutineScope.launch {
-            snackbarState.value = VROSnackBarState(
-                hostState = snackbarState.value.hostState,
+            state.value = VROSnackBarState(
+                hostState = state.value.hostState,
                 textColor = textColor,
                 backgroundColor = backgroundColor,
                 actionColor = actionColor
             )
-            val snackResult = snackbarState.value.hostState.showSnackbar(
+            val snackResult = state.value.hostState.showSnackbar(
                 message = message,
                 actionLabel = actionLabel,
                 duration = duration,
