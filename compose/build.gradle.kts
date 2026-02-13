@@ -38,7 +38,9 @@ dependencies {
     api(project(":core-android"))
     api(libs.material3)
     implementation(libs.accompanist.navigation.material)
+    implementation(libs.navigation.compose)
     implementation(libs.lifecycle.runtime.compose.android)
+    implementation(libs.compose.animation)
 }
 
 mavenPublishing {

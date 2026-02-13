@@ -3,6 +3,8 @@ package com.vro.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalSharedTransitionScope
+import com.vro.compose.composition.LocalSnackbarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.extensions.destinationRoute
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.screen.VROScreenBase
@@ -25,7 +31,8 @@ import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.compose.template.VROTemplate
-import com.vro.compose.theme.*
+import com.vro.compose.theme.VROComposableCustomTheme
+import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
 
@@ -169,7 +176,7 @@ abstract class VROComposableActivity : ComponentActivity() {
      *
      * @param backgroundColor Optional background color for the app container.
      */
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalSharedTransitionApi::class)
     @Composable
     fun Initialize(backgroundColor: Color? = null) {
         val bottomSheetNavigator = rememberBottomSheetNavigator()
@@ -178,8 +185,8 @@ abstract class VROComposableActivity : ComponentActivity() {
 
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
         val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val snackbarState = remember { mutableStateOf(VROSnackBarState(snackbarHostState)) }
+        val snackBarHostState = remember { SnackbarHostState() }
+        val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
 
         LaunchedEffect(navController) {
             onInitialized()
@@ -212,13 +219,13 @@ abstract class VROComposableActivity : ComponentActivity() {
                 },
                 snackbarHost = {
                     SnackbarHost(
-                        hostState = snackbarHostState,
+                        hostState = snackBarHostState,
                         snackbar = {
                             VROSnackbar(
                                 data = it,
-                                backgroundColor = snackbarState.value.backgroundColor,
-                                textColor = snackbarState.value.textColor,
-                                actionButtonColor = snackbarState.value.actionColor
+                                backgroundColor = snackBarState.value.backgroundColor,
+                                textColor = snackBarState.value.textColor,
+                                actionButtonColor = snackBarState.value.actionColor
                             )
                         }
                     )
@@ -229,16 +236,20 @@ abstract class VROComposableActivity : ComponentActivity() {
                         .fillMaxSize()
                         .padding(innerPadding)
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = startScreen.destinationRoute()
-                    ) {
-                        createComposableContent(
-                            navController = navController,
-                            topBarState = topBarState,
-                            bottomBarState = bottomBarState,
-                            snackbarState = snackbarState
-                        )
+                    SharedTransitionLayout {
+                        CompositionLocalProvider(
+                            LocalSharedTransitionScope provides this,
+                            LocalTopBarState provides topBarState,
+                            LocalBottomBarState provides bottomBarState,
+                            LocalSnackbarState provides snackBarState
+                        ) {
+                            NavHost(
+                                navController = navController,
+                                startDestination = startScreen.destinationRoute()
+                            ) {
+                                createComposableContent(navController = navController)
+                            }
+                        }
                     }
                 }
             }
@@ -288,7 +299,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     /**
      * Navigates to the given [template], optionally attaching a [starter] object.
      *
-     * @param screen The destination screen.
+     * @param template The destination template.
      * @param starter Optional navigation starter params.
      */
     fun navigateToTemplate(
@@ -310,14 +321,6 @@ abstract class VROComposableActivity : ComponentActivity() {
      * Must be implemented by the extending class to define the navigation graph.
      *
      * @param navController The current [NavHostController].
-     * @param topBarState Mutable state object to control the top bar UI.
-     * @param bottomBarState Mutable state object to control the bottom bar UI.
-     * @param snackbarState Mutable state object to control the snackbar UI.
      */
-    abstract fun NavGraphBuilder.createComposableContent(
-        navController: NavHostController,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
-    )
+    abstract fun NavGraphBuilder.createComposableContent(navController: NavHostController)
 }
