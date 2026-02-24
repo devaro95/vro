@@ -13,7 +13,7 @@ class SampleComposableFragmentNavigator(
     fragment: Fragment,
 ) : VROFragmentNavigator<SampleComposableFragmentDestinations>(fragment) {
 
-    override fun navigate(destination: SampleComposableFragmentDestinations) {
+    override fun onDestination(destination: SampleComposableFragmentDestinations) {
         when (destination) {
             is DestinationNavigation -> navigateWithAction(
                 action = R.id.action_sampleComposableFragment_to_sampleComposableDestinationFragment

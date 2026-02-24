@@ -71,7 +71,7 @@ abstract class VROFragment<
             vm.vroViewModel.getNavigationState().collectLatest {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
-                        navigator.navigate(destination)
+                        navigator.onDestination(destination)
                         destination.setNavigated()
                     }
                 } ?: navigator.navigateBack(it?.backResult)

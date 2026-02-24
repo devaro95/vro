@@ -38,7 +38,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
         viewModel.getNavigationState().collect {
             it?.destination?.let { destination ->
                 if (!destination.isNavigated) {
-                    navigator.navigate(destination)
+                    navigator.onDestination(destination)
                     destination.setNavigated()
                 }
             } ?: navigator.navigateBack(it?.backResult)

@@ -22,5 +22,5 @@ class SampleComposableFragment :
     override val theme: VROComposableMaterialTheme = SampleMaterialTheme
 
     @Composable
-    override fun composableView() = SampleComposableFragmentScreen()
+    override fun composableView() = SampleComposableFragmentScreen::class
 }

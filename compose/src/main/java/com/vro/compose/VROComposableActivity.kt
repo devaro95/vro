@@ -35,6 +35,7 @@ import com.vro.compose.theme.VROComposableCustomTheme
 import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
+import kotlin.reflect.KClass
 
 /**
  * Base class for Jetpack Compose activities that follow the VRO architecture pattern.
@@ -74,7 +75,7 @@ abstract class VROComposableActivity : ComponentActivity() {
     /**
      * Defines the first screen to be shown when the app starts.
      */
-    abstract val startScreen: VROScreenBase<*, *>
+    abstract val startScreen: KClass<out VROScreenBase<*, *>>
 
     /**
      * Navigation controller used to manage app navigation.
@@ -284,29 +285,10 @@ abstract class VROComposableActivity : ComponentActivity() {
      * @param starter Optional navigation starter params.
      */
     fun navigateToScreen(
-        screen: VROScreen<*, *>,
+        screen: KClass<out Any>,
         starter: VRONavStarter? = null,
     ) {
         navController.navigate(screen.destinationRoute()) {
-            popUpTo(navController.graph.id) { inclusive = true }
-            launchSingleTop = true
-        }
-        starter?.let {
-            putStarterParam(navController.currentDestination?.id.toString(), it)
-        }
-    }
-
-    /**
-     * Navigates to the given [template], optionally attaching a [starter] object.
-     *
-     * @param template The destination template.
-     * @param starter Optional navigation starter params.
-     */
-    fun navigateToTemplate(
-        template: VROTemplate<*, *, *, *>,
-        starter: VRONavStarter? = null,
-    ) {
-        navController.navigate(template.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
         }

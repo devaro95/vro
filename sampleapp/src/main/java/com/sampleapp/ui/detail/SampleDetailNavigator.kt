@@ -11,9 +11,9 @@ class SampleDetailNavigator(
     navController: NavController,
 ) : VROComposableNavigator<SampleDestinations>(activity, navController) {
 
-    override fun navigate(destination: SampleDestinations) {
+    override fun onDestination(destination: SampleDestinations) {
         when (destination) {
-            SampleDestinations.ProfileNavigation -> navigateToScreen(SampleProfileScreen())
+            SampleDestinations.ProfileNavigation -> navigate(SampleProfileScreen::class)
             else -> Unit
         }
     }

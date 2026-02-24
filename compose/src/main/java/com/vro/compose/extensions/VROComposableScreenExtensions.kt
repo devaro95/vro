@@ -26,6 +26,7 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.viewmodel.VROViewModel
+import kotlin.reflect.KClass
 
 /**
  * Adds a Compose screen to the navigation graph with optional transitions.
@@ -47,7 +48,7 @@ import com.vro.viewmodel.VROViewModel
 fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> NavGraphBuilder.vroComposableScreen(
     viewModel: @Composable () -> VM,
     navigator: VROComposableNavigator<D>,
-    content: VROScreen<S, E>,
+    content: KClass<out VROScreen<S, E>>,
     enterTransition: EnterTransition? = null,
     exitTransition: ExitTransition? = null
 ) {
@@ -67,7 +68,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
             VroComposableScreenContent(
                 viewModel = vm,
                 navigator = navigator,
-                content = content,
+                content = content
             )
         }
     }
@@ -92,7 +93,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
 fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VROComposableScreen(
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
-    content: VROScreen<S, E>
+    content: KClass<out VROScreen<S, E>>
 ) {
     VroComposableScreenContent(
         viewModel = viewModel,
@@ -120,7 +121,7 @@ fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VR
 fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VROComposableFragmentScreen(
     viewModel: VM,
     navigator: VROFragmentNavigator<D>,
-    content: VROScreen<S, E>
+    content: KClass<out VROScreen<S, E>>
 ) {
 
     val vm = viewModel(
@@ -158,23 +159,26 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
 internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
-    content: VROScreen<S, E>,
+    content: KClass<out VROScreen<S, E>>
 ) {
     val vm = viewModel.vroViewModel
-    content.screenContent.context = LocalContext.current
-    content.events = vm
-    content.navController = navigator.navController
-    BackHandler(true) { vm.onBackSystem() }
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
+
+    contentInstance.screenContent.context = LocalContext.current
+    contentInstance.events = vm
+    contentInstance.navController = navigator.navController
+    BackHandler(true) { vm.onBackSystem() }
+
     InitializeLifecycleObserver(
         viewModel = vm,
-        content = content,
+        content = contentInstance,
         screenLifecycle = screenLifecycle,
         navController = navigator.navController,
     )
     InitializeOneTimeListener(
         viewModel = vm,
-        content = content
+        content = contentInstance
     )
     InitializeNavigatorListener(
         viewModel = vm,
@@ -182,7 +186,7 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     )
     InitializeStepperListener(
         viewModel = vm,
-        content = content,
+        content = contentInstance,
         screenLifecycle = screenLifecycle
     )
     InitializeEventsListener(
@@ -212,22 +216,25 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
 internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> VroComposableScreenContent(
     viewModel: VM,
     navigator: VROFragmentNavigator<D>,
-    content: VROScreen<S, E>
+    content: KClass<out VROScreen<S, E>>
 ) {
     val vm = viewModel.vroViewModel
-    content.screenContent.context = LocalContext.current
-    content.events = vm
-    BackHandler(true) { vm.onBackSystem() }
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
+
+    contentInstance.screenContent.context = LocalContext.current
+    contentInstance.events = vm
+    BackHandler(true) { vm.onBackSystem() }
+
     InitializeLifecycleObserver(
         viewModel = vm,
         screenLifecycle = screenLifecycle,
         navController = navigator.navController,
-        content = content
+        content = contentInstance
     )
     InitializeOneTimeListener(
         viewModel = vm,
-        content = content
+        content = contentInstance
     )
     InitializeNavigatorListener(
         viewModel = vm,
@@ -235,7 +242,7 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     )
     InitializeStepperListener(
         viewModel = vm,
-        content = content,
+        content = contentInstance,
         screenLifecycle = screenLifecycle
     )
     InitializeEventsListener(

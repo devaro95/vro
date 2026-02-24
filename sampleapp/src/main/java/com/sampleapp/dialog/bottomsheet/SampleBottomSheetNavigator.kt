@@ -11,7 +11,7 @@ class SampleBottomSheetNavigator(
     navController: NavController,
 ) : VROComposableNavigator<SampleBottomSheetDestinations>(activity, navController) {
 
-    override fun navigate(destination: SampleBottomSheetDestinations) {
+    override fun onDestination(destination: SampleBottomSheetDestinations) {
 
     }
 
