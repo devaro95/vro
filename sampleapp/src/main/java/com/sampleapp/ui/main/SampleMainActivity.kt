@@ -27,7 +27,6 @@ import com.sampleapp.ui.profile.screen.SampleProfileScreen
 import com.sampleapp.ui.template.*
 import com.vro.compose.VROComposableActivity
 import com.vro.compose.extensions.*
-import com.vro.compose.states.*
 import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.core_android.injection.injectViewModel
 
@@ -70,43 +69,26 @@ open class SampleMainActivity : VROComposableActivity() {
         }
     }
 
-    override fun NavGraphBuilder.createComposableContent(
-        navController: NavHostController,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
-    ) {
+    override fun NavGraphBuilder.createComposableContent(navController: NavHostController) {
         vroComposableScreen(
             viewModel = { injectViewModel<SampleHomeViewModel>() },
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
-            content = SampleHomeScreen(),
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            content = SampleHomeScreen()
         )
         vroComposableScreen(
             viewModel = { injectViewModel<SampleProfileViewModel>() },
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
-            content = SampleProfileScreen(),
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            content = SampleProfileScreen()
         )
         vroComposableTemplate(
             viewModel = { injectViewModel<SampleTemplateViewModel>() },
             navigator = SampleTemplateNavigator(this@SampleMainActivity, navController),
-            content = SampleTemplate(),
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            content = SampleTemplate()
         )
         vroComposableScreen(
             viewModel = { injectViewModel<SampleDetailViewModel>() },
             navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
-            content = SampleDetailScreen(),
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            content = SampleDetailScreen()
         )
         vroBottomSheet(
             content = SampleBottomSheet(),

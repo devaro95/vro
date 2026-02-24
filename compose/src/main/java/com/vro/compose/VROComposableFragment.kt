@@ -2,6 +2,7 @@ package com.vro.compose
 
 import android.os.Bundle
 import android.view.*
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +19,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalSnackbarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.extensions.VROComposableFragmentScreen
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.*
@@ -154,7 +158,7 @@ abstract class VROComposableFragment<
      * Initializes the Compose UI with common components like Scaffold, TopBar, BottomBar, and Snackbar.
      * @param backgroundColor Optional background color for the scaffold
      */
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalSharedTransitionApi::class)
     @Composable
     fun Initialize(
         backgroundColor: Color? = null,
@@ -163,8 +167,9 @@ abstract class VROComposableFragment<
         this.navController = this@VROComposableFragment.findNavController()
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
         val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val snackbarState = remember { mutableStateOf<VROSnackBarState>(VROSnackBarState(snackbarHostState)) }
+        val snackBarHostState = remember { SnackbarHostState() }
+        val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
+
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -196,14 +201,17 @@ abstract class VROComposableFragment<
                         )
                         .fillMaxSize()
                 ) {
-                    VROComposableFragmentScreen(
-                        viewModel = vm.vroViewModel,
-                        navigator = navigator,
-                        topBarState = topBarState,
-                        bottomBarState = bottomBarState,
-                        snackbarState = snackbarState,
-                        content = composableView()
-                    )
+                    CompositionLocalProvider(
+                        LocalTopBarState provides topBarState,
+                        LocalBottomBarState provides bottomBarState,
+                        LocalSnackbarState provides snackBarState
+                    ) {
+                        VROComposableFragmentScreen(
+                            viewModel = vm.vroViewModel,
+                            navigator = navigator,
+                            content = composableView()
+                        )
+                    }
                 }
             }
         }

@@ -73,24 +73,15 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
      * Automatically switches between tablet and mobile layouts based on [tabletDesignEnabled].
      *
      * @param state The current screen state
-     * @param topBarState Mutable state for top bar configuration
-     * @param bottomBarState Mutable state for bottom bar configuration
-     * @param snackbarState Mutable state for snackbar presentation
      */
     @Composable
     internal fun ComposableScreenContainer(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
+        state: S
     ) {
         InitializeState(state)
         InitializeHandlers()
         InitializeContent(
-            state = state,
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            state = state
         )
     }
 
@@ -112,10 +103,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
 
     @Composable
     abstract fun InitializeContent(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
+        state: S
     )
 
     /**
