@@ -31,6 +31,7 @@ lifecycleRuntimeComposeAndroid = "2.9.2"
 koinAnnotations = "2.3.1"
 vaniktechVersion = "0.34.0"
 nmcpVersion = "1.0.3"
+composeAnimation = "1.6.0"
 
 [libraries]
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
@@ -67,6 +68,7 @@ junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeComposeAndroid" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
+compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "composeAnimation" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

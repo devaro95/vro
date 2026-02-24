@@ -2,12 +2,9 @@ package com.vro.compose.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.vro.compose.states.VROBottomBarBaseState
-import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
@@ -54,16 +51,10 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
 
     @Composable
     override fun InitializeContent(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
+        state: S
     ) {
         this.screenContent.events = events
-        this.screenContent.topBarState = topBarState
-        this.screenContent.bottomBarState = bottomBarState
         screenContent.coroutineScope = rememberCoroutineScope()
-        screenContent.snackbarState = snackbarState
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
