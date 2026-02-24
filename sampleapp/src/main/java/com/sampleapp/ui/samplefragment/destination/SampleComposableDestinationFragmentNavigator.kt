@@ -9,7 +9,7 @@ class SampleComposableDestinationFragmentNavigator(
     fragment: Fragment,
 ) : VROFragmentNavigator<SampleComposableDestinationFragmentDestinations>(fragment) {
 
-    override fun navigate(destination: SampleComposableDestinationFragmentDestinations) {
+    override fun onDestination(destination: SampleComposableDestinationFragmentDestinations) {
     }
 
     sealed class SampleComposableDestinationFragmentDestinations : VRODestination()
