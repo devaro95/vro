@@ -29,21 +29,21 @@ abstract class VROComposableNavigator<D : VRODestination>(
     /**
      * Navigates to a specified screen.
      *
-     * @param screen The screen to navigate to
+     * @param destination The destination to navigate to
      * @param starter Optional navigation starter parameters
-     * @param popDestination Optional screen to pop from back stack
-     * @param inclusive Whether to include the popScreen in the pop operation
+     * @param popDestination Optional destination to pop from back stack
+     * @param inclusive Whether to include the destination in the pop operation
      * @param singleTop Whether to avoid multiple copies of the same destination
      */
     fun navigate(
-        screen: KClass<out Any>,
+        destination: KClass<out Any>,
         starter: VRONavStarter? = null,
         popDestination: KClass<out Any>? = null,
         inclusive: Boolean = false,
         singleTop: Boolean = false
     ) {
         navigateToRoute(
-            destinationRoute = screen.destinationRoute(),
+            destinationRoute = destination.destinationRoute(),
             starter = starter,
             popDestination = popDestination,
             inclusive = inclusive,
