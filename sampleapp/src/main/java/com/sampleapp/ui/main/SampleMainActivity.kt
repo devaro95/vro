@@ -32,7 +32,7 @@ import com.vro.core_android.injection.injectViewModel
 
 open class SampleMainActivity : VROComposableActivity() {
 
-    override val startScreen = SampleHomeScreen()
+    override val startScreen = SampleHomeScreen::class
 
     override val materialTheme: VROComposableMaterialTheme = SampleMaterialTheme
 
@@ -62,8 +62,8 @@ open class SampleMainActivity : VROComposableActivity() {
         Column {
             HorizontalDivider(Modifier.background(Color(0xFFE9E9E7)), thickness = 1.dp)
             SampleBottomBar(
-                onHomeClick = { navigateToScreen(SampleHomeScreen()) },
-                onProfileClick = { navigateToScreen(SampleProfileScreen()) },
+                onHomeClick = { navigateToScreen(SampleHomeScreen::class) },
+                onProfileClick = { navigateToScreen(SampleProfileScreen::class) },
                 selectedItem = selectedItem
             )
         }
@@ -73,27 +73,27 @@ open class SampleMainActivity : VROComposableActivity() {
         vroComposableScreen(
             viewModel = { injectViewModel<SampleHomeViewModel>() },
             navigator = SampleHomeNavigator(this@SampleMainActivity, navController),
-            content = SampleHomeScreen()
+            content = SampleHomeScreen::class
         )
         vroComposableScreen(
             viewModel = { injectViewModel<SampleProfileViewModel>() },
             navigator = SampleProfileNavigator(this@SampleMainActivity, navController),
-            content = SampleProfileScreen()
+            content = SampleProfileScreen::class
         )
         vroComposableTemplate(
             viewModel = { injectViewModel<SampleTemplateViewModel>() },
             navigator = SampleTemplateNavigator(this@SampleMainActivity, navController),
-            content = SampleTemplate()
+            content = SampleTemplate::class
         )
         vroComposableScreen(
             viewModel = { injectViewModel<SampleDetailViewModel>() },
             navigator = SampleDetailNavigator(this@SampleMainActivity, navController),
-            content = SampleDetailScreen()
+            content = SampleDetailScreen::class
         )
         vroBottomSheet(
-            content = SampleBottomSheet(),
             viewModel = { injectViewModel<SampleBottomSheetNavViewModel>() },
-            navigator = SampleBottomSheetNavigator(this@SampleMainActivity, navController)
+            navigator = SampleBottomSheetNavigator(this@SampleMainActivity, navController),
+            content = SampleBottomSheet::class
         )
     }
 }

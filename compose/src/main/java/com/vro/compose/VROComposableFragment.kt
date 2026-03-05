@@ -38,6 +38,7 @@ import com.vro.navigation.VRODestination
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 /**
  * Abstract base class for fragments that use Jetpack Compose for their UI.
@@ -76,7 +77,7 @@ abstract class VROComposableFragment<
      * @return The root composable screen for this fragment
      */
     @Composable
-    abstract fun composableView(): SC
+    abstract fun composableView(): KClass<out SC>
 
     /**
      * Creates a MaterialTheme with the provided color schemes and typography.

@@ -19,6 +19,7 @@ import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.compose.dialog.VROComposableBottomSheetContent
 import com.vro.compose.dialog.VROComposableViewModelBottomSheetContent
 import com.vro.compose.initializers.*
+import com.vro.compose.screen.VROScreen
 import com.vro.viewmodel.VRODialogViewModel
 import com.vro.viewmodel.VROViewModel
 import com.vro.dialog.VRODialogListener
@@ -26,6 +27,7 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.state.VROStepper.*
+import kotlin.reflect.KClass
 
 /**
  * Adds a bottom sheet destination to the navigation graph with ViewModel support.
@@ -47,7 +49,7 @@ import com.vro.state.VROStepper.*
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> NavGraphBuilder.vroBottomSheet(
     viewModel: @Composable () -> VM,
-    content: VROComposableViewModelBottomSheetContent<S, E>,
+    content: KClass<out VROComposableViewModelBottomSheetContent<S, E>>,
     navigator: VROComposableNavigator<D>,
     listener: VRODialogListener? = null,
     onDismiss: () -> Unit = { },
@@ -81,7 +83,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination>
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun <S : VROState> NavGraphBuilder.vroBottomSheet(
     initialState: S,
-    content: VROComposableBottomSheetContent<S>,
+    content: KClass<out VROComposableBottomSheetContent<S>>,
     listener: VRODialogListener? = null,
     onDismiss: () -> Unit = { },
 ) {
@@ -206,12 +208,13 @@ fun <S : VROState> VroBottomSheet(
 @Composable
 internal fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODestination> VroComposableNavBottomSheetContent(
     viewModel: VM,
-    content: VROComposableViewModelBottomSheetContent<S, E>,
+    content: KClass<out VROComposableViewModelBottomSheetContent<S, E>>,
     navigator: VROComposableNavigator<D>,
     listener: VRODialogListener?,
     onDismiss: () -> Unit,
 ) {
-    content.context = LocalContext.current
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
+    contentInstance.context = LocalContext.current
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
         screenLifecycle = screenLifecycle,
@@ -219,21 +222,21 @@ internal fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODes
         navController = navigator.navController
     )
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
-        initialValue = content.skeleton?.let {
+        initialValue = contentInstance.skeleton?.let {
             VROSkeletonStep(viewModel.initialState)
         } ?: VROStateStep(viewModel.initialState),
         lifecycle = screenLifecycle
     ).value
 
     if (stepper is VROSkeletonStep) {
-        content.ComposableDialogSkeleton()
+        contentInstance.ComposableDialogSkeleton()
     } else {
-        content.CreateDialog(stepper.state, viewModel, listener, onDismiss)
+        contentInstance.CreateDialog(stepper.state, viewModel, listener, onDismiss)
         (stepper as? VRODialogStep)?.let {
-            content.onDialog(it.dialogState)
+            contentInstance.onDialog(it.dialogState)
         }
         (stepper as? VROErrorStep)?.let {
-            content.onError(it.error, it.data)
+            contentInstance.onError(it.error, it.data)
         }
     }
     InitializeEventsListener(viewModel)
@@ -257,10 +260,11 @@ internal fun <VM : VROViewModel<S, D, E>, S : VROState, E : VROEvent, D : VRODes
 @Composable
 internal fun <S : VROState> VroComposableBottomSheetContent(
     initialState: S,
-    content: VROComposableBottomSheetContent<S>,
+    content: KClass<out VROComposableBottomSheetContent<S>>,
     listener: VRODialogListener?,
     onDismiss: () -> Unit,
 ) {
-    content.context = LocalContext.current
-    content.CreateDialog(initialState, listener, onDismiss)
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
+    contentInstance.context = LocalContext.current
+    contentInstance.CreateDialog(initialState, listener, onDismiss)
 }
