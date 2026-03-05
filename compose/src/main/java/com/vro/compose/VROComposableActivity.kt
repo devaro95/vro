@@ -30,7 +30,6 @@ import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
-import com.vro.compose.template.VROTemplate
 import com.vro.compose.theme.VROComposableCustomTheme
 import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.navigation.putStarterParam
@@ -279,16 +278,16 @@ abstract class VROComposableActivity : ComponentActivity() {
     }
 
     /**
-     * Navigates to the given [screen], optionally attaching a [starter] object.
+     * Navigates to the given destination, optionally attaching a [starter] object.
      *
-     * @param screen The destination screen.
+     * @param destination The destination destination.
      * @param starter Optional navigation starter params.
      */
-    fun navigateToScreen(
-        screen: KClass<out Any>,
+    fun navigate(
+        destination: KClass<out Any>,
         starter: VRONavStarter? = null,
     ) {
-        navController.navigate(screen.destinationRoute()) {
+        navController.navigate(destination.destinationRoute()) {
             popUpTo(navController.graph.id) { inclusive = true }
             launchSingleTop = true
         }
