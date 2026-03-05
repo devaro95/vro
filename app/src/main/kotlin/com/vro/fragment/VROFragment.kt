@@ -95,7 +95,9 @@ abstract class VROFragment<
         super.onCreate(savedInstanceState)
         observer = createLifecycleEventObserver(
             onCreate = {
-                vm.vroViewModel.onStarter(getStarterParam(findNavController().currentDestination?.id.toString()))
+                findNavController().currentDestination?.id?.let { destinationId ->
+                    vm.vroViewModel.onStarter(getStarterParam(destinationId.toString()))
+                }
             },
             onStart = {
                 vm.vroViewModel.onStart()

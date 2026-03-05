@@ -126,7 +126,9 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
         val observer = createLifecycleEventObserver(
             onCreate = {
                 content.configureScaffold(topBarState, bottomBarState)
-                viewModel.onStarter(getStarterParam(navController.currentDestination?.id.toString()))
+                navController.currentDestination?.id?.let { destinationId ->
+                    viewModel.onStarter(getStarterParam(destinationId.toString()))
+                }
             },
             onStart = {
                 viewModel.onStart()
