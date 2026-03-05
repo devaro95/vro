@@ -11,6 +11,7 @@ import com.vro.core_android.navigation.VRONavigator
 import com.vro.navigation.VRODestination
 import com.vro.navigation.putStarterParam
 import com.vro.navstarter.VRONavStarter
+import kotlin.reflect.KClass
 
 /**
  * Abstract base class for handling navigation in a Compose-based application.
@@ -30,92 +31,23 @@ abstract class VROComposableNavigator<D : VRODestination>(
      *
      * @param screen The screen to navigate to
      * @param starter Optional navigation starter parameters
-     * @param popScreen Optional screen to pop from back stack
+     * @param popDestination Optional screen to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
      * @param singleTop Whether to avoid multiple copies of the same destination
      */
-    fun navigateToScreen(
-        screen: VROScreen<*, *>,
+    fun navigate(
+        screen: KClass<out Any>,
         starter: VRONavStarter? = null,
-        popScreen: VROScreen<*, *>? = null,
+        popDestination: KClass<out Any>? = null,
         inclusive: Boolean = false,
         singleTop: Boolean = false
     ) {
         navigateToRoute(
             destinationRoute = screen.destinationRoute(),
             starter = starter,
-            popScreen = popScreen,
+            popDestination = popDestination,
             inclusive = inclusive,
             singleTop = singleTop
-        )
-    }
-
-    /**
-     * Navigates to a specified screen.
-     *
-     * @param template The template to navigate to
-     * @param starter Optional navigation starter parameters
-     * @param popTemplate Optional template to pop from back stack
-     * @param inclusive Whether to include the popScreen in the pop operation
-     * @param singleTop Whether to avoid multiple copies of the same destination
-     */
-    fun navigateToTemplate(
-        template: VROTemplate<*, *, *, *>,
-        starter: VRONavStarter? = null,
-        popTemplate: VROTemplate<*, *, *, *>? = null,
-        inclusive: Boolean = false,
-        singleTop: Boolean = false
-    ) {
-        navigateToRoute(
-            destinationRoute = template.destinationRoute(),
-            starter = starter,
-            popTemplate = popTemplate,
-            inclusive = inclusive,
-            singleTop = singleTop
-        )
-    }
-
-    /**
-     * Opens a bottom sheet with ViewModel support.
-     *
-     * @param bottomSheet The bottom sheet content to display
-     * @param starter Optional navigation starter parameters
-     * @param popScreen Optional screen to pop from back stack
-     * @param inclusive Whether to include the popScreen in the pop operation
-     */
-    fun openBottomSheet(
-        bottomSheet: VROComposableViewModelBottomSheetContent<*, *>,
-        starter: VRONavStarter? = null,
-        popScreen: VROScreen<*, *>? = null,
-        inclusive: Boolean = false,
-    ) {
-        navigateToRoute(
-            destinationRoute = bottomSheet.destinationRoute(),
-            starter = starter,
-            popScreen = popScreen,
-            inclusive = inclusive
-        )
-    }
-
-    /**
-     * Opens a simple bottom sheet.
-     *
-     * @param bottomSheet The bottom sheet content to display
-     * @param starter Optional navigation starter parameters
-     * @param popScreen Optional screen to pop from back stack
-     * @param inclusive Whether to include the popScreen in the pop operation
-     */
-    fun openBottomSheet(
-        bottomSheet: VROComposableBottomSheetContent<*>,
-        starter: VRONavStarter? = null,
-        popScreen: VROScreen<*, *>? = null,
-        inclusive: Boolean = false,
-    ) {
-        navigateToRoute(
-            destinationRoute = bottomSheet.destinationRoute(),
-            starter = starter,
-            popScreen = popScreen,
-            inclusive = inclusive
         )
     }
 
@@ -124,50 +56,21 @@ abstract class VROComposableNavigator<D : VRODestination>(
      *
      * @param destinationRoute The route to navigate to
      * @param starter Optional navigation starter parameters
-     * @param popScreen Optional screen to pop from back stack
+     * @param popDestination Optional template to pop from back stack
      * @param inclusive Whether to include the popScreen in the pop operation
      * @param singleTop Whether to avoid multiple copies of the same destination
      */
     private fun navigateToRoute(
         destinationRoute: String,
         starter: VRONavStarter? = null,
-        popScreen: VROScreen<*, *>? = null,
+        popDestination: KClass<out Any>? = null,
         inclusive: Boolean = false,
         singleTop: Boolean = false
     ) {
-        activity.hideKeyboard()
-        navController.navigate(destinationRoute) {
-            popScreen?.destinationRoute()?.let { route ->
-                popUpTo(route) {
-                    this.inclusive = inclusive
-                }
-            }
-            launchSingleTop = singleTop
-        }
-        starter?.let {
-            putStarterParam(navController.currentDestination?.id.toString(), it)
-        }
-    }
 
-    /**
-     * Internal navigation method that handles the actual navigation logic.
-     *
-     * @param destinationRoute The route to navigate to
-     * @param starter Optional navigation starter parameters
-     * @param popTemplate Optional template to pop from back stack
-     * @param inclusive Whether to include the popScreen in the pop operation
-     * @param singleTop Whether to avoid multiple copies of the same destination
-     */
-    private fun navigateToRoute(
-        destinationRoute: String,
-        starter: VRONavStarter? = null,
-        popTemplate: VROTemplate<*, *, *, *>? = null,
-        inclusive: Boolean = false,
-        singleTop: Boolean = false
-    ) {
         activity.hideKeyboard()
         navController.navigate(destinationRoute) {
-            popTemplate?.destinationRoute()?.let { route ->
+            popDestination?.destinationRoute()?.let { route ->
                 popUpTo(route) {
                     this.inclusive = inclusive
                 }

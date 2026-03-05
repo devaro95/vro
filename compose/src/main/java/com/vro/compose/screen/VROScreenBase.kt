@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.vro.compose.handler.*
 import com.vro.compose.handler.default.*
+import com.vro.compose.navigator.VRONavigationClass
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
@@ -37,7 +38,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     open val errorHandler: VROErrorHandler<E> = VROErrorHandlerDefault(),
     open val oneTimeHandler: VROOneTimeHandler<S, E> = VROOneTimeHandlerDefault(),
     open val skeleton: VROSkeleton = VROSkeletonDefault(),
-) : KoinScopeComponent {
+) : VRONavigationClass, KoinScopeComponent {
 
     /**
      * Koin scope tied to this screen instance.
