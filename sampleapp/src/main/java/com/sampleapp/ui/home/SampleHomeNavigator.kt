@@ -31,7 +31,7 @@ class SampleHomeNavigator(
             ActivityFragmentNavigation -> startActivity(SampleFragmentActivity.createIntent(activity.baseContext))
             TemplateNavigation -> navigate(SampleTemplate::class)
             is DetailNavigation -> navigate(
-                screen = SampleDetailScreen::class,
+                destination = SampleDetailScreen::class,
                 starter = SampleDetailStarter.Initial(state = destination.state)
             )
         }
