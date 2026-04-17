@@ -26,8 +26,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+    kotlin {
+        compilerOptions{
+            JavaVersion.VERSION_21.toString()
+        }
     }
     buildFeatures {
         compose = true

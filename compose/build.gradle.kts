@@ -25,8 +25,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+    kotlin {
+        compilerOptions{
+            JavaVersion.VERSION_21.toString()
+        }
     }
     buildFeatures {
         compose = true
@@ -37,6 +39,8 @@ android {
 dependencies {
     api(project(":core-android"))
     api(libs.material3)
+    api(libs.compose.icons.core)
+    api(libs.compose.icons.extended)
     implementation(libs.accompanist.navigation.material)
     implementation(libs.navigation.compose)
     implementation(libs.lifecycle.runtime.compose.android)
