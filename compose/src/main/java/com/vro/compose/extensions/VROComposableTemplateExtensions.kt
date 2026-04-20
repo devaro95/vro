@@ -99,7 +99,6 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     val vm = viewModel.vroViewModel
     val contentInstance = content.java.getDeclaredConstructor().newInstance()
     contentInstance.templateContent.context = LocalContext.current
-    contentInstance.events = vm
     contentInstance.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle

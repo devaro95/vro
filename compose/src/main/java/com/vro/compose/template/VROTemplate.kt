@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.screen.VROScreenBase
 import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
+import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
@@ -62,8 +65,9 @@ abstract class VROTemplate<
 
     @Composable
     override fun InitializeContent(state: S) {
-        this.templateContent.events = events
         templateContent.coroutineScope = rememberCoroutineScope()
+        isStarted.value = true
+        SideEffect { isStarted.value = true }
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -72,6 +76,20 @@ abstract class VROTemplate<
             } else {
                 templateContent.Content(state)
             }
+        }
+    }
+
+    @Composable
+    override fun InitializeEvents(events: VROEventLauncher<E>) {
+        this.templateContent.events = events
+    }
+
+    @Composable
+    override fun InitializeBars() {
+        val topBarState = LocalTopBarState.current
+        val bottomBarState = LocalBottomBarState.current
+        LaunchedEffect(isStarted.value) {
+            configureScaffold(topBarState, bottomBarState)
         }
     }
 }
