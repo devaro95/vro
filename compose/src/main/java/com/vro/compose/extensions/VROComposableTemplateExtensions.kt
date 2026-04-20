@@ -7,16 +7,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.vro.compose.composition.LocalAnimatedVisibilityScope
 import com.vro.compose.initializers.*
 import com.vro.compose.navigator.VROComposableNavigator
-import com.vro.compose.navigator.VROTemplateNavigator
-import com.vro.compose.states.*
 import com.vro.compose.template.*
 import com.vro.constants.INT_ZERO
 import com.vro.core_android.viewmodel.VROAndroidViewModel
@@ -25,6 +24,7 @@ import com.vro.event.VROEvent
 import com.vro.navigation.VRODestination
 import com.vro.state.VROState
 import com.vro.viewmodel.VROViewModel
+import kotlin.reflect.KClass
 
 /**
  * Adds a Compose screen to the navigation graph with optional transitions.
@@ -39,9 +39,6 @@ import com.vro.viewmodel.VROViewModel
  * @param content The screen content composable
  * @param enterTransition Optional enter transition animation
  * @param exitTransition Optional exit transition animation
- * @param topBarState Mutable state for top bar configuration
- * @param bottomBarState Mutable state for bottom bar configuration
- * @param snackbarState Mutable state for snackbar presentation
  *
  * @see VROComposableScreen For the screen implementation
  * @see VroComposableScreenContent For internal content handling
@@ -49,12 +46,9 @@ import com.vro.viewmodel.VROViewModel
 fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> NavGraphBuilder.vroComposableTemplate(
     viewModel: @Composable () -> VM,
     navigator: VROComposableNavigator<D>,
-    content: VROTemplate<S, E, M, R>,
+    content: KClass<out VROTemplate<S, E, M, R>>,
     enterTransition: EnterTransition? = null,
-    exitTransition: ExitTransition? = null,
-    topBarState: MutableState<VROTopBarBaseState>,
-    bottomBarState: MutableState<VROBottomBarBaseState>,
-    snackbarState: MutableState<VROSnackBarState>,
+    exitTransition: ExitTransition? = null
 ) {
     val route = content.destinationRoute()
     composable(
@@ -62,20 +56,19 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
         enterTransition = { enterTransition ?: fadeIn(animationSpec = tween(INT_ZERO)) },
         exitTransition = { exitTransition ?: fadeOut(animationSpec = tween(INT_ZERO)) }
     ) {
-        val vm = viewModel(
-            modelClass = VROAndroidViewModel::class.java,
-            key = viewModel.javaClass.toString(), //TODO
-            factory = VROViewModelFactory(viewModel.invoke())
-        ) as VROAndroidViewModel<S, D, E>
+        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+            val vm = viewModel(
+                modelClass = VROAndroidViewModel::class.java,
+                key = viewModel.javaClass.toString(), //TODO
+                factory = VROViewModelFactory(viewModel.invoke())
+            ) as VROAndroidViewModel<S, D, E>
 
-        VroComposableTemplateContent(
-            viewModel = vm,
-            navigator = navigator,
-            content = content,
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState,
-        )
+            VroComposableTemplateContent(
+                viewModel = vm,
+                navigator = navigator,
+                content = content
+            )
+        }
     }
 }
 
@@ -91,9 +84,6 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
  * @param viewModel The ViewModel instance
  * @param navigator The navigation controller
  * @param content The screen content composable
- * @param topBarState Mutable state for top bar configuration
- * @param bottomBarState Mutable state for bottom bar configuration
- * @param snackbarState Mutable state for snackbar presentation
  *
  * @see InitializeLifecycleObserver For lifecycle handling
  * @see InitializeOneTimeListener For event handling
@@ -104,28 +94,23 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
 internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> VroComposableTemplateContent(
     viewModel: VM,
     navigator: VROComposableNavigator<D>,
-    content: VROTemplate<S, E, M, R>,
-    topBarState: MutableState<VROTopBarBaseState>,
-    bottomBarState: MutableState<VROBottomBarBaseState>,
-    snackbarState: MutableState<VROSnackBarState>,
+    content: KClass<out VROTemplate<S, E, M, R>>
 ) {
     val vm = viewModel.vroViewModel
-    content.templateContent.context = LocalContext.current
-    content.events = vm
-    content.navController = navigator.navController
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
+    contentInstance.templateContent.context = LocalContext.current
+    contentInstance.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
     InitializeLifecycleObserver(
         viewModel = vm,
-        content = content,
+        content = contentInstance,
         screenLifecycle = screenLifecycle,
-        topBarState = topBarState,
-        bottomBarState = bottomBarState,
         navController = navigator.navController,
     )
     InitializeOneTimeListener(
         viewModel = vm,
-        content = content
+        content = contentInstance
     )
     InitializeNavigatorListener(
         viewModel = vm,
@@ -133,11 +118,8 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     )
     InitializeStepperListener(
         viewModel = vm,
-        content = content,
-        screenLifecycle = screenLifecycle,
-        topBarState = topBarState,
-        bottomBarState = bottomBarState,
-        snackbarState = snackbarState
+        content = contentInstance,
+        screenLifecycle = screenLifecycle
     )
     InitializeEventsListener(
         viewModel = vm

@@ -12,7 +12,7 @@ class SampleFragmentNavigator(
     activity = activity
 ) {
 
-    override fun navigate(destination: SampleFragmentDestinations) {
+    override fun onDestination(destination: SampleFragmentDestinations) {
 
     }
 

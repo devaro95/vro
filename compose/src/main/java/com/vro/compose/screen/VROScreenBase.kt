@@ -3,10 +3,12 @@ package com.vro.compose.screen
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.vro.compose.handler.*
 import com.vro.compose.handler.default.*
+import com.vro.compose.navigator.VRONavigationClass
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
@@ -37,7 +39,7 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     open val errorHandler: VROErrorHandler<E> = VROErrorHandlerDefault(),
     open val oneTimeHandler: VROOneTimeHandler<S, E> = VROOneTimeHandlerDefault(),
     open val skeleton: VROSkeleton = VROSkeletonDefault(),
-) : KoinScopeComponent {
+) : VRONavigationClass, KoinScopeComponent {
 
     /**
      * Koin scope tied to this screen instance.
@@ -52,12 +54,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     lateinit var navController: NavController
 
     /**
-     * Event launcher for handling screen events.
-     * Automatically initialized by the screen system.
-     */
-    lateinit var events: VROEventLauncher<E>
-
-    /**
      * Flag indicating whether tablet-specific layouts should be used.
      * Override to enable tablet-optimized designs.
      */
@@ -69,28 +65,29 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     internal lateinit var screenState: S
 
     /**
+     * Updated to true when screen isStarted and state is loaded
+     */
+    internal val isStarted: MutableState<Boolean> = mutableStateOf(false)
+
+    /**
      * Main screen container that handles responsive layout.
      * Automatically switches between tablet and mobile layouts based on [tabletDesignEnabled].
      *
      * @param state The current screen state
-     * @param topBarState Mutable state for top bar configuration
-     * @param bottomBarState Mutable state for bottom bar configuration
-     * @param snackbarState Mutable state for snackbar presentation
      */
     @Composable
     internal fun ComposableScreenContainer(
         state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
+        events: VROEventLauncher<E>
     ) {
-        InitializeState(state)
-        InitializeHandlers()
+        InitializeState(
+            state = state
+        )
+        InitializeHandlers(
+            events = events
+        )
         InitializeContent(
-            state = state,
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            state = state
         )
     }
 
@@ -100,7 +97,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     }
 
     @Composable
-    fun InitializeHandlers() {
+    fun InitializeHandlers(
+        events: VROEventLauncher<E>
+    ) {
         val context: Context = LocalContext.current
         this.dialogHandler.events = events
         this.dialogHandler.context = context
@@ -111,12 +110,14 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     }
 
     @Composable
-    abstract fun InitializeContent(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
-    )
+    abstract fun InitializeContent(state: S)
+
+    @Composable
+    abstract fun InitializeEvents(events: VROEventLauncher<E>)
+
+    @Composable
+    abstract fun InitializeBars()
+
 
     /**
      * Composable function for tablet-optimized content.

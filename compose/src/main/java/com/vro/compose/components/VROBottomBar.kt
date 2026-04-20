@@ -7,6 +7,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vro.constants.EMPTY_STRING
+
+
 
 /**
  * A customizable bottom navigation bar component.
@@ -49,24 +52,30 @@ fun VROBottomBar(
             .fillMaxWidth(),
         tonalElevation = 0.dp
     ) {
-        Crossfade(targetState = selectedItem, label = EMPTY_STRING) { iconSelected ->
+        Crossfade(targetState = selectedItem, label = EMPTY_STRING) { selected ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 itemList.forEachIndexed { index, item ->
-                    AnimatedIcon(
-                        iconRes = item.icon,
+                    Column(
                         modifier = Modifier.weight(1f),
-                        selected = iconSelected == index,
-                        selectedIconRes = item.iconSelected ?: item.icon,
-                        iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
-                            if (iconSelected == index) iconSelectedTint
-                            else item.iconTint
-                        } ?: item.iconTint,
-                        iconSize = item.iconSize
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        item.onClick?.invoke()
+                        AnimatedIcon(
+                            iconRes = item.icon,
+                            selected = selected == index,
+                            selectedIconRes = item.iconSelected ?: item.icon,
+                            iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
+                                if (selected == index) iconSelectedTint
+                                else item.iconTint
+                            } ?: item.iconTint,
+                            iconSize = item.iconSize
+                        ) {
+                            item.onClick?.invoke()
+                        }
+                        item.text.invoke(item.textColor, item.textSelectedColor)
                     }
                 }
             }
@@ -77,23 +86,26 @@ fun VROBottomBar(
 /**
  * Configuration class for bottom navigation bar items.
  *
- * @property icon Resource ID for the default icon
- * @property iconTint Color for the default icon (default: null)
- * @property iconSelectedTint Color for the selected icon (default: null)
- * @property iconSelected Resource ID for the selected icon (default: null)
- * @property contentDescription Accessibility content description (default: "")
- * @property text Optional text label (default: "")
- * @property iconSize Size of the icons (default: 24.dp)
- * @property onClick Callback when item is clicked (default: null)
- *
+ * @property icon Resource ID for the default icon.
+ * @property iconTint Optional tint color for the default icon (default: null).
+ * @property iconSelectedTint Optional tint color for the selected icon (default: null).
+ * @property textColor Optional text color for the default state (default: null).
+ * @property textSelectedColor Optional text color for the selected state (default: null).
+ * @property iconSelected Optional resource ID for the selected icon (default: null).
+ * @property contentDescription Accessibility content description (default: "").
+ * @property text Composable lambda to render the text label. Receives (color, selectedColor) (default: empty lambda).
+ * @property iconSize Size of the icons (default: 24.dp).
+ * @property onClick Callback triggered when the item is clicked (default: null).
  */
 open class VROBottomBarItem(
     val icon: Int,
     val iconTint: Color? = null,
     val iconSelectedTint: Color? = null,
+    val textColor: Color? = null,
+    val textSelectedColor: Color? = null,
     val iconSelected: Int? = null,
     val contentDescription: String = EMPTY_STRING,
-    val text: String = EMPTY_STRING,
+    val text: @Composable (color: Color?, selectedColor: Color?) -> Unit = { _, _ -> },
     val iconSize: Dp = 24.dp,
     val onClick: (() -> Unit)? = null,
 )

@@ -10,5 +10,5 @@ class SampleProfileNavigator(
     navController: NavController,
 ) : VROComposableNavigator<SampleDestinations>(activity, navController) {
 
-    override fun navigate(destination: SampleDestinations) = Unit
+    override fun onDestination(destination: SampleDestinations) = Unit
 }

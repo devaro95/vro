@@ -1,8 +1,7 @@
 package com.sampleapp.dialog.withviewmodel
 
-import com.sampleapp.ui.home.SampleHomeViewModel
-import com.vro.viewmodel.VRODialogViewModel
 import com.vro.navigation.VROBackResult
+import com.vro.viewmodel.VRODialogViewModel
 
 class SampleVMDialogViewModel : VRODialogViewModel<SampleVMDialogState, SampleVMDialogEvents>() {
 

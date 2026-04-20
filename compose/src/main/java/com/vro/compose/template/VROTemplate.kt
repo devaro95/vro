@@ -2,18 +2,16 @@ package com.vro.compose.template
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.vro.compose.preview.VROLightMultiDevicePreview
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.screen.VROScreenBase
 import com.vro.compose.states.VROBottomBarBaseState
-import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
-import com.vro.navigation.VRODestination
+import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
@@ -66,17 +64,10 @@ abstract class VROTemplate<
     }
 
     @Composable
-    override fun InitializeContent(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
-    ) {
-        this.templateContent.events = events
-        this.templateContent.topBarState = topBarState
-        this.templateContent.bottomBarState = bottomBarState
+    override fun InitializeContent(state: S) {
         templateContent.coroutineScope = rememberCoroutineScope()
-        templateContent.snackbarState = snackbarState
+        isStarted.value = true
+        SideEffect { isStarted.value = true }
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -85,6 +76,20 @@ abstract class VROTemplate<
             } else {
                 templateContent.Content(state)
             }
+        }
+    }
+
+    @Composable
+    override fun InitializeEvents(events: VROEventLauncher<E>) {
+        this.templateContent.events = events
+    }
+
+    @Composable
+    override fun InitializeBars() {
+        val topBarState = LocalTopBarState.current
+        val bottomBarState = LocalBottomBarState.current
+        LaunchedEffect(isStarted.value) {
+            configureScaffold(topBarState, bottomBarState)
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
@@ -16,7 +17,7 @@ import com.vro.compose.states.VROTopBarBaseState
 
 class SampleDetailScreenContent : VROScreenContent<SampleDetailState, SampleDetailEvents>() {
 
-    override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
+    override fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean) = sampleBackToolbar(
         title = context.getString(R.string.detail_toolbar),
         onNavigation = { navigateBack() }
     )
@@ -24,7 +25,7 @@ class SampleDetailScreenContent : VROScreenContent<SampleDetailState, SampleDeta
     @Composable
     override fun Content(state: SampleDetailState) {
         Column(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .padding(top = 32.dp)
@@ -35,6 +36,6 @@ class SampleDetailScreenContent : VROScreenContent<SampleDetailState, SampleDeta
 
     @Composable
     override fun ScreenPreview() {
-        Content(state = SampleDetailState.Companion.INITIAL)
+        Content(state = SampleDetailState.INITIAL)
     }
 }

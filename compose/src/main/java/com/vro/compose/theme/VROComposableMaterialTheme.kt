@@ -1,4 +1,4 @@
-package com.vro.compose
+package com.vro.compose.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
@@ -11,7 +11,7 @@ import androidx.compose.material3.Typography
  * @property darkColors The color scheme for dark theme mode
  * @property typography The typography configuration for the theme
  */
-data class VROComposableTheme(
+data class VROComposableMaterialTheme(
     val lightColors: ColorScheme? = null,
     val darkColors: ColorScheme? = null,
     val typography: Typography? = null,

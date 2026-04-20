@@ -71,7 +71,7 @@ abstract class VROFragment<
             vm.vroViewModel.getNavigationState().collectLatest {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
-                        navigator.navigate(destination)
+                        navigator.onDestination(destination)
                         destination.setNavigated()
                     }
                 } ?: navigator.navigateBack(it?.backResult)
@@ -95,7 +95,9 @@ abstract class VROFragment<
         super.onCreate(savedInstanceState)
         observer = createLifecycleEventObserver(
             onCreate = {
-                vm.vroViewModel.onStarter(getStarterParam(findNavController().currentDestination?.id.toString()))
+                findNavController().currentDestination?.id?.let { destinationId ->
+                    vm.vroViewModel.onStarter(getStarterParam(destinationId.toString()))
+                }
             },
             onStart = {
                 vm.vroViewModel.onStart()
@@ -132,5 +134,13 @@ abstract class VROFragment<
         stepperFlow.cancel()
         navigationFLow.cancel()
         oneTimeFlow.cancel()
+    }
+
+    fun event(event: E) {
+        vm.vroViewModel.onEvent(event)
+    }
+
+    fun navigateBack(result: VROBackResult?) {
+        vm.vroViewModel.doBack(result)
     }
 }
