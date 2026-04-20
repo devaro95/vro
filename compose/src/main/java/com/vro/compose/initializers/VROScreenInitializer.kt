@@ -7,9 +7,10 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.skeleton.VROSkeletonDefault
-import com.vro.compose.states.*
 import com.vro.core_android.lifecycleevent.createLifecycleEventObserver
 import com.vro.viewmodel.VROViewModel
 import com.vro.event.VROEvent
@@ -64,23 +65,18 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
  * @param viewModel The ViewModel instance to observe
  * @param content The screen content to render
  * @param screenLifecycle The lifecycle owner for state collection
- * @param topBarState Mutable state for top bar configuration
- * @param bottomBarState Mutable state for bottom bar configuration
- * @param snackbarState Mutable state for snackbar presentation
  *
  * @see VROStepper For state step definitions
- * @see VROScreen.ComposableScreenSkeleton For skeleton implementation
  * @see VROScreen.ComposableScreenContainer For content container
  */
 @Composable
 fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent> InitializeStepperListener(
     viewModel: VM,
     content: VROScreen<S, E>,
-    screenLifecycle: Lifecycle,
-    topBarState: MutableState<VROTopBarBaseState>,
-    bottomBarState: MutableState<VROBottomBarBaseState>,
-    snackbarState: MutableState<VROSnackBarState>,
+    screenLifecycle: Lifecycle
 ) {
+    content.InitializeEvents(events = viewModel)
+    content.InitializeBars()
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue = if (content.skeleton::class != VROSkeletonDefault::class) {
             VROStepper.VROSkeletonStep(viewModel.initialState)
@@ -95,9 +91,7 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     } else {
         content.ComposableScreenContainer(
             state = stepper.state,
-            topBarState = topBarState,
-            bottomBarState = bottomBarState,
-            snackbarState = snackbarState
+            events = viewModel
         )
         (stepper as? VROStepper.VRODialogStep)?.let {
             content.dialogHandler.OnDialog(it.dialogState)
@@ -124,8 +118,6 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
  * @param viewModel The ViewModel instance to observe
  * @param content The screen content to configure
  * @param screenLifecycle The lifecycle owner to observe
- * @param topBarState Mutable state for top bar configuration
- * @param bottomBarState Mutable state for bottom bar configuration
  * @param navController The navigation controller for parameter handling
  *
  * @see createLifecycleEventObserver For base observer implementation
@@ -136,15 +128,14 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     viewModel: VM,
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle,
-    topBarState: MutableState<VROTopBarBaseState>,
-    bottomBarState: MutableState<VROBottomBarBaseState>,
     navController: NavController,
 ) {
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
             onCreate = {
-                content.configureScaffold(topBarState, bottomBarState)
-                viewModel.onStarter(getStarterParam(navController.currentDestination?.id.toString()))
+                navController.currentDestination?.id?.let { destinationId ->
+                    viewModel.onStarter(getStarterParam(destinationId.toString()))
+                }
             },
             onStart = {
                 viewModel.onStart()

@@ -16,7 +16,7 @@ interface VRONavigator<D : VRODestination> {
 
     val activity: ComponentActivity
 
-    fun navigate(destination: D)
+    fun onDestination(destination: D)
 
     fun navigateBack(result: VROBackResult?) {
         result?.let {

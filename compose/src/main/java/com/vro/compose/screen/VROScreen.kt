@@ -2,15 +2,15 @@ package com.vro.compose.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.states.VROBottomBarBaseState
-import com.vro.compose.states.VROSnackBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
+import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
 
 /**
@@ -48,22 +48,17 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
         topBarState: MutableState<VROTopBarBaseState>,
         bottomBarState: MutableState<VROBottomBarBaseState>,
     ) {
-        topBarState.value = screenContent.setTopBar(topBarState.value)
-        bottomBarState.value = screenContent.setBottomBar(bottomBarState.value)
+        val started = isStarted.value
+
+        topBarState.value = screenContent.setTopBar(topBarState.value, started)
+        bottomBarState.value = screenContent.setBottomBar(bottomBarState.value, started)
     }
 
     @Composable
-    override fun InitializeContent(
-        state: S,
-        topBarState: MutableState<VROTopBarBaseState>,
-        bottomBarState: MutableState<VROBottomBarBaseState>,
-        snackbarState: MutableState<VROSnackBarState>,
-    ) {
-        this.screenContent.events = events
-        this.screenContent.topBarState = topBarState
-        this.screenContent.bottomBarState = bottomBarState
+    override fun InitializeContent(state: S) {
         screenContent.coroutineScope = rememberCoroutineScope()
-        screenContent.snackbarState = snackbarState
+        isStarted.value = true
+        SideEffect { isStarted.value = true }
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -72,6 +67,20 @@ abstract class VROScreen<S : VROState, E : VROEvent> : VROScreenBase<S, E>() {
             } else {
                 screenContent.Content(state)
             }
+        }
+    }
+
+    @Composable
+    override fun InitializeEvents(events: VROEventLauncher<E>) {
+        screenContent.events = events
+    }
+
+    @Composable
+    override fun InitializeBars() {
+        val topBarState = LocalTopBarState.current
+        val bottomBarState = LocalBottomBarState.current
+        LaunchedEffect(isStarted.value) {
+            configureScaffold(topBarState, bottomBarState)
         }
     }
 }

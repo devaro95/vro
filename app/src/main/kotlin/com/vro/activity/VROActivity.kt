@@ -56,7 +56,7 @@ abstract class VROActivity<
             vm.vroViewModel.getNavigationState().collect {
                 it?.destination?.let { destination ->
                     if (!destination.isNavigated) {
-                        navigator.navigate(destination)
+                        navigator.onDestination(destination)
                         destination.setNavigated()
                     }
                 } ?: navigator.navigateBack(it?.backResult)

@@ -42,8 +42,14 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
 ) {
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
-            onCreate = { viewModel.onStarter(getStarterParam(navController.currentDestination?.id.toString())) },
-            onStart = { viewModel.onStart() },
+            onCreate = {
+                navController.currentDestination?.id?.let { destinationId ->
+                    viewModel.onStarter(getStarterParam(destinationId.toString()))
+                }
+            },
+            onStart = {
+                viewModel.onStart()
+            },
             onResume = {
                 viewModel.getResult()
                 viewModel.onResume()

@@ -23,15 +23,15 @@ class SampleHomeNavigator(
     navController: NavController,
 ) : VROComposableNavigator<SampleDestinations>(activity, navController) {
 
-    override fun navigate(destination: SampleDestinations) {
+    override fun onDestination(destination: SampleDestinations) {
         when (destination) {
-            HomeNavigation -> navigateToScreen(SampleHomeScreen())
-            ProfileNavigation -> navigateToScreen(SampleProfileScreen())
-            BottomSheetNavigation -> openBottomSheet(SampleBottomSheet())
+            HomeNavigation -> navigate(SampleHomeScreen::class)
+            ProfileNavigation -> navigate(SampleProfileScreen::class)
+            BottomSheetNavigation -> navigate(SampleBottomSheet::class)
             ActivityFragmentNavigation -> startActivity(SampleFragmentActivity.createIntent(activity.baseContext))
-            TemplateNavigation -> navigateToTemplate(SampleTemplate())
-            is DetailNavigation -> navigateToScreen(
-                screen = SampleDetailScreen(),
+            TemplateNavigation -> navigate(SampleTemplate::class)
+            is DetailNavigation -> navigate(
+                destination = SampleDetailScreen::class,
                 starter = SampleDetailStarter.Initial(state = destination.state)
             )
         }

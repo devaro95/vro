@@ -20,7 +20,7 @@ class SampleHomeDialogHandler : SampleBaseDialogHandler<SampleHomeEvents>() {
     @Composable
     override fun OnDialog(data: VRODialogData) {
         when (data.type) {
-            SampleHomeViewModel.Companion.SIMPLE_VIEW_MODEL_DIALOG -> VROComposableDialog(
+            SampleHomeViewModel.SIMPLE_VIEW_MODEL_DIALOG -> VROComposableDialog(
                 viewModel = { injectViewModel<SampleVMDialogViewModel>() },
                 content = SampleVMDialog(),
                 onDismiss = { event(SampleHomeEvents.VmDialogDismiss) },
@@ -29,7 +29,7 @@ class SampleHomeDialogHandler : SampleBaseDialogHandler<SampleHomeEvents>() {
                 }
             )
 
-            SampleHomeViewModel.Companion.BOTTOM_SHEET -> VroBottomSheet(
+            SampleHomeViewModel.BOTTOM_SHEET -> VroBottomSheet(
                 viewModel = { injectViewModel<SampleBottomSheetViewModel>() },
                 content = SampleBottomSheet(),
                 onDismiss = { event(SampleHomeEvents.BottomSheetDismiss) },

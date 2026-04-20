@@ -2,6 +2,7 @@ package com.vro.compose
 
 import android.os.Bundle
 import android.view.*
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,12 +19,16 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
+import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalSnackbarState
+import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.extensions.VROComposableFragmentScreen
 import com.vro.compose.screen.VROScreen
 import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
+import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.core_android.fragment.VROFragmentInjection
 import com.vro.core_android.navigation.VROFragmentNavigator
 import com.vro.viewmodel.VROViewModel
@@ -33,6 +38,7 @@ import com.vro.navigation.VRODestination
 import com.vro.state.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 /**
  * Abstract base class for fragments that use Jetpack Compose for their UI.
@@ -62,7 +68,7 @@ abstract class VROComposableFragment<
      * Optional theme configuration for the fragment.
      * Can be overridden to provide custom theming.
      */
-    open val theme: VROComposableTheme? = null
+    open val theme: VROComposableMaterialTheme? = null
 
     private lateinit var navController: NavController
 
@@ -71,7 +77,7 @@ abstract class VROComposableFragment<
      * @return The root composable screen for this fragment
      */
     @Composable
-    abstract fun composableView(): SC
+    abstract fun composableView(): KClass<out SC>
 
     /**
      * Creates a MaterialTheme with the provided color schemes and typography.
@@ -153,7 +159,7 @@ abstract class VROComposableFragment<
      * Initializes the Compose UI with common components like Scaffold, TopBar, BottomBar, and Snackbar.
      * @param backgroundColor Optional background color for the scaffold
      */
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalSharedTransitionApi::class)
     @Composable
     fun Initialize(
         backgroundColor: Color? = null,
@@ -162,8 +168,9 @@ abstract class VROComposableFragment<
         this.navController = this@VROComposableFragment.findNavController()
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
         val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val snackbarState = remember { mutableStateOf<VROSnackBarState>(VROSnackBarState(snackbarHostState)) }
+        val snackBarHostState = remember { SnackbarHostState() }
+        val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
+
         ModalBottomSheetLayout(
             modifier = Modifier.fillMaxSize(),
             bottomSheetNavigator = bottomSheetNavigator,
@@ -195,14 +202,17 @@ abstract class VROComposableFragment<
                         )
                         .fillMaxSize()
                 ) {
-                    VROComposableFragmentScreen(
-                        viewModel = vm.vroViewModel,
-                        navigator = navigator,
-                        topBarState = topBarState,
-                        bottomBarState = bottomBarState,
-                        snackbarState = snackbarState,
-                        content = composableView()
-                    )
+                    CompositionLocalProvider(
+                        LocalTopBarState provides topBarState,
+                        LocalBottomBarState provides bottomBarState,
+                        LocalSnackbarState provides snackBarState
+                    ) {
+                        VROComposableFragmentScreen(
+                            viewModel = vm.vroViewModel,
+                            navigator = navigator,
+                            content = composableView()
+                        )
+                    }
                 }
             }
         }

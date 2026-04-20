@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.vanniktech)
+    signing
 }
 
 apply (from= "../gradleConfig/configuration.gradle")
@@ -18,8 +20,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+    kotlin {
+        compilerOptions{
+            JavaVersion.VERSION_21.toString()
+        }
     }
     buildFeatures {
         compose = true
@@ -46,4 +50,33 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     debugImplementation(libs.ui.tooling)
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+
+    pom {
+        name.set("Legacy Library")
+        description.set("VRO Legacy Module")
+        url.set("https://github.com/devaro95/vro")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        developers {
+            developer {
+                id.set("devaro95")
+                name.set("Varo")
+                email.set("alvaromcarmena95@gmail.com")
+            }
+        }
+        scm {
+            connection.set("scm:git:git://github.com/devaro95/vro.git")
+            developerConnection.set("scm:git:ssh://github.com:devaro95/vro.git")
+            url.set("https://github.com/devaro95/vro")
+        }
+    }
 }
