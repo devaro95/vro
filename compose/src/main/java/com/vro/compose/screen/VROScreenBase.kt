@@ -3,6 +3,7 @@ package com.vro.compose.screen
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.vro.compose.handler.*
@@ -53,12 +54,6 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     lateinit var navController: NavController
 
     /**
-     * Event launcher for handling screen events.
-     * Automatically initialized by the screen system.
-     */
-    lateinit var events: VROEventLauncher<E>
-
-    /**
      * Flag indicating whether tablet-specific layouts should be used.
      * Override to enable tablet-optimized designs.
      */
@@ -70,6 +65,11 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     internal lateinit var screenState: S
 
     /**
+     * Updated to true when screen isStarted and state is loaded
+     */
+    internal val isStarted: MutableState<Boolean> = mutableStateOf(false)
+
+    /**
      * Main screen container that handles responsive layout.
      * Automatically switches between tablet and mobile layouts based on [tabletDesignEnabled].
      *
@@ -77,10 +77,15 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
      */
     @Composable
     internal fun ComposableScreenContainer(
-        state: S
+        state: S,
+        events: VROEventLauncher<E>
     ) {
-        InitializeState(state)
-        InitializeHandlers()
+        InitializeState(
+            state = state
+        )
+        InitializeHandlers(
+            events = events
+        )
         InitializeContent(
             state = state
         )
@@ -92,7 +97,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     }
 
     @Composable
-    fun InitializeHandlers() {
+    fun InitializeHandlers(
+        events: VROEventLauncher<E>
+    ) {
         val context: Context = LocalContext.current
         this.dialogHandler.events = events
         this.dialogHandler.context = context
@@ -103,9 +110,14 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
     }
 
     @Composable
-    abstract fun InitializeContent(
-        state: S
-    )
+    abstract fun InitializeContent(state: S)
+
+    @Composable
+    abstract fun InitializeEvents(events: VROEventLauncher<E>)
+
+    @Composable
+    abstract fun InitializeBars()
+
 
     /**
      * Composable function for tablet-optimized content.

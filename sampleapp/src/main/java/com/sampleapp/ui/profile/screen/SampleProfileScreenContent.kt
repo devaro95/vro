@@ -25,12 +25,12 @@ import com.vro.constants.INT_ONE
 
 class SampleProfileScreenContent : VROScreenContent<SampleProfileState, SampleProfileEvents>() {
 
-    override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
+    override fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean) = sampleBackToolbar(
         title = context.getString(R.string.profile_toolbar),
-        onNavigation = { navigateBack() }
+        onNavigation = { if(isScreenStarted) navigateBack() }
     )
 
-    override fun setBottomBar(currentState: VROBottomBarBaseState) =
+    override fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean) =
         VROBottomBarBaseState.VROBottomBarState(selectedItem = INT_ONE)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
@@ -62,6 +62,6 @@ class SampleProfileScreenContent : VROScreenContent<SampleProfileState, SamplePr
 
     @Composable
     override fun ScreenPreview() {
-        Content(state = SampleProfileState.Companion.INITIAL)
+        Content(state = SampleProfileState.INITIAL)
     }
 }

@@ -54,7 +54,8 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
         content.skeleton.SkeletonContent()
     } else {
         content.ComposableScreenContainer(
-            state = stepper.state
+            state = stepper.state,
+            events = viewModel
         )
         (stepper as? VROStepper.VRODialogStep)?.let {
             content.dialogHandler.OnDialog(it.dialogState)

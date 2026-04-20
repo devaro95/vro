@@ -17,7 +17,7 @@ import com.vro.constants.INT_ZERO
  * @property visibility Controls whether the top bar is visible (default true)
  */
 sealed class VROTopBarBaseState(
-    open val visibility: Boolean = true,
+    open val visibility: Boolean = true
 ) {
     /**
      * Complete top bar configuration state with all customizable properties.

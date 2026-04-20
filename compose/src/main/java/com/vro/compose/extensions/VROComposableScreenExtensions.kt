@@ -166,7 +166,6 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
 
     contentInstance.screenContent.context = LocalContext.current
-    contentInstance.events = vm
     contentInstance.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
 
@@ -223,7 +222,6 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
 
     contentInstance.screenContent.context = LocalContext.current
-    contentInstance.events = vm
     BackHandler(true) { vm.onBackSystem() }
 
     InitializeLifecycleObserver(
