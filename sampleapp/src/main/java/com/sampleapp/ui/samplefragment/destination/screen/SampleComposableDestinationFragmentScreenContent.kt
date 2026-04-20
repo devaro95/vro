@@ -17,7 +17,7 @@ import com.vro.compose.states.VROTopBarBaseState
 class SampleComposableDestinationFragmentScreenContent :
     VROScreenContent<SampleComposableDestinationFragmentState, SampleComposableDestinationFragmentEvents>() {
 
-    override fun setTopBar(currentState: VROTopBarBaseState) = sampleBackToolbar(
+    override fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean) = sampleBackToolbar(
         title = context.getString(R.string.destination_fragment_toolbar),
         onNavigation = { navigateBack() }
     )
@@ -25,8 +25,8 @@ class SampleComposableDestinationFragmentScreenContent :
     @Composable
     override fun Content(state: SampleComposableDestinationFragmentState) {
         Column(
-            modifier = Modifier.Companion.fillMaxSize(),
-            horizontalAlignment = Alignment.Companion.CenterHorizontally
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SampleButton(
                 modifier=Modifier.padding(top = 32.dp),
@@ -44,6 +44,6 @@ class SampleComposableDestinationFragmentScreenContent :
     @VROLightMultiDevicePreview
     @Composable
     override fun ScreenPreview() {
-        Content(state = SampleComposableDestinationFragmentState.Companion.INITIAL)
+        Content(state = SampleComposableDestinationFragmentState.INITIAL)
     }
 }

@@ -75,6 +75,8 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     content: VROScreen<S, E>,
     screenLifecycle: Lifecycle
 ) {
+    content.InitializeEvents(events = viewModel)
+    content.InitializeBars()
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue = if (content.skeleton::class != VROSkeletonDefault::class) {
             VROStepper.VROSkeletonStep(viewModel.initialState)
@@ -88,7 +90,8 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
         content.skeleton.SkeletonContent()
     } else {
         content.ComposableScreenContainer(
-            state = stepper.state
+            state = stepper.state,
+            events = viewModel
         )
         (stepper as? VROStepper.VRODialogStep)?.let {
             content.dialogHandler.OnDialog(it.dialogState)
@@ -127,12 +130,9 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent>
     screenLifecycle: Lifecycle,
     navController: NavController,
 ) {
-    val topBarState = LocalTopBarState.current
-    val bottomBarState = LocalBottomBarState.current
     DisposableEffect(screenLifecycle) {
         val observer = createLifecycleEventObserver(
             onCreate = {
-                content.configureScaffold(topBarState, bottomBarState)
                 navController.currentDestination?.id?.let { destinationId ->
                     viewModel.onStarter(getStarterParam(destinationId.toString()))
                 }

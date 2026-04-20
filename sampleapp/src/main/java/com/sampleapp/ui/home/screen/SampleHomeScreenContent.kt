@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,9 +29,9 @@ import com.vro.constants.INT_ZERO
 
 class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEvents>() {
 
-    override fun setTopBar(currentState: VROTopBarBaseState) = sampleHomeToolbar(context)
+    override fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean) = sampleHomeToolbar(context)
 
-    override fun setBottomBar(currentState: VROBottomBarBaseState) =
+    override fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean) =
         VROBottomBarState(selectedItem = INT_ZERO)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
@@ -119,6 +120,6 @@ class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEven
     @Composable
     @VROLightMultiDevicePreview
     override fun ScreenPreview() {
-        Content(state = SampleHomeState.Companion.INITIAL)
+        Content(state = SampleHomeState.INITIAL)
     }
 }
