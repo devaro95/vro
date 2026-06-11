@@ -1,6 +1,7 @@
 plugins {
+    kotlin("multiplatform")
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.vanniktech)
     alias(libs.plugins.nmcp)
@@ -12,6 +13,51 @@ group = property("GROUP") as String
 version = property("VERSION_NAME") as String
 
 apply(from = "../gradleConfig/configuration.gradle")
+
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(project(":core-android"))
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material3)
+                api(compose.components.resources)
+                api(compose.animation)
+                api(libs.koin.core)
+                implementation(libs.coroutines.core)
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                api(libs.material3)
+                api(libs.compose.icons.core)
+                api(libs.compose.icons.extended)
+                implementation(libs.accompanist.navigation.material)
+                implementation(libs.navigation.compose)
+                implementation(libs.lifecycle.runtime.compose.android)
+                implementation(libs.compose.animation)
+                implementation(libs.koin.compose)
+                implementation(libs.compose.activity)
+            }
+        }
+
+        val iosMain by creating {
+            dependsOn(commonMain)
+        }
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
+    }
+
+    jvmToolchain(21)
+}
 
 android {
     compileSdk = 36
@@ -26,7 +72,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlin {
-        compilerOptions{
+        compilerOptions {
             JavaVersion.VERSION_21.toString()
         }
     }
@@ -34,17 +80,6 @@ android {
         compose = true
     }
     namespace = "com.vro.compose"
-}
-
-dependencies {
-    api(project(":core-android"))
-    api(libs.material3)
-    api(libs.compose.icons.core)
-    api(libs.compose.icons.extended)
-    implementation(libs.accompanist.navigation.material)
-    implementation(libs.navigation.compose)
-    implementation(libs.lifecycle.runtime.compose.android)
-    implementation(libs.compose.animation)
 }
 
 mavenPublishing {
