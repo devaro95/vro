@@ -1,15 +1,16 @@
-package com.vro.core_android.navigation
+package com.vro.compose.navigator
 
 import com.vro.navigation.VROBackResult
 import com.vro.navigation.VRODestination
 import com.vro.navigation.putResultParam
+import com.vro.core_android.navigation.VRONavigator
 
 /**
- * Fully implemented iOS navigator using a simple callback-based stack.
- * The host SwiftUI/UIKit layer provides the navigate/back/finish lambdas.
+ * iOS Compose Multiplatform navigator.
+ * Uses a simple screen-stack model since NavController is Android-only.
  */
-class VROIosNavigator<D : VRODestination>(
-    private val onNavigate: (route: String) -> Unit,
+class VROIosComposableNavigator<D : VRODestination>(
+    private val onNavigate: (String) -> Unit,
     private val onBack: (VROBackResult?) -> Unit,
     private val onFinish: () -> Unit,
 ) : VRONavigator<D> {
