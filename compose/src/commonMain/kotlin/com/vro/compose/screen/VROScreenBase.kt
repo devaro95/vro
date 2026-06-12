@@ -9,8 +9,6 @@ import com.vro.compose.navigator.VRONavigationClass
 import com.vro.compose.skeleton.VROSkeleton
 import com.vro.compose.skeleton.VROSkeletonDefault
 import com.vro.compose.states.*
-import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
-import com.vro.compose.states.VROTopBarBaseState.VROTopBarStartState
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
@@ -50,9 +48,9 @@ abstract class VROScreenBase<S : VROState, E : VROEvent>(
 
     @Composable
     fun InitializeHandlers(events: VROEventLauncher<E>) {
-        this.dialogHandler.events = events
-        this.errorHandler.events = events
-        this.oneTimeHandler.events = events
+        dialogHandler.events = events
+        errorHandler.events = events
+        oneTimeHandler.events = events
     }
 
     @Composable

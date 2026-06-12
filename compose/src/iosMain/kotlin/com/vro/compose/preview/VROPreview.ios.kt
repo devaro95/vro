@@ -1,9 +1,8 @@
 package com.vro.compose.preview
 
 /**
- * Multiplatform preview annotation stub.
- * The actual Android preview annotation is in androidMain.
+ * iOS actual — no-op since Compose Multiplatform previews run via Android Studio.
  */
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.BINARY)
-expect annotation class VROLightMultiDevicePreview()
+actual annotation class VROLightMultiDevicePreview

@@ -11,8 +11,8 @@ val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope> { err
 
 val LocalAnimatedVisibilityScope = staticCompositionLocalOf<AnimatedVisibilityScope> { error("No AnimatedVisibilityScope provided") }
 
-val LocalTopBarState = compositionLocalOf<MutableState<VROTopBarBaseState>> { error("No VROTopBarBaseState provided") }
+val LocalTopBarState = compositionLocalOf<MutableState<VROTopBarBaseState>> { mutableStateOf(VROTopBarStartState()) }
 
-val LocalBottomBarState = compositionLocalOf<MutableState<VROBottomBarBaseState>> { error("No VROBottomBarBaseState provided") }
+val LocalBottomBarState = compositionLocalOf<MutableState<VROBottomBarBaseState>> { mutableStateOf(VROBottomBarStartState()) }
 
 val LocalSnackbarState = compositionLocalOf<MutableState<VROSnackBarState>> { error("No VROSnackBarState provided") }
