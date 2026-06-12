@@ -1,11 +1,9 @@
-package com.vro.compose.screen
+package com.vro.compose.template
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import com.vro.compose.composition.LocalBottomBarState
-import com.vro.compose.composition.LocalTopBarState
 import com.vro.compose.states.*
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarStartState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
@@ -22,15 +20,17 @@ import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
 import org.koin.core.scope.Scope
 
-abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent {
+abstract class VROTemplateContent<S : VROState, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> : KoinScopeComponent {
 
     lateinit var events: VROEventLauncher<E>
-
     override val scope: Scope by lazy { createScope(this) }
+    internal lateinit var topBarState: MutableState<VROTopBarBaseState>
+    internal lateinit var bottomBarState: MutableState<VROBottomBarBaseState>
+    abstract val mapper: M
+    abstract fun render(state: S): R
 
-    open fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean): VROTopBarBaseState = VROTopBarStartState()
-
-    open fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean): VROBottomBarBaseState = VROBottomBarStartState()
+    open fun setTopBar(currentState: VROTopBarBaseState): VROTopBarBaseState = VROTopBarStartState()
+    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState = VROBottomBarStartState()
 
     @Composable
     abstract fun Content(state: S)
@@ -39,9 +39,9 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
     abstract fun ScreenPreview()
 
     lateinit var coroutineScope: CoroutineScope
+    lateinit var snackbarState: MutableState<VROSnackBarState>
 
     fun showSnackbar(
-        state: MutableState<VROSnackBarState>,
         message: String,
         actionLabel: String = EMPTY_STRING,
         duration: SnackbarDuration = SnackbarDuration.Short,
@@ -52,13 +52,13 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
         onDismiss: () -> Unit = {},
     ) {
         coroutineScope.launch {
-            state.value = VROSnackBarState(
-                hostState = state.value.hostState,
+            snackbarState.value = VROSnackBarState(
+                hostState = snackbarState.value.hostState,
                 textColor = textColor,
                 backgroundColor = backgroundColor,
                 actionColor = actionColor
             )
-            val snackResult = state.value.hostState.showSnackbar(
+            val snackResult = snackbarState.value.hostState.showSnackbar(
                 message = message,
                 actionLabel = actionLabel,
                 duration = duration,
@@ -71,26 +71,19 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
     }
 
     fun event(event: E) = events.doEvent(event)
-
     fun navigateBack(result: VROBackResult? = null) = events.doBack(result)
 
     @Composable
     fun UpdateTopBar(changeStateFunction: VROTopBarState.() -> VROTopBarState) {
-        val topBarState = LocalTopBarState.current
         LaunchedEffect(changeStateFunction) {
-            (topBarState.value as? VROTopBarState)
-                ?.let { topBarState.value = changeStateFunction(it) }
-                ?: run { topBarState.value = VROTopBarStartState() }
+            (topBarState.value as? VROTopBarState)?.let { topBarState.value = changeStateFunction(it) }
         }
     }
 
     @Composable
     fun UpdateBottomBar(changeStateFunction: VROBottomBarState.() -> VROBottomBarState) {
-        val bottomBarState = LocalBottomBarState.current
         LaunchedEffect(changeStateFunction) {
-            (bottomBarState.value as? VROBottomBarState)
-                ?.let { bottomBarState.value = changeStateFunction(it) }
-                ?: run { bottomBarState.value = VROBottomBarStartState() }
+            (bottomBarState.value as? VROBottomBarState)?.let { bottomBarState.value = changeStateFunction(it) }
         }
     }
 }
