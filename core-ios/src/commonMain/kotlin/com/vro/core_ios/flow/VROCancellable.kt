@@ -3,17 +3,13 @@ package com.vro.core_ios.flow
 import kotlinx.coroutines.Job
 
 /**
- * Lightweight cancellation handle returned by [watch] functions.
+ * Handle returned when subscribing to a Kotlin [kotlinx.coroutines.flow.Flow] from Swift.
  *
- * Allows Swift code to stop observing a Kotlin [kotlinx.coroutines.flow.Flow]
- * without exposing coroutine internals (Job) directly to Swift.
+ * Swift cannot keep a raw Kotlin coroutine [Job] alive idiomatically, so this wraps it
+ * behind a simple `cancel()` call. Call [cancel] (e.g. in `onDisappear` / `deinit`) to stop
+ * observing and avoid leaks.
  */
 class VROCancellable(private val job: Job) {
-
-    /**
-     * Cancels the underlying collection coroutine.
-     * Call this from `deinit` / `onDisappear` on the Swift side to avoid leaks.
-     */
     fun cancel() {
         job.cancel()
     }
