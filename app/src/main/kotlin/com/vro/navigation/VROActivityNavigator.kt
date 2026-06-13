@@ -12,8 +12,8 @@ import kotlinx.serialization.encodeToString
 
 abstract class VROActivityNavigator<D : VRODestination>(
     navHostId: Int,
-    final override val activity: ComponentActivity,
-    override val navController: NavController = activity.findNavController(navHostId),
+    val activity: ComponentActivity,
+    val navController: NavController = activity.findNavController(navHostId),
 ) : VRONavigator<D> {
 
     fun navigateWithAction(action: Int, state: VROState? = null) =
