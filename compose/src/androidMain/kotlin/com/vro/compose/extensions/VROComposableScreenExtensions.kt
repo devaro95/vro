@@ -14,7 +14,6 @@ import com.vro.compose.composition.LocalAnimatedVisibilityScope
 import com.vro.compose.initializers.*
 import com.vro.compose.navigator.VROComposableNavigator
 import com.vro.compose.screen.*
-import com.vro.compose.states.*
 import com.vro.compose.template.*
 import com.vro.constants.INT_ZERO
 import com.vro.core_android.navigation.VROFragmentNavigator
@@ -81,7 +80,8 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     val vm = viewModel.vroViewModel
     val contentInstance = content.java.getDeclaredConstructor().newInstance()
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
-    contentInstance.screenContent.context = LocalContext.current
+    val context = LocalContext.current
+    contentInstance.screenContent.setAndroidContext(context)
     contentInstance.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
     InitializeLifecycleObserver(viewModel = vm, content = contentInstance, screenLifecycle = screenLifecycle, navController = navigator.navController)
@@ -100,7 +100,8 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
     val vm = viewModel.vroViewModel
     val contentInstance = content.java.getDeclaredConstructor().newInstance()
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle
-    contentInstance.screenContent.context = LocalContext.current
+    val context = LocalContext.current
+    contentInstance.screenContent.setAndroidContext(context)
     BackHandler(true) { vm.onBackSystem() }
     InitializeLifecycleObserver(viewModel = vm, screenLifecycle = screenLifecycle, navController = navigator.navController, content = contentInstance)
     InitializeOneTimeListener(viewModel = vm, content = contentInstance)
@@ -141,7 +142,8 @@ internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestinatio
 ) {
     val vm = viewModel.vroViewModel
     val contentInstance = content.java.getDeclaredConstructor().newInstance()
-    contentInstance.templateContent.context = LocalContext.current
+    val context = LocalContext.current
+    contentInstance.templateContent.context = context
     contentInstance.navController = navigator.navController
     BackHandler(true) { vm.onBackSystem() }
     val screenLifecycle = LocalLifecycleOwner.current.lifecycle

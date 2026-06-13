@@ -13,16 +13,11 @@ import com.vro.compose.utils.isTablet
 import com.vro.event.VROEvent
 import com.vro.event.VROEventLauncher
 import com.vro.state.VROState
-import org.koin.core.component.KoinScopeComponent
-import org.koin.core.component.createScope
-import org.koin.core.scope.Scope
 
 abstract class VROTemplate<S : VROState, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> :
-    VROScreenBase<S, E>(), KoinScopeComponent {
+    VROScreenBase<S, E>() {
 
     abstract val templateContent: VROTemplateContent<S, E, M, R>
-
-    override val scope: Scope by lazy { createScope(this) }
 
     internal fun configureScaffold(
         topBarState: MutableState<VROTopBarBaseState>,
