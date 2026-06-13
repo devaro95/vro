@@ -46,3 +46,23 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
         }
     }
 }
+
+@Composable
+internal fun <VM : VROAndroidViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent, M : VROTemplateMapper, R : VROTemplateRender<E, S>> VroComposableTemplateContent(
+    viewModel: VM,
+    navigator: VROComposableNavigator<D>,
+    content: KClass<out VROTemplate<S, E, M, R>>
+) {
+    val vm = viewModel.vroViewModel
+    val contentInstance = content.java.getDeclaredConstructor().newInstance()
+    val context = LocalContext.current
+    contentInstance.templateContent.context = context
+    contentInstance.navController = navigator.navController
+    BackHandler(true) { vm.onBackSystem() }
+    val screenLifecycle = LocalLifecycleOwner.current.lifecycle
+    InitializeLifecycleObserver(viewModel = vm, content = contentInstance, screenLifecycle = screenLifecycle, navController = navigator.navController)
+    InitializeOneTimeListener(viewModel = vm, content = contentInstance)
+    InitializeNavigatorListener(viewModel = vm, navigator = navigator)
+    InitializeStepperListener(viewModel = vm, content = contentInstance, screenLifecycle = screenLifecycle)
+    InitializeEventsListener(viewModel = vm)
+}
