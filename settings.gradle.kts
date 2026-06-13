@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "vro"
-include(":app", ":sampleapp", ":core", ":compose", ":common", ":core-android")
+include(":app", ":sampleapp", ":core", ":compose", ":common", ":core-android", ":core-ios")
