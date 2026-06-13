@@ -75,6 +75,7 @@ compose-icons-extended = { group = "androidx.compose.material", name = "material
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 jetbrains-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
