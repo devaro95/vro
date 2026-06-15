@@ -41,6 +41,8 @@ fun <VM : VROViewModel<S, D, E>, S : VROState, D : VRODestination, E : VROEvent,
     content: VROTemplate<S, E, M, R>,
     screenLifecycle: Lifecycle
 ) {
+    content.InitializeEvents(events = viewModel)
+    content.InitializeBars()
     val stepper = viewModel.stepper.collectAsStateWithLifecycle(
         initialValue = if (content.skeleton::class != VROSkeletonDefault::class) {
             VROStepper.VROSkeletonStep(viewModel.initialState)
