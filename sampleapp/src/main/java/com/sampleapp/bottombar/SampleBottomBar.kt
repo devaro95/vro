@@ -11,42 +11,41 @@ import com.sampleapp.R
 import com.sampleapp.styles.theme.SampleAppTheme
 import com.vro.compose.components.VROBottomBar
 import com.vro.compose.components.VROBottomBarItem
+import com.vro.compose.states.VROBottomBarBaseState
 
 @Composable
 fun SampleBottomBar(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
-    selectedItem: Int,
+    selectedItem: VROBottomBarBaseState.VROBottomBarValue,
 ) = VROBottomBar(
     selectedItem = selectedItem,
     itemList = listOf(
         VROBottomBarItem(
+            value = SampleBottomBarValue.HOME,
             icon = R.drawable.ic_home,
             onClick = onHomeClick,
             iconSelectedTint = SampleAppTheme.colors.bottomBarSelected,
-            textColor = Color(0xFF6B7280),
-            textSelectedColor = SampleAppTheme.colors.bottomBarSelected,
-            text = { color, selectedColor ->
+            text = { isSelected ->
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
                     text = "Home",
                     fontWeight = FontWeight.SemiBold,
-                    color = (if (selectedItem == 1) selectedColor else color) ?: Color.Black
+                    color = (if (isSelected) SampleAppTheme.colors.bottomBarSelected else  Color(0xFF6B7280))
                 )
             }
         ),
         VROBottomBarItem(
+            value = SampleBottomBarValue.PROFILE,
             icon = R.drawable.ic_profile,
             onClick = onProfileClick,
             iconSelectedTint = SampleAppTheme.colors.bottomBarSelected,
-            textColor = Color(0xFF6B7280),
-            textSelectedColor = SampleAppTheme.colors.bottomBarSelected,
-            text = { color, selectedColor ->
+            text = { isSelected ->
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
                     text = "Profile",
                     fontWeight = FontWeight.SemiBold,
-                    color = (if (selectedItem == 1) selectedColor else color) ?: Color.Black
+                    color = (if (isSelected) SampleAppTheme.colors.bottomBarSelected else Color(0xFF6B7280))
                 )
             }
         )
@@ -54,3 +53,8 @@ fun SampleBottomBar(
     height = 75.dp,
     background = SampleAppTheme.colors.bottomBarColor
 )
+
+enum class SampleBottomBarValue : VROBottomBarBaseState.VROBottomBarValue {
+    HOME,
+    PROFILE
+}
