@@ -81,8 +81,7 @@ abstract class VROTemplateContent<S : VROState, E : VROEvent, M: VROTemplateMapp
      * @param currentState The current bottom bar state
      * @return The desired bottom bar configuration state
      */
-    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState =
-        VROBottomBarStartState()
+    open fun setBottomBar(currentState: VROBottomBarBaseState): VROBottomBarBaseState = VROBottomBarStartState
 
     @Composable
     abstract fun Content(state: S)

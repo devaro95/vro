@@ -167,7 +167,7 @@ abstract class VROComposableFragment<
         val bottomSheetNavigator = rememberBottomSheetNavigator()
         this.navController = this@VROComposableFragment.findNavController()
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
-        val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState) }
         val snackBarHostState = remember { SnackbarHostState() }
         val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
 
@@ -235,7 +235,7 @@ abstract class VROComposableFragment<
      * @param selectedItem The currently selected bottom bar item
      */
     @Composable
-    open fun BottomBar(selectedItem: Int) = Unit
+    open fun BottomBar(selectedItem: VROBottomBarBaseState.VROBottomBarValue) = Unit
 
     /**
      * Called when the fragment is visible to the user.

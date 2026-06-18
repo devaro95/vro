@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.constants.EMPTY_STRING
-
 
 
 /**
@@ -43,7 +43,7 @@ fun VROBottomBar(
     itemList: List<VROBottomBarItem> = emptyList(),
     height: Dp = 55.dp,
     background: Color = Color.Black,
-    selectedItem: Int,
+    selectedItem: VROBottomBarBaseState.VROBottomBarValue,
 ) {
     BottomAppBar(
         containerColor = background,
@@ -57,7 +57,7 @@ fun VROBottomBar(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                itemList.forEachIndexed { index, item ->
+                itemList.forEach { item ->
                     Column(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.Center,
@@ -65,17 +65,17 @@ fun VROBottomBar(
                     ) {
                         AnimatedIcon(
                             iconRes = item.icon,
-                            selected = selected == index,
+                            selected = selected == item.value,
                             selectedIconRes = item.iconSelected ?: item.icon,
                             iconTint = item.iconSelectedTint?.let { iconSelectedTint ->
-                                if (selected == index) iconSelectedTint
+                                if (selected == item.value) iconSelectedTint
                                 else item.iconTint
                             } ?: item.iconTint,
                             iconSize = item.iconSize
                         ) {
                             item.onClick?.invoke()
                         }
-                        item.text.invoke(item.textColor, item.textSelectedColor)
+                        item.text.invoke(selected == item.value)
                     }
                 }
             }
@@ -89,8 +89,6 @@ fun VROBottomBar(
  * @property icon Resource ID for the default icon.
  * @property iconTint Optional tint color for the default icon (default: null).
  * @property iconSelectedTint Optional tint color for the selected icon (default: null).
- * @property textColor Optional text color for the default state (default: null).
- * @property textSelectedColor Optional text color for the selected state (default: null).
  * @property iconSelected Optional resource ID for the selected icon (default: null).
  * @property contentDescription Accessibility content description (default: "").
  * @property text Composable lambda to render the text label. Receives (color, selectedColor) (default: empty lambda).
@@ -98,14 +96,13 @@ fun VROBottomBar(
  * @property onClick Callback triggered when the item is clicked (default: null).
  */
 open class VROBottomBarItem(
+    val value: VROBottomBarBaseState.VROBottomBarValue,
     val icon: Int,
     val iconTint: Color? = null,
     val iconSelectedTint: Color? = null,
-    val textColor: Color? = null,
-    val textSelectedColor: Color? = null,
     val iconSelected: Int? = null,
     val contentDescription: String = EMPTY_STRING,
-    val text: @Composable (color: Color?, selectedColor: Color?) -> Unit = { _, _ -> },
+    val text: @Composable (isSelected: Boolean) -> Unit = { _ -> },
     val iconSize: Dp = 24.dp,
     val onClick: (() -> Unit)? = null,
 )

@@ -53,8 +53,7 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
      * @param currentState The current bottom bar state
      * @return The desired bottom bar configuration state
      */
-    open fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean): VROBottomBarBaseState =
-        VROBottomBarStartState()
+    open fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean): VROBottomBarBaseState = VROBottomBarStartState
 
     @Composable
     abstract fun Content(state: S)
@@ -175,7 +174,7 @@ abstract class VROScreenContent<S : VROState, E : VROEvent> : KoinScopeComponent
             if (currentState != null) {
                 bottomBarState.value = changeStateFunction(currentState)
             } else {
-                bottomBarState.value = VROBottomBarStartState()
+                bottomBarState.value = VROBottomBarStartState
             }
         }
     }

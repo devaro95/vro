@@ -2,7 +2,6 @@ package com.sampleapp.ui.profile.screen
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
+import com.sampleapp.bottombar.SampleBottomBarValue
 import com.sampleapp.topbar.sampleBackToolbar
-import com.sampleapp.ui.home.SampleHomeEvents
 import com.sampleapp.ui.profile.SampleProfileEvents
 import com.sampleapp.ui.profile.SampleProfileState
 import com.vro.compose.composition.LocalAnimatedVisibilityScope
@@ -21,7 +20,6 @@ import com.vro.compose.composition.LocalSharedTransitionScope
 import com.vro.compose.screen.VROScreenContent
 import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROTopBarBaseState
-import com.vro.constants.INT_ONE
 
 class SampleProfileScreenContent : VROScreenContent<SampleProfileState, SampleProfileEvents>() {
 
@@ -31,7 +29,7 @@ class SampleProfileScreenContent : VROScreenContent<SampleProfileState, SamplePr
     )
 
     override fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean) =
-        VROBottomBarBaseState.VROBottomBarState(selectedItem = INT_ONE)
+        VROBottomBarBaseState.VROBottomBarState(selectedItem = SampleBottomBarValue.PROFILE)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
