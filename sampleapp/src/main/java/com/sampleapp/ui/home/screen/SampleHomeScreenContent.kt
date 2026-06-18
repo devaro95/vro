@@ -5,12 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sampleapp.R
+import com.sampleapp.bottombar.SampleBottomBarValue
 import com.sampleapp.components.CardListItem
 import com.sampleapp.components.SampleCardList
 import com.sampleapp.topbar.sampleHomeToolbar
@@ -25,14 +25,13 @@ import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.states.VROBottomBarBaseState.VROBottomBarState
 import com.vro.compose.states.VROTopBarBaseState
 import com.vro.compose.utils.vroVerticalScroll
-import com.vro.constants.INT_ZERO
 
 class SampleHomeScreenContent : VROScreenContent<SampleHomeState, SampleHomeEvents>() {
 
     override fun setTopBar(currentState: VROTopBarBaseState, isScreenStarted: Boolean) = sampleHomeToolbar(context)
 
     override fun setBottomBar(currentState: VROBottomBarBaseState, isScreenStarted: Boolean) =
-        VROBottomBarState(selectedItem = INT_ZERO)
+        VROBottomBarState(selectedItem = SampleBottomBarValue.HOME)
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
