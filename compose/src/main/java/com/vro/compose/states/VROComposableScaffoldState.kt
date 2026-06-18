@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.vro.constants.INT_ZERO
 
 /**
  * Sealed class hierarchy representing different states of a top app bar.
@@ -90,18 +89,18 @@ sealed class VROBottomBarBaseState(
      * @property visibility Controls whether the bottom bar is visible (default true)
      */
     data class VROBottomBarState(
-        val selectedItem: Int = INT_ZERO,
+        val selectedItem: VROBottomBarValue,
         override val visibility: Boolean = true,
     ) : VROBottomBarBaseState()
 
     /**
      * Initial state for the bottom bar, typically used when the bar should be hidden.
      *
-     * @property selectedItem Index of the currently selected item
      * @property visibility Controls whether the bottom bar is visible (default false)
      */
-    data class VROBottomBarStartState(
-        val selectedItem: Int = INT_ZERO,
-        override val visibility: Boolean = false,
-    ) : VROBottomBarBaseState()
+    data object VROBottomBarStartState : VROBottomBarBaseState() {
+        override val visibility: Boolean = false
+    }
+
+    interface VROBottomBarValue
 }

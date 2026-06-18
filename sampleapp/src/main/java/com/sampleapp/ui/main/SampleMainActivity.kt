@@ -27,6 +27,7 @@ import com.sampleapp.ui.profile.screen.SampleProfileScreen
 import com.sampleapp.ui.template.*
 import com.vro.compose.VROComposableActivity
 import com.vro.compose.extensions.*
+import com.vro.compose.states.VROBottomBarBaseState
 import com.vro.compose.theme.VROComposableMaterialTheme
 import com.vro.core_android.injection.injectViewModel
 
@@ -58,7 +59,7 @@ open class SampleMainActivity : VROComposableActivity() {
     }
 
     @Composable
-    override fun BottomBar(selectedItem: Int) {
+    override fun BottomBar(selectedItem: VROBottomBarBaseState.VROBottomBarValue) {
         Column {
             HorizontalDivider(Modifier.background(Color(0xFFE9E9E7)), thickness = 1.dp)
             SampleBottomBar(

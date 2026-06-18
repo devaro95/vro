@@ -184,7 +184,7 @@ abstract class VROComposableActivity : ComponentActivity() {
         this.navController = navController
 
         val topBarState = remember { mutableStateOf<VROTopBarBaseState>(VROTopBarStartState()) }
-        val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState()) }
+        val bottomBarState = remember { mutableStateOf<VROBottomBarBaseState>(VROBottomBarStartState) }
         val snackBarHostState = remember { SnackbarHostState() }
         val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
 
@@ -265,7 +265,7 @@ abstract class VROComposableActivity : ComponentActivity() {
      * @param selectedItem Index of the currently selected bottom bar item.
      */
     @Composable
-    open fun BottomBar(selectedItem: Int) = Unit
+    open fun BottomBar(selectedItem: VROBottomBarBaseState.VROBottomBarValue) = Unit
 
     /**
      * Returns the route of the current screen.
