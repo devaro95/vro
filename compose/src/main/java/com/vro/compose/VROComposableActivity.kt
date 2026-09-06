@@ -10,15 +10,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.material.*
 import com.vro.compose.components.VroTopBar
 import com.vro.compose.composition.LocalBottomBarState
+import com.vro.compose.composition.LocalBottomBarScrollProgress
 import com.vro.compose.composition.LocalSharedTransitionScope
 import com.vro.compose.composition.LocalSnackbarState
 import com.vro.compose.composition.LocalTopBarState
@@ -75,6 +83,13 @@ abstract class VROComposableActivity : ComponentActivity() {
      * Defines the first screen to be shown when the app starts.
      */
     abstract val startScreen: KClass<out VROScreenBase<*, *>>
+
+    /**
+     * Opt-in: when true, the floating BottomBar hides on scroll-down and reappears on
+     * scroll-up. Defaults to false so existing consumers of this base class keep their current
+     * BottomBar behavior unchanged; override to `true` to enable it for a given app.
+     */
+    open val bottomBarHidesOnScroll: Boolean = false
 
     /**
      * Navigation controller used to manage app navigation.
@@ -188,8 +203,46 @@ abstract class VROComposableActivity : ComponentActivity() {
         val snackBarHostState = remember { SnackbarHostState() }
         val snackBarState = remember { mutableStateOf(VROSnackBarState(snackBarHostState)) }
 
+        // Reports a normalized 0f..1f scroll signal (LocalBottomBarScrollProgress) to the
+        // BottomBar composable, only for consumers that opted in via bottomBarHidesOnScroll.
+        // Observes (does not consume) scroll deltas bubbling up from any descendant scrollable, so
+        // screens don't need to opt in individually. VRO does not decide what the BottomBar does
+        // with this signal (hide, shrink, ignore) -- that is up to its own implementation. When
+        // disabled, the value stays 0f and no nestedScroll Modifier is added, so behavior is
+        // identical to before this feature existed.
+        //
+        // Uses onPostScroll (the *consumed* delta) rather than onPreScroll (the raw, un-consumed
+        // delta): a drag gesture on a scrollable that has nothing to scroll -- its content already
+        // fits the screen -- still dispatches nested scroll deltas even though nothing actually
+        // moves. Reacting to onPreScroll's raw delta collapsed the BottomBar on screens with no real
+        // scrolling; onPostScroll's consumed amount is 0 there, so the bar only reacts once a
+        // descendant scrollable has genuinely moved.
+        val bottomBarScrollThresholdPx = with(LocalDensity.current) { 120.dp.toPx() }
+        val bottomBarScrollProgress = remember { mutableFloatStateOf(0f) }
+        val bottomBarNestedScrollConnection = remember(bottomBarHidesOnScroll) {
+            if (!bottomBarHidesOnScroll) return@remember null
+            object : NestedScrollConnection {
+                override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                    val newOffsetPx = (bottomBarScrollProgress.floatValue * bottomBarScrollThresholdPx - consumed.y)
+                        .coerceIn(0f, bottomBarScrollThresholdPx)
+                    bottomBarScrollProgress.floatValue = newOffsetPx / bottomBarScrollThresholdPx
+                    return Offset.Zero
+                }
+            }
+        }
+
         LaunchedEffect(navController) {
             onInitialized()
+        }
+
+        // Resets the scroll-collapse signal whenever the current destination changes, so a screen
+        // with no scrollable content never inherits a collapsed/mid-animating BottomBar left over
+        // from whatever screen the user scrolled on before navigating here.
+        if (bottomBarHidesOnScroll) {
+            val currentBackStackEntry by navController.currentBackStackEntryAsState()
+            LaunchedEffect(currentBackStackEntry) {
+                bottomBarScrollProgress.floatValue = 0f
+            }
         }
 
         ModalBottomSheetLayout(
@@ -208,15 +261,6 @@ abstract class VROComposableActivity : ComponentActivity() {
                         }
                     }
                 },
-                bottomBar = {
-                    (bottomBarState.value as? VROBottomBarState)?.let {
-                        if (bottomBarState.value.visibility) {
-                            Row(modifier = Modifier.navigationBarsPadding()) {
-                                BottomBar(selectedItem = it.selectedItem)
-                            }
-                        }
-                    }
-                },
                 snackbarHost = {
                     SnackbarHost(
                         hostState = snackBarHostState,
@@ -231,23 +275,45 @@ abstract class VROComposableActivity : ComponentActivity() {
                     )
                 },
             ) { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                ) {
-                    SharedTransitionLayout {
-                        CompositionLocalProvider(
-                            LocalSharedTransitionScope provides this,
-                            LocalTopBarState provides topBarState,
-                            LocalBottomBarState provides bottomBarState,
-                            LocalSnackbarState provides snackBarState
+                CompositionLocalProvider(LocalBottomBarScrollProgress provides bottomBarScrollProgress.floatValue) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Content deliberately ignores innerPadding's bottom (bar height): it is only
+                        // reserved here for the system navigation bar, via contentWindowInsets above.
+                        // This lets screens draw behind the floating BottomBar, which is overlaid below
+                        // instead of occupying Scaffold's bottomBar slot (that would clip content to a
+                        // rectangle the size of the bar, defeating the floating look).
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                                .let { m -> bottomBarNestedScrollConnection?.let { m.nestedScroll(it) } ?: m }
                         ) {
-                            NavHost(
-                                navController = navController,
-                                startDestination = startScreen.destinationRoute()
-                            ) {
-                                createComposableContent(navController = navController)
+                            SharedTransitionLayout {
+                                CompositionLocalProvider(
+                                    LocalSharedTransitionScope provides this,
+                                    LocalTopBarState provides topBarState,
+                                    LocalBottomBarState provides bottomBarState,
+                                    LocalSnackbarState provides snackBarState
+                                ) {
+                                    NavHost(
+                                        navController = navController,
+                                        startDestination = startScreen.destinationRoute()
+                                    ) {
+                                        createComposableContent(navController = navController)
+                                    }
+                                }
+                            }
+                        }
+
+                        (bottomBarState.value as? VROBottomBarState)?.let {
+                            if (bottomBarState.value.visibility) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .navigationBarsPadding(),
+                                ) {
+                                    BottomBar(selectedItem = it.selectedItem)
+                                }
                             }
                         }
                     }
