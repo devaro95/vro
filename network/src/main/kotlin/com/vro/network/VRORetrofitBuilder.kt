@@ -1,8 +1,8 @@
-package com.vro.retrofit
+package com.vro.network
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.vro.retrofit.VROHttpClient.Companion.emptyTrustManager
+import com.vro.network.VROHttpClient.Companion.emptyTrustManager
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -1,4 +1,4 @@
-package com.vro.retrofit
+package com.vro.network
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
