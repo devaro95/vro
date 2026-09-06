@@ -1,15 +1,19 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.vanniktech)
+    alias(libs.plugins.nmcp)
     signing
 }
 
-apply (from= "../gradleConfig/configuration.gradle")
+group = property("GROUP") as String
+version = property("VERSION_NAME") as String
+
+apply(from = "../gradleConfig/configuration.gradle")
 
 android {
     compileSdk = 36
+    namespace = "com.vro.network"
 
     defaultConfig {
         aarMetadata {
@@ -21,31 +25,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlin {
-        compilerOptions{
+        compilerOptions {
             JavaVersion.VERSION_21.toString()
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    namespace = "com.vro.app"
 }
 
 dependencies {
-    api(project(":core"))
-    api(project(":core-android"))
-    api(project(":network"))
-
-    api(libs.material3)
-    api(libs.view.binding)
-    implementation(libs.arch.core)
-    implementation(libs.core)
-    implementation(libs.app.compat)
-    implementation(libs.lifecycle.viewmodel)
-    implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.material3.size)
-
-    debugImplementation(libs.ui.tooling)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.scalars)
+    implementation(libs.retrofit.gson)
+    implementation(libs.retrofit.coroutines)
+    implementation(libs.logging.interceptor)
 }
 
 mavenPublishing {
@@ -53,8 +44,8 @@ mavenPublishing {
     signAllPublications()
 
     pom {
-        name.set("Legacy Library")
-        description.set("VRO Legacy Module")
+        name.set("Network Library")
+        description.set("VRO Network Module")
         url.set("https://github.com/devaro95/vro")
         licenses {
             license {
