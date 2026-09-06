@@ -1,13 +1,7 @@
 package com.sampleapp.ui.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.sampleapp.bottombar.SampleBottomBar
@@ -39,6 +33,8 @@ open class SampleMainActivity : VROComposableActivity() {
 
     override val customTheme: SampleComposableCustomTheme = SampleCustomTheme
 
+    override val bottomBarHidesOnScroll: Boolean = true
+
     companion object {
         val LocalActivityColors = staticCompositionLocalOf<SampleColorScheme> {
             error("No AppColors provided")
@@ -60,14 +56,11 @@ open class SampleMainActivity : VROComposableActivity() {
 
     @Composable
     override fun BottomBar(selectedItem: VROBottomBarBaseState.VROBottomBarValue) {
-        Column {
-            HorizontalDivider(Modifier.background(Color(0xFFE9E9E7)), thickness = 1.dp)
-            SampleBottomBar(
-                onHomeClick = { navigate(SampleHomeScreen::class) },
-                onProfileClick = { navigate(SampleProfileScreen::class) },
-                selectedItem = selectedItem
-            )
-        }
+        SampleBottomBar(
+            onHomeClick = { navigate(SampleHomeScreen::class) },
+            onProfileClick = { navigate(SampleProfileScreen::class) },
+            selectedItem = selectedItem
+        )
     }
 
     override fun NavGraphBuilder.createComposableContent(navController: NavHostController) {
